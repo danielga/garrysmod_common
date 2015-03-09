@@ -11,11 +11,18 @@ function IncludeScanning(path)
 		["Source files"] = path .. "/**.cpp"
 	})
 
-	filter("system:linux")
-		links({"dl"})
+	local curfilter = GetFilter()
+	local nosystem = curfilter.system == nil
 
-	filter("system:macosx")
-		links({"dl"})
+	if nosystem or HasFilter(FILTER_LINUX) then
+		filter({"system:linux", curfilter.configurations})
+			links({"dl"})
+	end
 
-	filter({})
+	if nosystem or HasFilter(FILTER_MACOSX) then
+		filter({"system:macosx", curfilter.configurations})
+			links({"dl"})
+	end
+
+	filter(curfilter.patterns)
 end

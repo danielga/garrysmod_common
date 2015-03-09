@@ -1,11 +1,21 @@
+SERVERSIDE = true
+CLIENTSIDE = false
+
+FILTER_WINDOWS = "windows"
+FILTER_LINUX = "linux"
+FILTER_MACOSX = "macosx"
+
+FILTER_DEBUG = "debug"
+FILTER_RELEASE = "release"
+
 include("premake/lua_shared.lua")
 include("premake/sourcesdk.lua")
 include("premake/detouring.lua")
 include("premake/scanning.lua")
 
-function CreateSolution(name)
+function CreateSolution(name, solutionpath)
 	_SOLUTION_NAME = name
-	_SOLUTION_FOLDER = os.get() .. "/" .. _ACTION
+	_SOLUTION_FOLDER = solutionpath or (os.get() .. "/" .. _ACTION)
 
 	solution(name)
 		language("C++")
@@ -32,20 +42,18 @@ function CreateSolution(name)
 		filter({})
 end
 
-function CreateProject(sourcepath, is_server)
-	local statedefine
-	if _PROJECT_NAME then
-		statedefine = _SOLUTION_NAME .. (is_server and "_SERVER" or "_CLIENT")
-		project(_PROJECT_NAME)
-			defines({string.upper(_SOLUTION_NAME) .. (_PROJECT_SERVERSIDE and "_SERVER" or "_CLIENT")})
-	end
+function CreateProject(is_server, sourcepath)
+	sourcepath = sourcepath or "../source"
 
 	_PROJECT_NAME = (is_server and "gmsv_" or "gmcl_") .. _SOLUTION_NAME
 	_PROJECT_SERVERSIDE = is_server
 
 	project(_PROJECT_NAME)
 		kind("SharedLib")
-		defines({"GMMODULE", statedefine})
+		defines({
+			"GMMODULE",
+			string.upper(_SOLUTION_NAME) .. (_PROJECT_SERVERSIDE and "_SERVER" or "_CLIENT")
+		})
 		files({
 			sourcepath .. "/**.h",
 			sourcepath .. "/**.hpp",
@@ -74,12 +82,53 @@ function CreateProject(sourcepath, is_server)
 			targetsuffix("_win32")
 
 		filter("system:linux")
-			buildoptions({"-std=c++11"})
 			targetsuffix("_linux")
 
-		filter({"system:macosx"})
-			buildoptions({"-std=c++11"})
+		filter("system:macosx")
 			targetsuffix("_mac")
 
+		filter("action:gmake")
+			buildoptions({"-std=c++11"})
+
 		filter({})
+end
+
+function HasFilter(filter)
+	if _CURRENT_FILTER then
+		for i = 1, #_CURRENT_FILTER.list do
+			if _CURRENT_FILTER.list[i] == filter then
+				return true
+			end
+		end
+	end
+
+	return false
+end
+
+function GetFilter()
+	return _CURRENT_FILTER or {}
+end
+
+function SetFilter(...)
+	local list = {...}
+	local sys, config
+	for i = 1, #list do
+		if list[i] == FILTER_WINDOWS or list[i] == FILTER_LINUX or list[i] == FILTER_MACOSX then
+			if sys then
+				sys = sys .. " or " .. list[i]
+			else
+				sys = "system:" .. list[i]
+			end
+		elseif list[i] == FILTER_DEBUG or list[i] == FILTER_RELEASE then
+			if config then
+				config = config .. " or " .. list[i]
+			else
+				config = "configurations:" .. list[i]
+			end
+		end
+	end
+
+	local patterns = {sys, config}
+	_CURRENT_FILTER = {system = sys, configurations = config, list = list, patterns = patterns}
+	filter(patterns)
 end
