@@ -11,26 +11,7 @@ namespace Bootil
 }
 
 class Color;
-
-#if !defined LUA_VERSION
-
-typedef struct lua_Debug
-{
-	int event;
-	const char *name;			/* (n) */
-	const char *namewhat;		/* (n) */
-	const char *what;			/* (S) */
-	const char *source;			/* (S) */
-	int currentline;			/* (l) */
-	int nups;					/* (u) number of upvalues */
-	int linedefined;			/* (S) */
-	int lastlinedefined;		/* (S) */
-	char short_src[512];		/* (S) */
-	/* private part */
-	int i_ci;
-} lua_Debug;
-
-#endif
+struct lua_Debug;
 
 namespace GarrysMod
 {
