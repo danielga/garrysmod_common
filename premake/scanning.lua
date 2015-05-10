@@ -1,14 +1,25 @@
-function IncludeScanning(path)
-	path = path or "../scanning"
+newoption({
+	trigger = "scanning",
+	description = "Sets the path to the scanning directory",
+	value = "path to scanning directory"
+})
 
-	includedirs({path})
+function IncludeScanning(folder)
+	folder = folder or _OPTIONS["scanning"] or os.getenv("SCANNING") or "../scanning"
+
+	local dir = path.getabsolute(folder)
+	if not os.isdir(dir) then
+		error(dir .. " doesn't exist (scanning)")
+	end
+
+	includedirs({folder})
 	files({
-		path .. "/*.hpp",
-		path .. "/*.cpp"
+		folder .. "/*.hpp",
+		folder .. "/*.cpp"
 	})
 	vpaths({
-		["Header files"] = path .. "/**.hpp",
-		["Source files"] = path .. "/**.cpp"
+		["Header files"] = folder .. "/**.hpp",
+		["Source files"] = folder .. "/**.cpp"
 	})
 
 	local curfilter = GetFilter()

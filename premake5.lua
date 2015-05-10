@@ -8,14 +8,24 @@ FILTER_MACOSX = "macosx"
 FILTER_DEBUG = "debug"
 FILTER_RELEASE = "release"
 
+_GARRYSMOD_COMMON_FOLDER = path.getrelative(_MAIN_SCRIPT_DIR, _SCRIPT_DIR)
+
 include("premake/lua_shared.lua")
 include("premake/sourcesdk.lua")
 include("premake/detouring.lua")
 include("premake/scanning.lua")
 
+newoption({
+	trigger = "solution",
+	description = "Sets the path for the solution directory",
+	value = "path for solution directory"
+})
+
 function CreateSolution(name, solutionpath)
+	SetFilter()
+	
 	_SOLUTION_NAME = name
-	_SOLUTION_FOLDER = solutionpath or (os.get() .. "/" .. _ACTION)
+	_SOLUTION_FOLDER = solutionpath or _OPTIONS["solution"] or (os.get() .. "/" .. _ACTION)
 
 	solution(name)
 		language("C++")
@@ -42,8 +52,16 @@ function CreateSolution(name, solutionpath)
 		filter({})
 end
 
+newoption({
+	trigger = "source",
+	description = "Sets the path to the source directory",
+	value = "path to source directory"
+})
+
 function CreateProject(is_server, sourcepath)
-	sourcepath = sourcepath or "../source"
+	sourcepath = sourcepath or _OPTIONS["source"] or "../source"
+
+	SetFilter()
 
 	_PROJECT_NAME = (is_server and "gmsv_" or "gmcl_") .. _SOLUTION_NAME
 	_PROJECT_SERVERSIDE = is_server
@@ -54,6 +72,7 @@ function CreateProject(is_server, sourcepath)
 			"GMMODULE",
 			string.upper(_SOLUTION_NAME) .. (_PROJECT_SERVERSIDE and "_SERVER" or "_CLIENT")
 		})
+		includedirs({_GARRYSMOD_COMMON_FOLDER .. "/include"})
 		files({
 			sourcepath .. "/**.h",
 			sourcepath .. "/**.hpp",
@@ -94,7 +113,7 @@ function CreateProject(is_server, sourcepath)
 end
 
 function HasFilter(filter)
-	if _CURRENT_FILTER then
+	if _CURRENT_FILTER ~= nil then
 		for i = 1, #_CURRENT_FILTER.list do
 			if _CURRENT_FILTER.list[i] == filter then
 				return true
@@ -114,13 +133,13 @@ function SetFilter(...)
 	local sys, config
 	for i = 1, #list do
 		if list[i] == FILTER_WINDOWS or list[i] == FILTER_LINUX or list[i] == FILTER_MACOSX then
-			if sys then
+			if sys ~= nil then
 				sys = sys .. " or " .. list[i]
 			else
 				sys = "system:" .. list[i]
 			end
 		elseif list[i] == FILTER_DEBUG or list[i] == FILTER_RELEASE then
-			if config then
+			if config ~= nil then
 				config = config .. " or " .. list[i]
 			else
 				config = "configurations:" .. list[i]

@@ -1,13 +1,24 @@
-function IncludeDetouring(path)
-	path = path or "../detouring"
+newoption({
+	trigger = "detouring",
+	description = "Sets the path to the detouring directory",
+	value = "path to detouring directory"
+})
 
-	includedirs({path})
+function IncludeDetouring(folder)
+	folder = folder or _OPTIONS["detouring"] or os.getenv("DETOURING") or "../detouring"
+
+	local dir = path.getabsolute(folder)
+	if not os.isdir(dir) then
+		error(dir .. " doesn't exist (detouring)")
+	end
+
+	includedirs({folder})
 	files({
-		path .. "/*.hpp",
-		path .. "/*.cpp"
+		folder .. "/*.hpp",
+		folder .. "/*.cpp"
 	})
 	vpaths({
-		["Header files"] = path .. "/**.hpp",
-		["Source files"] = path .. "/**.cpp"
+		["Header files"] = folder .. "/**.hpp",
+		["Source files"] = folder .. "/**.cpp"
 	})
 end
