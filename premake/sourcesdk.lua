@@ -5,12 +5,13 @@ newoption({
 })
 
 function IncludeSourceSDK(folder)
-	folder = folder or _OPTIONS["sourcesdk"] or os.getenv("SOURCE_SDK")
+	folder = folder or _OPTIONS["sourcesdk"] or os.getenv("SOURCE_SDK") or DEFAULT_SOURCESDK_FOLDER
 
-	if not folder then
+	if folder == nil then
 		error("you didn't supply a path to your SourceSDK copy")
 	end
 
+	folder = CleanPath(folder)
 	local dir = path.getabsolute(folder)
 	if not os.isdir(dir) then
 		error(dir .. " doesn't exist (SourceSDK)")
@@ -45,6 +46,10 @@ function IncludeSourceSDK(folder)
 			defines({"COMPILER_GCC", "POSIX", "LINUX", "_LINUX", "GNUC", "NO_MALLOC_OVERRIDE"})
 			libdirs({folder .. "/lib/public/linux32"})
 			if _PROJECT_SERVERSIDE then
+				prelinkcommands({
+					"cp -fn " .. folder .. "/lib/public/linux32/libtier0.so " .. folder .. "/lib/public/linux32/libtier0_srv.so",
+					"cp -fn " .. folder .. "/lib/public/linux32/libvstdlib.so " .. folder .. "/lib/public/linux32/libvstdlib_srv.so"
+				})
 				links({"tier0_srv", "vstdlib_srv"})
 			else
 				links({"tier0", "vstdlib"})
@@ -59,4 +64,6 @@ function IncludeSourceSDK(folder)
 	end
 
 	filter(curfilter.patterns)
+
+	_SOURCE_SDK_INCLUDED = true
 end

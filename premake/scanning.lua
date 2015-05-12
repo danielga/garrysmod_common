@@ -1,16 +1,5 @@
-newoption({
-	trigger = "scanning",
-	description = "Sets the path to the scanning directory",
-	value = "path to scanning directory"
-})
-
-function IncludeScanning(folder)
-	folder = folder or _OPTIONS["scanning"] or os.getenv("SCANNING") or "../scanning"
-
-	local dir = path.getabsolute(folder)
-	if not os.isdir(dir) then
-		error(dir .. " doesn't exist (scanning)")
-	end
+function IncludeScanning()
+	local folder = _GARRYSMOD_COMMON_FOLDER .. "/scanning"
 
 	includedirs({folder})
 	files({

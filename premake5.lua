@@ -1,3 +1,7 @@
+if _ACTION == nil then
+	error("no action (vs20**, gmake or xcode for example) provided")
+end
+
 SERVERSIDE = true
 CLIENTSIDE = false
 
@@ -8,12 +12,11 @@ FILTER_MACOSX = "macosx"
 FILTER_DEBUG = "debug"
 FILTER_RELEASE = "release"
 
-_GARRYSMOD_COMMON_FOLDER = path.getrelative(_MAIN_SCRIPT_DIR, _SCRIPT_DIR)
-
+include("config.lua")
 include("premake/lua_shared.lua")
-include("premake/sourcesdk.lua")
 include("premake/detouring.lua")
 include("premake/scanning.lua")
+include("premake/sourcesdk.lua")
 
 newoption({
 	trigger = "solution",
@@ -21,11 +24,32 @@ newoption({
 	value = "path for solution directory"
 })
 
+function CleanPath(p)
+	if p == nil then
+		return
+	end
+
+	local last = p:sub(-1)
+	if last == "/" or last == "\\" then
+		p = p:sub(1, -2)
+	end
+
+	return p
+end
+
+_GARRYSMOD_COMMON_FOLDER = CleanPath(path.getrelative(_MAIN_SCRIPT_DIR, _SCRIPT_DIR))
+
 function CreateSolution(name, solutionpath)
 	SetFilter()
-	
+
 	_SOLUTION_NAME = name
-	_SOLUTION_FOLDER = solutionpath or _OPTIONS["solution"] or (os.get() .. "/" .. _ACTION)
+	_SOLUTION_FOLDER = solutionpath or _OPTIONS["solution"] or DEFAULT_SOLUTION_FOLDER
+
+	if _SOLUTION_FOLDER == nil then
+		error("you didn't supply a path for your solution folder")
+	end
+
+	_SOLUTION_FOLDER = CleanPath(_SOLUTION_FOLDER)
 
 	solution(name)
 		language("C++")
@@ -59,9 +83,15 @@ newoption({
 })
 
 function CreateProject(is_server, sourcepath)
-	sourcepath = sourcepath or _OPTIONS["source"] or "../source"
-
 	SetFilter()
+
+	sourcepath = sourcepath or _OPTIONS["source"] or DEFAULT_SOURCE_FOLDER
+
+	if sourcepath == nil then
+		error("you didn't supply a path to your source folder")
+	end
+
+	sourcepath = CleanPath(sourcepath)
 
 	_PROJECT_NAME = (is_server and "gmsv_" or "gmcl_") .. _SOLUTION_NAME
 	_PROJECT_SERVERSIDE = is_server
@@ -70,7 +100,8 @@ function CreateProject(is_server, sourcepath)
 		kind("SharedLib")
 		defines({
 			"GMMODULE",
-			string.upper(_SOLUTION_NAME) .. (_PROJECT_SERVERSIDE and "_SERVER" or "_CLIENT")
+			string.upper(_SOLUTION_NAME) .. (_PROJECT_SERVERSIDE and "_SERVER" or "_CLIENT"),
+			"IS_SERVERSIDE=" .. tostring(is_server)
 		})
 		includedirs({_GARRYSMOD_COMMON_FOLDER .. "/include"})
 		files({
@@ -82,12 +113,12 @@ function CreateProject(is_server, sourcepath)
 			sourcepath .. "/**.cxx"
 		})
 		vpaths({
-			["Header files"] = {
+			["Header files/*"] = {
 				sourcepath .. "/**.h",
 				sourcepath .. "/**.hpp",
 				sourcepath .. "/**.hxx"
 			},
-			["Source files"] = {
+			["Source files/*"] = {
 				sourcepath .. "/**.c",
 				sourcepath .. "/**.cpp",
 				sourcepath .. "/**.cxx"
