@@ -103,7 +103,10 @@ function CreateProject(is_server, sourcepath)
 			string.upper(_SOLUTION_NAME) .. (_PROJECT_SERVERSIDE and "_SERVER" or "_CLIENT"),
 			"IS_SERVERSIDE=" .. tostring(is_server)
 		})
-		includedirs({_GARRYSMOD_COMMON_FOLDER .. "/include"})
+		includedirs({
+			_GARRYSMOD_COMMON_FOLDER .. "/include",
+			sourcepath
+		})
 		files({
 			sourcepath .. "/**.h",
 			sourcepath .. "/**.hpp",
