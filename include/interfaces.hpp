@@ -9,7 +9,7 @@ namespace SourceSDK
 class FactoryLoader
 {
 public:
-	FactoryLoader( const std::string &name, bool serverside = true, bool noload = true ) :
+	FactoryLoader( const std::string &name, bool libprefix = true, bool srvsuffix = true, bool noload = true ) :
 		module( nullptr ),
 		factory( nullptr )
 	{
@@ -17,16 +17,21 @@ public:
 
 #if defined _WIN32
 
-		(void)serverside;
+		( void )libprefix;
+		(void)srvsuffix;
 		filename += ".dll";
 
 #elif defined __linux
 
-		filename += serverside ? "_srv.so" : ".so";
+		if( libprefix )
+			filename.insert( 0, "lib" );
+
+		filename += srvsuffix ? "_srv.so" : ".so";
 
 #elif defined __APPLE__
 
-		(void)serverside;
+		(void)libprefix;
+		(void)srvsuffix;
 		filename += ".dylib";
 
 #endif
