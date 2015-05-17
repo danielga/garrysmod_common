@@ -47,10 +47,14 @@ function IncludeSourceSDK(folder)
 			libdirs({folder .. "/lib/public/linux32"})
 			if _PROJECT_SERVERSIDE then
 				prelinkcommands({
-					"cp -fn " .. folder .. "/lib/public/linux32/libtier0.so " .. folder .. "/lib/public/linux32/libtier0_srv.so",
-					"cp -fn " .. folder .. "/lib/public/linux32/libvstdlib.so " .. folder .. "/lib/public/linux32/libvstdlib_srv.so"
+					--"cp -fn " .. folder .. "/lib/public/linux32/libtier0.so " .. folder .. "/lib/public/linux32/libtier0_srv.so",
+					--"cp -fn " .. folder .. "/lib/public/linux32/libvstdlib.so " .. folder .. "/lib/public/linux32/libvstdlib_srv.so"
+					"mkdir -p bin",
+					"cp -fn " .. folder .. "/lib/public/linux32/libtier0.so bin/libtier0_srv.so",
+					"cp -fn " .. folder .. "/lib/public/linux32/libvstdlib.so bin/libvstdlib_srv.so"
 				})
-				links({"tier0_srv", "vstdlib_srv"})
+				--links({"tier0_srv", "vstdlib_srv"})
+				linkoptions({"-l:bin/libtier0_srv.so", "-l:bin/libvstdlib_srv.so"})
 			else
 				links({"tier0", "vstdlib"})
 			end
