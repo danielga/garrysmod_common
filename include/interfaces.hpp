@@ -11,7 +11,7 @@ inline std::string GetBinaryFileName( const std::string &name, bool serverside =
 #if defined _WIN32
 
 	(void)serverside;
-	return name + ".dylib";
+	return name + ".dll";
 
 #elif defined __linux
 
