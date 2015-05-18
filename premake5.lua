@@ -5,6 +5,9 @@ end
 SERVERSIDE = true
 CLIENTSIDE = false
 
+SOURCES_MANUAL = true
+SOURCES_ALL = false
+
 FILTER_WINDOWS = "windows"
 FILTER_LINUX = "linux"
 FILTER_MACOSX = "macosx"
@@ -82,7 +85,7 @@ newoption({
 	value = "path to source directory"
 })
 
-function CreateProject(is_server, sourcepath)
+function CreateProject(is_server, manual_files, sourcepath)
 	SetFilter()
 
 	sourcepath = sourcepath or _OPTIONS["source"] or DEFAULT_SOURCE_FOLDER
@@ -91,7 +94,7 @@ function CreateProject(is_server, sourcepath)
 		error("you didn't supply a path to your source folder")
 	end
 
-	sourcepath = CleanPath(sourcepath)
+	_SOURCE_FOLDER = CleanPath(sourcepath)
 
 	_PROJECT_NAME = (is_server and "gmsv_" or "gmcl_") .. _SOLUTION_NAME
 	_PROJECT_SERVERSIDE = is_server
@@ -104,27 +107,31 @@ function CreateProject(is_server, sourcepath)
 			"IS_SERVERSIDE=" .. tostring(is_server)
 		})
 		includedirs({
-			_GARRYSMOD_COMMON_FOLDER .. "/include",
-			sourcepath
+			_SOURCE_FOLDER,
+			_GARRYSMOD_COMMON_FOLDER .. "/include"
 		})
-		files({
-			sourcepath .. "/**.h",
-			sourcepath .. "/**.hpp",
-			sourcepath .. "/**.hxx",
-			sourcepath .. "/**.c",
-			sourcepath .. "/**.cpp",
-			sourcepath .. "/**.cxx"
-		})
+
+		if not manual_files then
+			files({
+				_SOURCE_FOLDER .. "/**.h",
+				_SOURCE_FOLDER .. "/**.hpp",
+				_SOURCE_FOLDER .. "/**.hxx",
+				_SOURCE_FOLDER .. "/**.c",
+				_SOURCE_FOLDER .. "/**.cpp",
+				_SOURCE_FOLDER .. "/**.cxx"
+			})
+		end
+
 		vpaths({
 			["Header files/*"] = {
-				sourcepath .. "/**.h",
-				sourcepath .. "/**.hpp",
-				sourcepath .. "/**.hxx"
+				_SOURCE_FOLDER .. "/**.h",
+				_SOURCE_FOLDER .. "/**.hpp",
+				_SOURCE_FOLDER .. "/**.hxx"
 			},
 			["Source files/*"] = {
-				sourcepath .. "/**.c",
-				sourcepath .. "/**.cpp",
-				sourcepath .. "/**.cxx"
+				_SOURCE_FOLDER .. "/**.c",
+				_SOURCE_FOLDER .. "/**.cpp",
+				_SOURCE_FOLDER .. "/**.cxx"
 			}
 		})
 
@@ -144,6 +151,18 @@ function CreateProject(is_server, sourcepath)
 			buildoptions({"-std=c++11"})
 
 		filter({})
+end
+
+function AddFiles(data)
+	if type(data) == "string" then
+		files(_SOURCE_FOLDER .. "/" .. data)
+	elseif type(data) == "table" then
+		for i = 1, #data do
+			data[i] = _SOURCE_FOLDER .. "/" .. data[i]
+		end
+
+		files(data)
+	end
 end
 
 function HasFilter(filter)
