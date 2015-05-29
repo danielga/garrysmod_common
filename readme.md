@@ -48,4 +48,5 @@ Call the next functions as needed. [path] means it's optional because you can al
 	IncludeSourceSDK([path]) -- premake option: --sourcesdk=path - env var: SOURCE_SDK
 
 ## Relevant URLs
+
 https://github.com/ValveSoftware/source-sdk-2013
