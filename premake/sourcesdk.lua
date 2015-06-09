@@ -44,16 +44,13 @@ function IncludeSourceSDK(folder)
 	if nosystem or HasFilter(FILTER_LINUX) then
 		filter({"system:linux", curfilter.configurations})
 			defines({"COMPILER_GCC", "POSIX", "LINUX", "_LINUX", "GNUC", "NO_MALLOC_OVERRIDE"})
-			libdirs({folder .. "/lib/public/linux32"})
+			libdirs({_SOLUTION_FOLDER})
 			if _PROJECT_SERVERSIDE then
 				prelinkcommands({
-					--"cp -fn " .. folder .. "/lib/public/linux32/libtier0.so " .. folder .. "/lib/public/linux32/libtier0_srv.so",
-					--"cp -fn " .. folder .. "/lib/public/linux32/libvstdlib.so " .. folder .. "/lib/public/linux32/libvstdlib_srv.so"
 					"mkdir -p bin",
 					"cp -fn " .. folder .. "/lib/public/linux32/libtier0.so bin/libtier0_srv.so",
 					"cp -fn " .. folder .. "/lib/public/linux32/libvstdlib.so bin/libvstdlib_srv.so"
 				})
-				--links({"tier0_srv", "vstdlib_srv"})
 				linkoptions({"-l:bin/libtier0_srv.so", "-l:bin/libvstdlib_srv.so"})
 			else
 				links({"tier0", "vstdlib"})

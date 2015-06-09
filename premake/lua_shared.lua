@@ -12,6 +12,7 @@ function IncludeLuaShared()
 
 	if nosystem or HasFilter(FILTER_LINUX) then
 		filter({"system:linux", curfilter.configurations})
+			libdirs({_SOLUTION_FOLDER})
 			local lua_shared_name = _PROJECT_SERVERSIDE and "lua_shared_srv.so" or "lua_shared.so"
 			prelinkcommands({"cp -fn " .. path.getabsolute(folder .. "/" .. lua_shared_name) .. " ./"})
 			linkoptions({"-l:" .. lua_shared_name})
