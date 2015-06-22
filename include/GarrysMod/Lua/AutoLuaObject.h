@@ -10,49 +10,49 @@ namespace GarrysMod
 		{
 		public:
 			AutoLuaObject( ) :
-				m_pLuaObj( NULL )
+				lua_object( nullptr )
 			{ };
 
 			AutoLuaObject( ILuaObject *obj ) :
-				m_pLuaObj( obj )
+				lua_object( obj )
 			{ };
 
 			~AutoLuaObject( )
 			{
-				if( !m_pLuaObj )
+				if( !lua_object )
 					return;
 
-				m_pLuaObj->UnReference( );
+				lua_object->UnReference( );
 			};
 
 			ILuaObject *operator->( )
 			{
-				return m_pLuaObj;
+				return lua_object;
 			};
 
 			ILuaObject *operator->( ) const
 			{
-				return m_pLuaObj;
+				return lua_object;
 			};
 
 			operator ILuaObject *( )
 			{
-				return m_pLuaObj;
+				return lua_object;
 			};
 
 			operator ILuaObject *( ) const
 			{
-				return m_pLuaObj;
+				return lua_object;
 			};
 
 			const AutoLuaObject &operator=( const ILuaObject *obj )
 			{
-				m_pLuaObj = const_cast<ILuaObject *>( obj );
+				lua_object = const_cast<ILuaObject *>( obj );
 				return *this;
 			}
 
 		private:
-			ILuaObject *m_pLuaObj;
+			ILuaObject *lua_object;
 		};
 	}
 }

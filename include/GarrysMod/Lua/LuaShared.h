@@ -2,7 +2,6 @@
 
 #define GMOD_LUASHARED_INTERFACE "LUASHARED003"
 
-#include "LuaInterface.h"
 #include <string>
 #include <vector>
 
@@ -14,6 +13,8 @@ namespace GarrysMod
 {
 	namespace Lua
 	{
+		class ILuaInterface;
+
 		namespace State
 		{
 			enum

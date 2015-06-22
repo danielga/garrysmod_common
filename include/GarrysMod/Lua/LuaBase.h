@@ -1,7 +1,5 @@
 #pragma once
 
-#include <cstddef>
-
 struct lua_State;
 
 namespace GarrysMod 
@@ -40,7 +38,7 @@ namespace GarrysMod
 			virtual void RawGet( int iStackPos ) = 0;
 			virtual void RawSet( int iStackPos ) = 0;
 
-			virtual const char *GetString( int iStackPos = -1, unsigned int *iOutLen = NULL ) = 0;
+			virtual const char *GetString( int iStackPos = -1, unsigned int *iOutLen = nullptr ) = 0;
 			virtual double GetNumber( int iStackPos = -1 ) = 0;
 			virtual bool GetBool( int iStackPos = -1 ) = 0;
 			virtual CFunc GetCFunction( int iStackPos = -1 ) = 0;

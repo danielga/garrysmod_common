@@ -1,8 +1,6 @@
 #pragma once
 
 #include "LuaBase.h"
-#include "LuaCallback.h"
-#include "LuaObject.h"
 #include <string>
 
 namespace Bootil
@@ -18,6 +16,8 @@ namespace GarrysMod
 	namespace Lua
 	{
 		class IThreadedCall;
+		class ILuaGameCallback;
+		class ILuaObject;
 
 		class ILuaInterface : public ILuaBase
 		{
