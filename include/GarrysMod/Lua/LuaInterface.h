@@ -23,7 +23,7 @@ namespace GarrysMod
 		{
 		public:
 			virtual void *AddThreadedCall( IThreadedCall * ) = 0; // returns something?
-			virtual bool Init( ILuaCallback *, bool ) = 0;
+			virtual bool Init( ILuaGameCallback *, bool ) = 0;
 			virtual void Shutdown( ) = 0;
 			virtual void Cycle( ) = 0;
 			virtual lua_State *GetLuaState( ) = 0;
