@@ -24,6 +24,17 @@ function IncludeSourceSDK(folder)
 		folder .. "/public/tier0",
 		folder .. "/public/tier1"
 	})
+	if _PROJECT_SERVERSIDE then
+		includedirs({
+			folder .. "/game/server",
+			folder .. "/game/shared"
+		})
+	else
+		includedirs({
+			folder .. "/game/client",
+			folder .. "/game/shared"
+		})
+	end
 	vpaths({["Source files"] = folder .. "/**.cpp"})
 
 	local curfilter = GetFilter()
