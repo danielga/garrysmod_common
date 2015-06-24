@@ -7,8 +7,12 @@ namespace GarrysMod
 	namespace Lua
 	{
 		class ILuaObject;
-		class CLuaError;
 		class ILuaInterface;
+
+		struct CLuaError
+		{
+			const char *text;
+		};
 
 		class ILuaGameCallback
 		{
