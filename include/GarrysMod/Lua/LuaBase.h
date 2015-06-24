@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+
 struct lua_State;
 
 namespace GarrysMod 
