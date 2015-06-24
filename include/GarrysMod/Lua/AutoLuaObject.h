@@ -25,17 +25,7 @@ namespace GarrysMod
 				lua_object->UnReference( );
 			};
 
-			ILuaObject *operator->( )
-			{
-				return lua_object;
-			};
-
 			ILuaObject *operator->( ) const
-			{
-				return lua_object;
-			};
-
-			operator ILuaObject *( )
 			{
 				return lua_object;
 			};
