@@ -5,13 +5,14 @@ function IncludeLuaShared()
 	local nosystem = curfilter.system == nil
 
 	if nosystem or HasFilter(FILTER_WINDOWS) then
-		filter({"system:windows", curfilter.configurations})
+		local filt = {"system:windows", curfilter.configurations}
+		filter(MergeFilters({"system:windows", curfilter.configurations}, curfilter.extra))
 			libdirs({folder})
 			links({"lua_shared"})
 	end
 
 	if nosystem or HasFilter(FILTER_LINUX) then
-		filter({"system:linux", curfilter.configurations})
+		filter(MergeFilters({"system:linux", curfilter.configurations}, curfilter.extra))
 			libdirs({_SOLUTION_FOLDER})
 			local lua_shared_name = _PROJECT_SERVERSIDE and "lua_shared_srv.so" or "lua_shared.so"
 			prelinkcommands({"cp -fn " .. path.getabsolute(folder .. "/" .. lua_shared_name) .. " ./"})
@@ -19,7 +20,7 @@ function IncludeLuaShared()
 	end
 
 	if nosystem or HasFilter(FILTER_MACOSX) then
-		filter({"system:macosx", curfilter.configurations}) -- should probably be similar to linux
+		filter(MergeFilters({"system:macosx", curfilter.configurations}, curfilter.extra)) -- should probably be similar to linux
 			libdirs({folder})
 			links({"lua_shared"})
 	end

@@ -41,7 +41,7 @@ function IncludeSourceSDK(folder)
 	local nosystem = curfilter.system == nil
 
 	if nosystem or HasFilter(FILTER_WINDOWS) then
-		filter({"system:windows", curfilter.configurations})
+		filter(MergeFilters({"system:windows", curfilter.configurations}, curfilter.extra))
 			files({folder .. "/public/tier0/memoverride.cpp"})
 			libdirs({folder .. "/lib/public"})
 			links({"ws2_32", "tier0", "tier1", "vstdlib"})
@@ -53,7 +53,7 @@ function IncludeSourceSDK(folder)
 	end
 
 	if nosystem or HasFilter(FILTER_LINUX) then
-		filter({"system:linux", curfilter.configurations})
+		filter(MergeFilters({"system:linux", curfilter.configurations}, curfilter.extra))
 			defines({"COMPILER_GCC", "POSIX", "LINUX", "_LINUX", "GNUC", "NO_MALLOC_OVERRIDE"})
 			if _PROJECT_SERVERSIDE then
 				libdirs({_SOLUTION_FOLDER})
@@ -71,7 +71,7 @@ function IncludeSourceSDK(folder)
 	end
 
 	if nosystem or HasFilter(FILTER_MACOSX) then
-		filter({"system:macosx", curfilter.configurations}) -- should probably be similar to linux
+		filter(MergeFilters({"system:macosx", curfilter.configurations}, curfilter.extra)) -- should probably be similar to linux
 			libdirs({folder .. "/lib/public/osx32"})
 			links({"tier0", "tier1", "vstdlib"})
 	end

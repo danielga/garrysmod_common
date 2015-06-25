@@ -184,6 +184,7 @@ end
 function SetFilter(...)
 	local list = {...}
 	local sys, config
+	local extra, patterns = {}, {}
 	for i = 1, #list do
 		if list[i] == FILTER_WINDOWS or list[i] == FILTER_LINUX or list[i] == FILTER_MACOSX then
 			if sys ~= nil then
@@ -197,10 +198,28 @@ function SetFilter(...)
 			else
 				config = "configurations:" .. list[i]
 			end
+		else
+			table.insert(extra, list[i])
+			table.insert(patterns, list[i])
 		end
 	end
 
-	local patterns = {sys, config}
-	_CURRENT_FILTER = {system = sys, configurations = config, list = list, patterns = patterns}
+	table.insert(patterns, sys)
+	table.insert(patterns, config)
+	_CURRENT_FILTER = {system = sys, configurations = config, extra = extra, list = list, patterns = patterns}
 	filter(patterns)
+end
+
+function MergeFilters(tab1, tab2)
+	local tab = {}
+
+	for i = 1, #tab1 do
+		table.insert(tab, tab1[i])
+	end
+
+	for i = 1, #tab2 do
+		table.insert(tab, tab2[i])
+	end
+
+	return tab
 end

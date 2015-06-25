@@ -15,12 +15,12 @@ function IncludeScanning()
 	local nosystem = curfilter.system == nil
 
 	if nosystem or HasFilter(FILTER_LINUX) then
-		filter({"system:linux", curfilter.configurations})
+		filter(MergeFilters({"system:linux", curfilter.configurations}, curfilter.extra))
 			links({"dl"})
 	end
 
 	if nosystem or HasFilter(FILTER_MACOSX) then
-		filter({"system:macosx", curfilter.configurations})
+		filter(MergeFilters({"system:macosx", curfilter.configurations}, curfilter.extra))
 			links({"dl"})
 	end
 
