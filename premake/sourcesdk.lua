@@ -44,7 +44,7 @@ function IncludeSourceSDK(folder)
 		filter(MergeFilters({"system:windows", curfilter.configurations}, curfilter.extra))
 			files({folder .. "/public/tier0/memoverride.cpp"})
 			libdirs({folder .. "/lib/public"})
-			links({"ws2_32", "tier0", "tier1", "vstdlib"})
+			links({"ws2_32", "tier0", "tier1", "vstdlib", "mathlib"})
 
 			if curfilter.configurations == nil or HasFilter(FILTER_DEBUG) then
 				filter({"system:windows", "configurations:Debug"})
@@ -67,13 +67,16 @@ function IncludeSourceSDK(folder)
 				libdirs({folder .. "/lib/public/linux32"})
 				links({"tier0", "vstdlib"})
 			end
-			linkoptions({folder .. "/lib/public/linux32/tier1.a"})
+			linkoptions({
+				folder .. "/lib/public/linux32/tier1.a",
+				folder .. "/lib/public/linux32/mathlib.a"
+			})
 	end
 
 	if nosystem or HasFilter(FILTER_MACOSX) then
 		filter(MergeFilters({"system:macosx", curfilter.configurations}, curfilter.extra)) -- should probably be similar to linux
 			libdirs({folder .. "/lib/public/osx32"})
-			links({"tier0", "tier1", "vstdlib"})
+			links({"tier0", "tier1", "vstdlib", "mathlib"})
 	end
 
 	filter(curfilter.patterns)
