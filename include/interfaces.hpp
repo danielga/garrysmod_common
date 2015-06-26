@@ -1,38 +1,11 @@
 #pragma once
 
+#include <helpers.hpp>
 #include <interface.h>
 #include <string>
 
 namespace SourceSDK
 {
-
-inline std::string GetBinaryFileName(
-	const std::string &name,
-	bool libprefix = true,
-	bool srvsuffix = true,
-	const std::string &extraprefix = ""
-)
-{
-
-#if defined _WIN32
-
-	(void)libprefix;
-	(void)srvsuffix;
-	return extraprefix + name + ".dll";
-
-#elif defined __linux
-
-	return extraprefix + ( libprefix ? "lib" : "" ) + name + ( srvsuffix ? "_srv.so" : ".so" );
-
-#elif defined __APPLE__
-
-	(void)libprefix;
-	(void)srvsuffix;
-	return extraprefix + name + ".dylib";
-
-#endif
-
-}
 
 class FactoryLoader
 {
@@ -47,7 +20,7 @@ public:
 		module( nullptr ),
 		factory( nullptr )
 	{
-		std::string filename = GetBinaryFileName( name, libprefix, srvsuffix, extraprefix );
+		std::string filename = helpers::GetBinaryFileName( name, libprefix, srvsuffix, extraprefix );
 		module = Sys_LoadModule( filename.c_str( ), noload ? SYS_NOLOAD : SYS_NOFLAGS );
 		if( module != nullptr )
 			factory = Sys_GetFactory( module );
