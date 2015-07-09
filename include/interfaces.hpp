@@ -17,6 +17,7 @@ public:
 		const std::string &extraprefix = "",
 		bool noload = true
 	) :
+		unload( !noload ),
 		module( nullptr ),
 		factory( nullptr )
 	{
@@ -28,7 +29,7 @@ public:
 
 	~FactoryLoader( )
 	{
-		if( module != nullptr )
+		if( unload && module != nullptr )
 			Sys_UnloadModule( module );
 	}
 
@@ -49,6 +50,7 @@ public:
 	}
 
 private:
+	bool unload;
 	CSysModule *module;
 	CreateInterfaceFn factory;
 };
