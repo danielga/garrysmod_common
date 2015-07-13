@@ -76,6 +76,12 @@ function CreateSolution(name, solutionpath)
 			objdir(_SOLUTION_FOLDER .. "/intermediate")
 			targetdir(_SOLUTION_FOLDER .. "/debug")
 
+		filter("system:linux")
+			linkoptions({"-static-libgcc", "-static-libstdc++"})
+
+		filter("system:macosx")
+			linkoptions({"-static-libgcc", "-static-libstdc++"})
+
 		filter({})
 end
 
