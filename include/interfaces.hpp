@@ -21,7 +21,10 @@ public:
 		module( nullptr ),
 		factory( nullptr )
 	{
-		std::string filename = helpers::GetBinaryFileName( name, libprefix, srvsuffix, extraprefix );
+		std::string filename = name;
+		if( filename.find( '.' ) == filename.npos )
+			filename = helpers::GetBinaryFileName( name, libprefix, srvsuffix, extraprefix );
+
 		module = Sys_LoadModule( filename.c_str( ), noload ? SYS_NOLOAD : SYS_NOFLAGS );
 		if( module != nullptr )
 			factory = Sys_GetFactory( module );
