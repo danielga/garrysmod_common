@@ -11,28 +11,28 @@ namespace GarrysMod
 		public:
 			AutoLuaReference( ) :
 				lua( nullptr ),
-				lua_ref( -2 )
+				ref( -2 )
 			{ };
 
 			AutoLuaReference( GarrysMod::Lua::ILuaBase *luabase ) :
 				lua( luabase ),
-				lua_ref( luabase->ReferenceCreate( ) )
+				ref( luabase->ReferenceCreate( ) )
 			{ };
 
 			AutoLuaReference( GarrysMod::Lua::ILuaBase *luabase, int ref ) :
 				lua( luabase ),
-				lua_ref( ref )
+				ref( ref )
 			{ };
 
 			~AutoLuaReference( )
 			{
 				if( IsValid( ) )
-					lua->ReferenceFree( lua_ref );
+					lua->ReferenceFree( ref );
 			};
 
 			bool IsValid( ) const
 			{
-				return lua != nullptr && lua_ref != -2;
+				return lua != nullptr && ref != -2;
 			}
 
 			explicit operator bool( ) const
@@ -42,7 +42,7 @@ namespace GarrysMod
 
 			operator int( ) const
 			{
-				return lua_ref;
+				return ref;
 			};
 
 			bool Create( GarrysMod::Lua::ILuaBase *luabase = nullptr )
@@ -52,7 +52,7 @@ namespace GarrysMod
 				if( luabase != nullptr )
 					lua = luabase;
 
-				lua_ref = lua->ReferenceCreate( );
+				ref = lua->ReferenceCreate( );
 				return IsValid( );
 			}
 
@@ -61,8 +61,8 @@ namespace GarrysMod
 				if( !IsValid( ) )
 					return false;
 
-				lua->ReferenceFree( lua_ref );
-				lua_ref = -2;
+				lua->ReferenceFree( ref );
+				ref = -2;
 				return true;
 			}
 
@@ -71,13 +71,13 @@ namespace GarrysMod
 				if( !IsValid( ) )
 					return false;
 
-				lua->ReferencePush( lua_ref );
+				lua->ReferencePush( ref );
 				return true;
 			}
 
 		private:
 			GarrysMod::Lua::ILuaBase *lua;
-			int lua_ref;
+			int ref;
 		};
 	}
 }
