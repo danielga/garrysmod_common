@@ -1,5 +1,4 @@
-garrysmod_common
-================
+# garrysmod_common
 
 A repository of common bits for compilation projects based on Garry's Mod.
 
