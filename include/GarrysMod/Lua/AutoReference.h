@@ -1,6 +1,7 @@
 #pragma once
 
 #include "LuaBase.h"
+#include <cstdint>
 
 namespace GarrysMod
 {
@@ -19,15 +20,17 @@ namespace GarrysMod
 				ref( luabase->ReferenceCreate( ) )
 			{ };
 
-			AutoReference( GarrysMod::Lua::ILuaBase *luabase, int ref ) :
+			AutoReference( GarrysMod::Lua::ILuaBase *luabase, int32_t index ) :
 				lua( luabase ),
-				ref( ref )
-			{ };
+				ref( -2 )
+			{
+				lua->Push( index );
+				ref = lua->ReferenceCreate( );
+			};
 
 			~AutoReference( )
 			{
-				if( IsValid( ) )
-					lua->ReferenceFree( ref );
+				Free( );
 			};
 
 			bool IsValid( ) const
@@ -40,28 +43,44 @@ namespace GarrysMod
 				return IsValid( );
 			}
 
-			operator int( ) const
+			operator int32_t( ) const
 			{
 				return ref;
 			};
 
-			bool Create( GarrysMod::Lua::ILuaBase *luabase = nullptr )
+			void Setup( GarrysMod::Lua::ILuaBase *luabase )
 			{
 				Free( );
+				lua = luabase;
+			}
 
-				if( luabase != nullptr )
-					lua = luabase;
+			bool Create( )
+			{
+				if( !Free( ) )
+					return false;
 
+				ref = lua->ReferenceCreate( );
+				return IsValid( );
+			}
+
+			bool Create( int32_t index )
+			{
+				if( !Free( ) )
+					return false;
+
+				lua->Push( index );
 				ref = lua->ReferenceCreate( );
 				return IsValid( );
 			}
 
 			bool Free( )
 			{
-				if( !IsValid( ) )
+				if( lua == nullptr )
 					return false;
 
-				lua->ReferenceFree( ref );
+				if( ref >= 0 )
+					lua->ReferenceFree( ref );
+
 				ref = -2;
 				return true;
 			}
@@ -77,7 +96,7 @@ namespace GarrysMod
 
 		private:
 			GarrysMod::Lua::ILuaBase *lua;
-			int ref;
+			int32_t ref;
 		};
 	}
 }
