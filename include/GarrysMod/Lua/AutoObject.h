@@ -6,18 +6,18 @@ namespace GarrysMod
 {
 	namespace Lua
 	{
-		class AutoLuaObject
+		class AutoObject
 		{
 		public:
-			AutoLuaObject( ) :
+			AutoObject( ) :
 				lua_object( nullptr )
 			{ };
 
-			AutoLuaObject( ILuaObject *obj ) :
+			AutoObject( ILuaObject *obj ) :
 				lua_object( obj )
 			{ };
 
-			~AutoLuaObject( )
+			~AutoObject( )
 			{
 				if( !lua_object )
 					return;

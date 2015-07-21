@@ -6,25 +6,25 @@ namespace GarrysMod
 {
 	namespace Lua
 	{
-		class AutoLuaReference
+		class AutoReference
 		{
 		public:
-			AutoLuaReference( ) :
+			AutoReference( ) :
 				lua( nullptr ),
 				ref( -2 )
 			{ };
 
-			AutoLuaReference( GarrysMod::Lua::ILuaBase *luabase ) :
+			AutoReference( GarrysMod::Lua::ILuaBase *luabase ) :
 				lua( luabase ),
 				ref( luabase->ReferenceCreate( ) )
 			{ };
 
-			AutoLuaReference( GarrysMod::Lua::ILuaBase *luabase, int ref ) :
+			AutoReference( GarrysMod::Lua::ILuaBase *luabase, int ref ) :
 				lua( luabase ),
 				ref( ref )
 			{ };
 
-			~AutoLuaReference( )
+			~AutoReference( )
 			{
 				if( IsValid( ) )
 					lua->ReferenceFree( ref );
