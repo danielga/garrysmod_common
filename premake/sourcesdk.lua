@@ -17,7 +17,7 @@ function IncludeSourceSDK(folder)
 		error(dir .. " doesn't exist (SourceSDK)")
 	end
 
-	defines({"SUPPRESS_INVALID_PARAMETER_NO_INFO", _PROJECT_SERVERSIDE and "GAME_DLL" or "CLIENT_DLL"})
+	defines({_PROJECT_SERVERSIDE and "GAME_DLL" or "CLIENT_DLL"})
 	includedirs({
 		folder .. "/common",
 		folder .. "/public",
@@ -42,7 +42,6 @@ function IncludeSourceSDK(folder)
 
 	if nosystem or HasFilter(FILTER_WINDOWS) then
 		filter(MergeFilters({"system:windows", curfilter.configurations}, curfilter.extra))
-			files({folder .. "/public/tier0/memoverride.cpp"})
 			libdirs({folder .. "/lib/public"})
 			links({"ws2_32", "tier0", "tier1", "vstdlib", "mathlib"})
 
