@@ -4,8 +4,9 @@ function IncludeLuaShared()
 	local curfilter = GetFilter()
 	local nosystem = curfilter.system == nil
 
+	includedirs({_GARRYSMOD_COMMON_FOLDER .. "/include"})
+
 	if nosystem or HasFilter(FILTER_WINDOWS) then
-		local filt = {"system:windows", curfilter.configurations}
 		filter(MergeFilters({"system:windows", curfilter.configurations}, curfilter.extra))
 			libdirs({folder})
 			links({"lua_shared"})
