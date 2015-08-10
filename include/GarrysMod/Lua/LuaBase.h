@@ -90,9 +90,20 @@ namespace GarrysMod
 
 		enum 
 		{
-			SPECIAL_GLOB,		// Global table
-			SPECIAL_ENV,		// Environment table
-			SPECIAL_REG,		// Registry table
+			SPECIAL_GLOB,						// Global table
+			SPECIAL_ENV,						// Environment table
+			SPECIAL_REG,						// Registry table
+			SPECIAL_ENVIRONMENT = SPECIAL_ENV,	// Environment table (verbose)
+			SPECIAL_REGISTRY = SPECIAL_REG		// Registry table (verbose)
+		};
+
+		// Use these when calling ILuaBase::GetField or ILuaBase::SetField for example,
+		// instead of pushing the specified table
+		enum
+		{
+			INDEX_GLOBAL = -10002,	// Global table
+			INDEX_ENVIRONMENT,		// Environment table
+			INDEX_REGISTRY,			// Registry table
 		};
 	}
 }
