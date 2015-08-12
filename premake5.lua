@@ -109,7 +109,7 @@ function CreateProject(is_server, manual_files, sourcepath)
 		kind("SharedLib")
 		defines({
 			"GMMODULE",
-			string.upper(_SOLUTION_NAME) .. (_PROJECT_SERVERSIDE and "_SERVER" or "_CLIENT"),
+			string.upper(string.gsub(_SOLUTION_NAME, "%.", "_")) .. (_PROJECT_SERVERSIDE and "_SERVER" or "_CLIENT"),
 			"IS_SERVERSIDE=" .. tostring(is_server)
 		})
 		includedirs({
