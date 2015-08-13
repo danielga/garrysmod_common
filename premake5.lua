@@ -20,6 +20,7 @@ include("premake/lua_shared.lua")
 include("premake/detouring.lua")
 include("premake/scanning.lua")
 include("premake/sourcesdk.lua")
+include("premake/pkg_config.lua")
 
 newoption({
 	trigger = "solution",
