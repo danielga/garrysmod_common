@@ -60,7 +60,7 @@ function CreateSolution(name, solutionpath)
 		location(_SOLUTION_FOLDER)
 		warnings("Extra")
 		flags({"NoPCH", "StaticRuntime"})
-		platforms({"x86"})
+		platforms("x86")
 		configurations({"Release", "Debug"})
 
 		filter("platforms:x86")
@@ -73,7 +73,7 @@ function CreateSolution(name, solutionpath)
 			targetdir(_SOLUTION_FOLDER .. "/release")
 
 		filter("configurations:Debug")
-			flags({"Symbols"})
+			flags("Symbols")
 			objdir(_SOLUTION_FOLDER .. "/intermediate")
 			targetdir(_SOLUTION_FOLDER .. "/debug")
 
@@ -155,7 +155,7 @@ function CreateProject(is_server, manual_files, sourcepath)
 			targetsuffix("_mac")
 
 		filter("action:gmake")
-			buildoptions({"-std=c++11"})
+			buildoptions("-std=c++11")
 
 		filter({})
 end
