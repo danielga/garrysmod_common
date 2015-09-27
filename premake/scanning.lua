@@ -1,7 +1,7 @@
 function IncludeScanning()
 	local folder = _GARRYSMOD_COMMON_FOLDER .. "/scanning"
 
-	includedirs({folder})
+	includedirs(folder)
 	files({
 		folder .. "/*.hpp",
 		folder .. "/*.cpp"
@@ -16,12 +16,12 @@ function IncludeScanning()
 
 	if nosystem or HasFilter(FILTER_LINUX) then
 		filter(MergeFilters({"system:linux", curfilter.configurations}, curfilter.extra))
-			links({"dl"})
+			links("dl")
 	end
 
 	if nosystem or HasFilter(FILTER_MACOSX) then
 		filter(MergeFilters({"system:macosx", curfilter.configurations}, curfilter.extra))
-			links({"dl"})
+			links("dl")
 	end
 
 	filter(curfilter.patterns)

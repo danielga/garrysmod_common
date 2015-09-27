@@ -172,6 +172,17 @@ function AddFiles(data)
 	end
 end
 
+-- Move filters over to configuration().current._criteria.patterns:
+--[[
+for k, v in pairs(configuration().current._criteria.patterns) do
+	for k, v in pairs(v) do
+		for k, v in pairs(v) do
+			print(k, v)
+		end
+	end
+end
+]]
+
 function HasFilter(filter)
 	if _CURRENT_FILTER ~= nil then
 		for i = 1, #_CURRENT_FILTER.list do
