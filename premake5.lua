@@ -74,6 +74,7 @@ function CreateSolution(name, solutionpath)
 
 		filter("configurations:Debug")
 			flags("Symbols")
+			defines({"DEBUG", "_DEBUG"})
 			objdir(_SOLUTION_FOLDER .. "/intermediate")
 			targetdir(_SOLUTION_FOLDER .. "/debug")
 
