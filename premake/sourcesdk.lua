@@ -144,10 +144,14 @@ function IncludeSDKTier1(folder)
 			folder .. "/public/tier0",
 			folder .. "/public/tier1"
 		})
-		vpaths({["Source files"] = folder .. "/tier1/**.cpp"})
+		vpaths({["Source files"] = {
+			folder .. "/tier1/**.cpp",
+			folder .. "/utils/lzma/C/**.c"
+		}})
 		AddCommon(folder)
 		files({
 			folder .. "/tier1/bitbuf.cpp",
+			folder .. "/tier1/newbitbuf.cpp",
 			folder .. "/tier1/byteswap.cpp",
 			folder .. "/tier1/characterset.cpp",
 			folder .. "/tier1/checksum_crc.cpp",
@@ -163,26 +167,29 @@ function IncludeSDKTier1(folder)
 			folder .. "/tier1/KeyValues.cpp",
 			folder .. "/tier1/kvpacker.cpp",
 			folder .. "/tier1/lzmaDecoder.cpp",
+			--folder .. "/tier1/lzss.cpp",
 			folder .. "/tier1/mempool.cpp",
 			folder .. "/tier1/memstack.cpp",
 			folder .. "/tier1/NetAdr.cpp",
+			folder .. "/tier1/splitstring.cpp",
 			folder .. "/tier1/rangecheckedvar.cpp",
 			folder .. "/tier1/reliabletimer.cpp",
-			folder .. "/tier1/snappy-sinksource.cpp",
-			folder .. "/tier1/snappy-stubs-internal.cpp",
-			folder .. "/tier1/snappy.cpp",
-			folder .. "/tier1/sparsematrix.cpp",
-			folder .. "/tier1/splitstring.cpp",
 			folder .. "/tier1/stringpool.cpp",
 			folder .. "/tier1/strtools.cpp",
+			folder .. "/tier1/strtools_unicode.cpp",
 			folder .. "/tier1/tier1.cpp",
 			folder .. "/tier1/tokenreader.cpp",
+			folder .. "/tier1/sparsematrix.cpp",
 			folder .. "/tier1/uniqueid.cpp",
-			folder .. "/tier1/utlbinaryblock.cpp",
 			folder .. "/tier1/utlbuffer.cpp",
 			folder .. "/tier1/utlbufferutil.cpp",
 			folder .. "/tier1/utlstring.cpp",
-			folder .. "/tier1/utlsymbol.cpp"
+			folder .. "/tier1/utlsymbol.cpp",
+			folder .. "/tier1/utlbinaryblock.cpp",
+			folder .. "/tier1/snappy.cpp",
+			folder .. "/tier1/snappy-sinksource.cpp",
+			folder .. "/tier1/snappy-stubs-internal.cpp",
+			folder .. "/utils/lzma/C/LzmaDec.c"
 		})
 
 		filter("system:windows")
@@ -194,7 +201,7 @@ function IncludeSDKTier1(folder)
 			files({
 				folder .. "/tier1/processor_detect_linux.cpp",
 				folder .. "/tier1/qsort_s.cpp",
-				--folder .. "/tier1/pathmatch.cpp"
+				folder .. "/tier1/pathmatch.cpp"
 			})
 
 		filter("system:macosx")
@@ -202,7 +209,7 @@ function IncludeSDKTier1(folder)
 			files({
 				folder .. "/tier1/processor_detect_linux.cpp",
 				folder .. "/tier1/qsort_s.cpp",
-				--folder .. "/tier1/pathmatch.cpp"
+				folder .. "/tier1/pathmatch.cpp"
 			})
 
 		filter("action:gmake")
@@ -239,6 +246,81 @@ function IncludeSDKTier3(folder)
 
 	includedirs(folder .. "/public/tier3")
 	links("tier3")
+
+	filter(curfilter.patterns)
+end
+
+function IncludeSDKMathlib(folder)
+	folder = GetSDKPath(folder)
+
+	AddCommon(folder)
+
+	local curfilter = GetFilter()
+
+	filter({})
+
+	includedirs(folder .. "/public/mathlib")
+	links("mathlib")
+
+	project("mathlib")
+		kind("StaticLib")
+		warnings("Default")
+		defines("MATHLIB_LIB")
+		includedirs(folder .. "/public/mathlib")
+		vpaths({["Source files"] = folder .. "/mathlib/**.cpp"})
+		AddCommon(folder)
+		files({
+			folder .. "/mathlib/color_conversion.cpp",
+			folder .. "/mathlib/halton.cpp",
+			folder .. "/mathlib/lightdesc.cpp",
+			folder .. "/mathlib/mathlib_base.cpp",
+			folder .. "/mathlib/powsse.cpp",
+			folder .. "/mathlib/sparse_convolution_noise.cpp",
+			folder .. "/mathlib/sseconst.cpp",
+			folder .. "/mathlib/sse.cpp",
+			folder .. "/mathlib/ssenoise.cpp",
+			folder .. "/mathlib/anorms.cpp",
+			folder .. "/mathlib/bumpvects.cpp",
+			folder .. "/mathlib/IceKey.cpp",
+			folder .. "/mathlib/imagequant.cpp",
+			folder .. "/mathlib/polyhedron.cpp",
+			folder .. "/mathlib/quantize.cpp",
+			folder .. "/mathlib/randsse.cpp",
+			folder .. "/mathlib/spherical.cpp",
+			folder .. "/mathlib/simdvectormatrix.cpp",
+			folder .. "/mathlib/vector.cpp",
+			folder .. "/mathlib/vmatrix.cpp",
+			folder .. "/mathlib/almostequal.cpp"
+		})
+
+		filter("system:windows or linux")
+			files({	folder .. "/mathlib/3dnow.cpp"})
+
+	filter(curfilter.patterns)
+end
+
+function IncludeSDKRaytrace(folder)
+	folder = GetSDKPath(folder)
+
+	AddCommon(folder)
+
+	local curfilter = GetFilter()
+
+	filter({})
+
+	links("raytrace")
+
+	project("raytrace")
+		kind("StaticLib")
+		warnings("Default")
+		includedirs(folder .. "/utils/common")
+		vpaths({["Source files"] = folder .. "/raytrace/**.cpp"})
+		AddCommon(folder)
+		files({
+			folder .. "/raytrace/raytrace.cpp",
+			folder .. "/raytrace/trace2.cpp",
+			folder .. "/raytrace/trace3.cpp"
+		})
 
 	filter(curfilter.patterns)
 end
