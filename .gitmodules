@@ -1,6 +1,6 @@
 [submodule "detouring"]
 	path = detouring
-	url = https://bitbucket.org/danielga/detouring.git
+	url = https://github.com/danielga/detouring.git
 [submodule "scanning"]
 	path = scanning
-	url = https://bitbucket.org/danielga/scanning.git
+	url = https://github.com/danielga/scanning.git
