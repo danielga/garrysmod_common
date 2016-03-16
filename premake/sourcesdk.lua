@@ -151,7 +151,6 @@ function IncludeSDKTier1(folder)
 		AddCommon(folder)
 		files({
 			folder .. "/tier1/bitbuf.cpp",
-			folder .. "/tier1/newbitbuf.cpp",
 			folder .. "/tier1/byteswap.cpp",
 			folder .. "/tier1/characterset.cpp",
 			folder .. "/tier1/checksum_crc.cpp",
