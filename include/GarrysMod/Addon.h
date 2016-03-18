@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <string>
+#include <list>
 
 class CSteamAPIContext;
 class IAddonDownloadNotification;
@@ -10,7 +11,7 @@ struct RemoteStorageGetPublishedFileDetailsResult_t;
 namespace IAddonSystem
 {
 
-class Information
+struct Information
 {
 	std::string placeholder1;
 	std::string placeholder2;
@@ -21,8 +22,8 @@ class Information
 	uint64_t placeholder7;
 	uint32_t placeholder8;
 	uint64_t placeholder9;
-	int8_t placeholder10;
-	int8_t placeholder11;
+	bool placeholder10;
+	bool placeholder11;
 };
 
 }
