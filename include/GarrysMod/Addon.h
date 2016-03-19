@@ -13,17 +13,17 @@ namespace IAddonSystem
 
 struct Information
 {
-	std::string placeholder1;
-	std::string placeholder2;
-	uint32_t placeholder3;
-	uint32_t placeholder4;
-	uint64_t placeholder5;
-	uint64_t placeholder6;
+	std::string title;
+	std::string file;
+	uint32_t pubdate;
+	uint32_t models;
+	uint64_t wsid;
+	uint64_t creator;
 	uint64_t placeholder7;
 	uint32_t placeholder8;
 	uint64_t placeholder9;
 	bool placeholder10;
-	bool placeholder11;
+	bool downloaded;
 };
 
 }

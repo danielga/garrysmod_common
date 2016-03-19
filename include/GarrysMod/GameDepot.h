@@ -9,14 +9,14 @@ namespace IGameDepotSystem
 
 struct Information
 {
-	bool placeholder1;
-	uint32_t placeholder2;
-	std::string placeholder3;
-	std::string placeholder4;
-	bool placeholder5;
+	uint32_t placeholder1;
+	uint32_t depot;
+	std::string title;
+	std::string folder;
+	bool mounted;
 	bool placeholder6;
-	bool placeholder7;
-	bool placeholder8;
+	bool owned;
+	bool installed;
 };
 
 }

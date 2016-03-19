@@ -8,9 +8,9 @@ namespace ILegacyAddons
 
 struct Information
 {
-	std::string placeholder1;
-	std::string placeholder2;
-	std::string placeholder3;
+	std::string name;
+	std::string path;
+	std::string luapath;
 	std::string placeholder4;
 };
 

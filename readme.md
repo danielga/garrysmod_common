@@ -9,6 +9,10 @@ The lib folder provides files for linking on each platform supported by Garry's 
 There's common code for premake on the premake folder for faster development. Include this folder or premake5.lua (including this folder runs the premake5.lua file by default).
 As you can see by the filename, you need premake5.
 
+## Warning
+
+Do not use internal classes/structures (like the GameDepot::System class or the IGamemodeSystem::Information structure) unless you compile with **Visual Studio 2010 SP1** on **release** mode for Windows. Unsure about Linux and Mac OSX but try using GCC 4.4 or above.
+
 ## Usage
 
 In your project's premake5.lua (or whatever you named it) you should include your local copy of this repository:

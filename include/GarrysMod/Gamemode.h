@@ -9,12 +9,12 @@ namespace IGamemodeSystem
 struct Information
 {
 	bool placeholder1;
-	bool placeholder2;
-	std::string placeholder3;
-	std::string placeholder4;
-	std::string placeholder5;
-	std::string placeholder6;
-	std::string placeholder7;
+	bool menusystem;
+	std::string title;
+	std::string name;
+	std::string maps;
+	std::string basename;
+	std::string workshopid;
 };
 
 }
