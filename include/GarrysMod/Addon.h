@@ -48,7 +48,7 @@ public:
 	virtual bool ShouldMount( uint64_t ) = 0;
 	virtual void SetShouldMount( const std::string &, bool ) = 0;
 	virtual void Save( ) = 0;
-	virtual std::list<IAddonSystem::Information> &GetList( ) = 0;
+	virtual const std::list<IAddonSystem::Information> &GetList( ) const = 0;
 	virtual void ScanForSubscriptions( CSteamAPIContext *, const char * ) = 0;
 	virtual void Think( ) = 0;
 	virtual void SetDownloadNotify( IAddonDownloadNotification * ) = 0;

@@ -23,7 +23,7 @@ class System
 {
 public:
 	virtual void Refresh( ) = 0;
-	virtual std::list<ILegacyAddons::Information> &GetList( ) = 0;
+	virtual const std::list<ILegacyAddons::Information> &GetList( ) const = 0;
 };
 
 }

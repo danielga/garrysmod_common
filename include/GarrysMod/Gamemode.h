@@ -31,7 +31,7 @@ public:
 	virtual void Active( );
 	virtual void FindByName( const std::string & );
 	virtual void SetActive( const std::string & );
-	virtual std::list<IGamemodeSystem::Information> &GetList( );
+	virtual const std::list<IGamemodeSystem::Information> &GetList( ) const;
 };
 
 }
