@@ -15,7 +15,11 @@ function IncludeLuaShared()
 	if nosystem or HasFilter(FILTER_LINUX) then
 		filter(MergeFilters({"system:linux", curfilter.configurations}, curfilter.extra))
 			libdirs(folder)
-			linkoptions("-l:" .. (_PROJECT_SERVERSIDE and "lua_shared_srv.so" or "lua_shared.so"))
+			linkoptions({
+				"-Wl,--no-as-needed",
+				"-l:" .. (_PROJECT_SERVERSIDE and "lua_shared_srv.so" or "lua_shared.so"),
+				"-Wl,--as-needed"
+			})
 	end
 
 	if nosystem or HasFilter(FILTER_MACOSX) then
