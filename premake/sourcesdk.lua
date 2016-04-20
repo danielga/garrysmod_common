@@ -74,6 +74,7 @@ local function AddCommon(folder)
 	_SOURCE_SDK_INCLUDED = true
 end
 
+local mkdir_bin = false
 function IncludeSDKTier0(folder)
 	folder = GetSDKPath(folder)
 
@@ -94,10 +95,11 @@ function IncludeSDKTier0(folder)
 	if nosystem or HasFilter(FILTER_LINUX) then
 		filter(MergeFilters({"system:linux", curfilter.configurations}, curfilter.extra))
 			prelinkcommands({
-				"mkdir -p " .. path.getabsolute(folder) .. "/lib/public/linux32/bin",
+				not mkdir_bin and "mkdir -p " .. path.getabsolute(folder) .. "/lib/public/linux32/bin" or nil,
 				"ln -f " .. path.getabsolute(folder) .. "/lib/public/linux32/libtier0.so " .. path.getabsolute(folder) .. "/lib/public/linux32/bin/libtier0.so",
 				"ln -f " .. path.getabsolute(folder) .. "/lib/public/linux32/libtier0.so " .. path.getabsolute(folder) .. "/lib/public/linux32/bin/libtier0_srv.so"
 			})
+			mkdir_bin = true
 			linkoptions("-l:bin/" .. (_PROJECT_SERVERSIDE and "libtier0_srv.so" or "libtier0.so"))
 	end
 
@@ -131,10 +133,11 @@ function IncludeSDKTier1(folder)
 	if nosystem or HasFilter(FILTER_LINUX) then
 		filter(MergeFilters({"system:linux", curfilter.configurations}, curfilter.extra))
 			prelinkcommands({
-				"mkdir -p " .. path.getabsolute(folder) .. "/lib/public/linux32/bin",
+				not mkdir_bin and "mkdir -p " .. path.getabsolute(folder) .. "/lib/public/linux32/bin" or nil,
 				"ln -f " .. path.getabsolute(folder) .. "/lib/public/linux32/libvstdlib.so " .. path.getabsolute(folder) .. "/lib/public/linux32/bin/libvstdlib.so",
 				"ln -f " .. path.getabsolute(folder) .. "/lib/public/linux32/libvstdlib.so " .. path.getabsolute(folder) .. "/lib/public/linux32/bin/libvstdlib_srv.so"
 			})
+			mkdir_bin = true
 			linkoptions("-l:bin/" .. (_PROJECT_SERVERSIDE and "libvstdlib_srv.so" or "libvstdlib.so"))
 	end
 
