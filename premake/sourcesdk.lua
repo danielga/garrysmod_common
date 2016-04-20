@@ -60,8 +60,7 @@ local function AddCommon(folder)
 	if nosystem or HasFilter(FILTER_LINUX) then
 		filter(MergeFilters({"system:linux", curfilter.configurations}, curfilter.extra))
 			defines({"COMPILER_GCC", "POSIX", "_POSIX", "LINUX", "_LINUX", "GNUC", "NO_MALLOC_OVERRIDE"})
-			--libdirs(folder .. "/lib/public/linux32")
-			linkoptions("-L" .. path.getabsolute(folder) .. "/lib/public/linux32")
+			libdirs(folder .. "/lib/public/linux32")
 	end
 
 	if nosystem or HasFilter(FILTER_MACOSX) then
@@ -94,8 +93,12 @@ function IncludeSDKTier0(folder)
 
 	if nosystem or HasFilter(FILTER_LINUX) then
 		filter(MergeFilters({"system:linux", curfilter.configurations}, curfilter.extra))
-			prelinkcommands("cp -f " .. path.getabsolute(folder) .. "/lib/public/linux32/libtier0.so " .. path.getabsolute(folder) .. "/lib/public/linux32/libtier0_srv.so")
-			links(_PROJECT_SERVERSIDE and "tier0_srv" or "tier0")
+			prelinkcommands({
+				"mkdir -p " .. path.getabsolute(folder) .. "/lib/public/linux32/bin",
+				"ln -f " .. path.getabsolute(folder) .. "/lib/public/linux32/libtier0.so " .. path.getabsolute(folder) .. "/lib/public/linux32/bin/libtier0.so",
+				"ln -f " .. path.getabsolute(folder) .. "/lib/public/linux32/libtier0.so " .. path.getabsolute(folder) .. "/lib/public/linux32/bin/libtier0_srv.so"
+			})
+			linkoptions("-l:bin/" .. (_PROJECT_SERVERSIDE and "libtier0_srv.so" or "libtier0.so"))
 	end
 
 	if nosystem or HasFilter(FILTER_MACOSX) then
@@ -127,8 +130,12 @@ function IncludeSDKTier1(folder)
 
 	if nosystem or HasFilter(FILTER_LINUX) then
 		filter(MergeFilters({"system:linux", curfilter.configurations}, curfilter.extra))
-			prelinkcommands("cp -f " .. path.getabsolute(folder) .. "/lib/public/linux32/libvstdlib.so " .. path.getabsolute(folder) .. "/lib/public/linux32/libvstdlib_srv.so")
-			links(_PROJECT_SERVERSIDE and "vstdlib_srv" or "vstdlib")
+			prelinkcommands({
+				"mkdir -p " .. path.getabsolute(folder) .. "/lib/public/linux32/bin",
+				"ln -f " .. path.getabsolute(folder) .. "/lib/public/linux32/libvstdlib.so " .. path.getabsolute(folder) .. "/lib/public/linux32/bin/libvstdlib.so",
+				"ln -f " .. path.getabsolute(folder) .. "/lib/public/linux32/libvstdlib.so " .. path.getabsolute(folder) .. "/lib/public/linux32/bin/libvstdlib_srv.so"
+			})
+			linkoptions("-l:bin/" .. (_PROJECT_SERVERSIDE and "libvstdlib_srv.so" or "libvstdlib.so"))
 	end
 
 	if nosystem or HasFilter(FILTER_MACOSX) then
@@ -166,7 +173,6 @@ function IncludeSDKTier1(folder)
 			folder .. "/tier1/KeyValues.cpp",
 			folder .. "/tier1/kvpacker.cpp",
 			folder .. "/tier1/lzmaDecoder.cpp",
-			--folder .. "/tier1/lzss.cpp",
 			folder .. "/tier1/mempool.cpp",
 			folder .. "/tier1/memstack.cpp",
 			folder .. "/tier1/NetAdr.cpp",
