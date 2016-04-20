@@ -17,7 +17,7 @@ function IncludeLuaShared()
 			libdirs(folder)
 			linkoptions({
 				"-Wl,--no-as-needed",
-				"-l:" .. (_PROJECT_SERVERSIDE and "lua_shared_srv.so" or "lua_shared.so"),
+				"-l:garrysmod/bin/" .. (_PROJECT_SERVERSIDE and "lua_shared_srv.so" or "lua_shared.so"),
 				"-Wl,--as-needed"
 			})
 	end
