@@ -20,14 +20,7 @@ local function GetSDKPath(folder)
 	return folder
 end
 
-local added_common = false
-local function AddCommon(folder)
-	if added_common then
-		return
-	end
-
-	added_common = true
-
+function IncludeSourceSDK(folder)
 	folder = GetSDKPath(folder)
 
 	local curfilter = GetFilter()
@@ -68,6 +61,7 @@ local function AddCommon(folder)
 		filter(MergeFilters({"system:linux", curfilter.configurations}, curfilter.extra))
 			defines({"COMPILER_GCC", "POSIX", "_POSIX", "LINUX", "_LINUX", "GNUC", "NO_MALLOC_OVERRIDE"})
 			libdirs(folder .. "/lib/public/linux32")
+			prelinkcommands("mkdir -p " .. path.getabsolute(folder) .. "/lib/public/linux32/bin")
 	end
 
 	if nosystem or HasFilter(FILTER_MACOSX) then
@@ -81,11 +75,8 @@ local function AddCommon(folder)
 	_SOURCE_SDK_INCLUDED = true
 end
 
-local mkdir_bin = false
 function IncludeSDKTier0(folder)
 	folder = GetSDKPath(folder)
-
-	AddCommon(folder)
 
 	local curfilter = GetFilter()
 	local nosystem = curfilter.system == nil
@@ -102,11 +93,9 @@ function IncludeSDKTier0(folder)
 	if nosystem or HasFilter(FILTER_LINUX) then
 		filter(MergeFilters({"system:linux", curfilter.configurations}, curfilter.extra))
 			prelinkcommands({
-				not mkdir_bin and "mkdir -p " .. path.getabsolute(folder) .. "/lib/public/linux32/bin" or nil,
 				"ln -f " .. path.getabsolute(folder) .. "/lib/public/linux32/libtier0.so " .. path.getabsolute(folder) .. "/lib/public/linux32/bin/libtier0.so",
 				"ln -f " .. path.getabsolute(folder) .. "/lib/public/linux32/libtier0.so " .. path.getabsolute(folder) .. "/lib/public/linux32/bin/libtier0_srv.so"
 			})
-			mkdir_bin = true
 			linkoptions("-l:bin/" .. (_PROJECT_SERVERSIDE and "libtier0_srv.so" or "libtier0.so"))
 	end
 
@@ -120,8 +109,6 @@ end
 
 function IncludeSDKTier1(folder)
 	folder = GetSDKPath(folder)
-
-	AddCommon(folder)
 
 	local name = project().name
 	local curfilter = GetFilter()
@@ -140,11 +127,9 @@ function IncludeSDKTier1(folder)
 	if nosystem or HasFilter(FILTER_LINUX) then
 		filter(MergeFilters({"system:linux", curfilter.configurations}, curfilter.extra))
 			prelinkcommands({
-				not mkdir_bin and "mkdir -p " .. path.getabsolute(folder) .. "/lib/public/linux32/bin" or nil,
 				"ln -f " .. path.getabsolute(folder) .. "/lib/public/linux32/libvstdlib.so " .. path.getabsolute(folder) .. "/lib/public/linux32/bin/libvstdlib.so",
 				"ln -f " .. path.getabsolute(folder) .. "/lib/public/linux32/libvstdlib.so " .. path.getabsolute(folder) .. "/lib/public/linux32/bin/libvstdlib_srv.so"
 			})
-			mkdir_bin = true
 			linkoptions("-l:bin/" .. (_PROJECT_SERVERSIDE and "libvstdlib_srv.so" or "libvstdlib.so"))
 	end
 
@@ -165,7 +150,7 @@ function IncludeSDKTier1(folder)
 			folder .. "/tier1/**.cpp",
 			folder .. "/utils/lzma/C/**.c"
 		}})
-		AddCommon(folder)
+		IncludeSourceSDK(folder)
 		files({
 			folder .. "/tier1/bitbuf.cpp",
 			folder .. "/tier1/byteswap.cpp",
@@ -238,8 +223,6 @@ end
 function IncludeSDKTier2(folder)
 	folder = GetSDKPath(folder)
 
-	AddCommon(folder)
-
 	local curfilter = GetFilter()
 
 	filter({})
@@ -252,8 +235,6 @@ end
 
 function IncludeSDKTier3(folder)
 	folder = GetSDKPath(folder)
-
-	AddCommon(folder)
 
 	local curfilter = GetFilter()
 
@@ -268,8 +249,6 @@ end
 function IncludeSDKMathlib(folder)
 	folder = GetSDKPath(folder)
 
-	AddCommon(folder)
-
 	local curfilter = GetFilter()
 
 	filter({})
@@ -283,7 +262,7 @@ function IncludeSDKMathlib(folder)
 		defines("MATHLIB_LIB")
 		includedirs(folder .. "/public/mathlib")
 		vpaths({["Source files"] = folder .. "/mathlib/**.cpp"})
-		AddCommon(folder)
+		IncludeSourceSDK(folder)
 		files({
 			folder .. "/mathlib/color_conversion.cpp",
 			folder .. "/mathlib/halton.cpp",
@@ -317,8 +296,6 @@ end
 function IncludeSDKRaytrace(folder)
 	folder = GetSDKPath(folder)
 
-	AddCommon(folder)
-
 	local curfilter = GetFilter()
 
 	filter({})
@@ -330,7 +307,7 @@ function IncludeSDKRaytrace(folder)
 		warnings("Default")
 		includedirs(folder .. "/utils/common")
 		vpaths({["Source files"] = folder .. "/raytrace/**.cpp"})
-		AddCommon(folder)
+		IncludeSourceSDK(folder)
 		files({
 			folder .. "/raytrace/raytrace.cpp",
 			folder .. "/raytrace/trace2.cpp",
@@ -340,16 +317,8 @@ function IncludeSDKRaytrace(folder)
 	filter(curfilter.patterns)
 end
 
-function IncludeSourceSDK(folder)
-	folder = GetSDKPath(folder)
-	IncludeSDKTier0(folder)
-	IncludeSDKTier1(folder)
-end
-
 function IncludeSteamAPI(folder)
 	folder = GetSDKPath(folder)
-
-	AddCommon(folder)
 
 	local curfilter = GetFilter()
 	local nosystem = curfilter.system == nil
@@ -365,11 +334,7 @@ function IncludeSteamAPI(folder)
 
 	if nosystem or HasFilter(FILTER_LINUX) then
 		filter(MergeFilters({"system:linux", curfilter.configurations}, curfilter.extra))
-			prelinkcommands({
-				not mkdir_bin and "mkdir -p " .. path.getabsolute(folder) .. "/lib/public/linux32/bin" or nil,
-				"ln -f " .. path.getabsolute(folder) .. "/lib/public/linux32/libsteam_api.so " .. path.getabsolute(folder) .. "/lib/public/linux32/bin/libsteam_api.so"
-			})
-			mkdir_bin = true
+			prelinkcommands("ln -f " .. path.getabsolute(folder) .. "/lib/public/linux32/libsteam_api.so " .. path.getabsolute(folder) .. "/lib/public/linux32/bin/libsteam_api.so")
 			linkoptions("-l:bin/libsteam_api.so")
 	end
 
