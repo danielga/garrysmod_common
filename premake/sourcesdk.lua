@@ -349,7 +349,26 @@ function IncludeSteamAPI(folder)
 	filter({})
 
 	includedirs(folder .. "/public/steam")
-	links("steam_api")
+
+	if nosystem or HasFilter(FILTER_WINDOWS) then
+		filter(MergeFilters({"system:windows", curfilter.configurations}, curfilter.extra))
+			links("steam_api")
+	end
+
+	if nosystem or HasFilter(FILTER_LINUX) then
+		filter(MergeFilters({"system:linux", curfilter.configurations}, curfilter.extra))
+			prelinkcommands({
+				not mkdir_bin and "mkdir -p " .. path.getabsolute(folder) .. "/lib/public/linux32/bin" or nil,
+				"ln -f " .. path.getabsolute(folder) .. "/lib/public/linux32/libsteam_api.so " .. path.getabsolute(folder) .. "/lib/public/linux32/bin/libsteam_api.so"
+			})
+			mkdir_bin = true
+			linkoptions("-l:bin/libsteam_api.so")
+	end
+
+	if nosystem or HasFilter(FILTER_MACOSX) then
+		filter(MergeFilters({"system:macosx", curfilter.configurations}, curfilter.extra))
+			links("steam_api")
+	end
 
 	filter(curfilter.patterns)
 end
