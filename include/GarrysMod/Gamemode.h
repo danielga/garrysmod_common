@@ -28,7 +28,7 @@ public:
 	virtual void OnJoinServer( const std::string & );
 	virtual void Refresh( );
 	virtual void Clear( );
-	virtual void Active( );
+	virtual const IGamemodeSystem::Information &Active( );
 	virtual void FindByName( const std::string & );
 	virtual void SetActive( const std::string & );
 	virtual const std::list<IGamemodeSystem::Information> &GetList( ) const;
