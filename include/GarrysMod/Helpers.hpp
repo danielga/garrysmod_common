@@ -5,6 +5,7 @@
 #include <string>
 #include <sstream>
 #include <lua.hpp>
+#include <GarrysMod/Lua/Types.h>
 #include <GarrysMod/Lua/LuaInterface.h>
 
 namespace helpers
