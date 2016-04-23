@@ -345,6 +345,7 @@ function IncludeSteamAPI(folder)
 	AddCommon(folder)
 
 	local curfilter = GetFilter()
+	local nosystem = curfilter.system == nil
 
 	filter({})
 
