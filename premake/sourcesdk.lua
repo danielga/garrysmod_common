@@ -20,7 +20,14 @@ local function GetSDKPath(folder)
 	return folder
 end
 
+local added_common = false
 local function AddCommon(folder)
+	if added_common then
+		return
+	end
+
+	added_common = true
+
 	folder = GetSDKPath(folder)
 
 	local curfilter = GetFilter()
