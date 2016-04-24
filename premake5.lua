@@ -63,6 +63,7 @@ function CreateSolution(config)
 		location(_solution.directory)
 		warnings("Extra")
 		flags({"NoPCH", "StaticRuntime"})
+		characterset("MBCS")
 		platforms("x86")
 
 		if allowdebug then
