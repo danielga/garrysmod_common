@@ -2,12 +2,6 @@ if _ACTION == nil then
 	error("no action (vs20**, gmake or xcode for example) provided")
 end
 
-SERVERSIDE = true
-CLIENTSIDE = false
-
-SOURCES_MANUAL = true
-SOURCES_ALL = false
-
 include("config.lua")
 include("premake/lua_shared.lua")
 include("premake/detouring.lua")
@@ -36,30 +30,46 @@ end
 
 _GARRYSMOD_COMMON_DIRECTORY = CleanPath(path.getrelative(_MAIN_SCRIPT_DIR, _SCRIPT_DIR))
 
-function CreateSolution(name, solutionpath)
-	local directory = solutionpath or _OPTIONS["solution"] or DEFAULT_SOLUTION_DIRECTORY
+function CreateSolution(config)
+	if type(config) ~= "table" then
+		error("supplied argument is not a table")
+	end
+
+	local name = config.name
+	if name == nil then
+		error("you didn't supply a name for your solution")
+	end
+
+	local directory = config.path or _OPTIONS["solution"] or DEFAULT_SOLUTION_DIRECTORY
 	if directory == nil then
 		error("you didn't supply a path for your solution directory")
 	end
 
 	directory = CleanPath(directory)
 
-	local solution = solution(name)
-	if solution.gmcommon ~= nil then
+	local allowdebug = config.allow_debug
+	if allowdebug == nil then
+		allowdebug = true
+	end
+
+	local _solution = solution(name)
+	if _solution.directory ~= nil then
 		error("a solution with this name ('" .. name .. "') already exists")
 	end
 
-	solution.gmcommon = {}
-	_SOLUTION = solution.gmcommon
-	_SOLUTION.name = name
-	_SOLUTION.directory = directory
+	_solution.directory = directory
 
 		language("C++")
-		location(_SOLUTION.directory)
+		location(_solution.directory)
 		warnings("Extra")
 		flags({"NoPCH", "StaticRuntime"})
 		platforms("x86")
-		configurations({"Release", "Debug"})
+
+		if allowdebug then
+			configurations({"Release", "Debug"})
+		else
+			configurations("Release")
+		end
 
 		filter("platforms:x86")
 			architecture("x32")
@@ -67,14 +77,14 @@ function CreateSolution(name, solutionpath)
 		filter("configurations:Release")
 			optimize("On")
 			vectorextensions("SSE2")
-			objdir(_SOLUTION.directory .. "/intermediate")
-			targetdir(_SOLUTION.directory .. "/release")
+			objdir(_solution.directory .. "/intermediate")
+			targetdir(_solution.directory .. "/release")
 
 		filter("configurations:Debug")
 			flags("Symbols")
 			defines({"DEBUG", "_DEBUG"})
-			objdir(_SOLUTION.directory .. "/intermediate")
-			targetdir(_SOLUTION.directory .. "/debug")
+			objdir(_solution.directory .. "/intermediate")
+			targetdir(_solution.directory .. "/debug")
 
 		filter("system:linux or macosx")
 			linkoptions({"-static-libgcc", "-static-libstdc++"})
@@ -88,57 +98,69 @@ newoption({
 	value = "path to source directory"
 })
 
-function CreateProject(is_server, manual_files, sourcepath)
-	sourcepath = sourcepath or _OPTIONS["source"] or DEFAULT_SOURCE_DIRECTORY
-	if sourcepath == nil then
-		error("you didn't supply a path to your source folder")
+function CreateProject(config)
+	if type(config) ~= "table" then
+		error("supplied argument is not a table")
 	end
 
-	local name = (is_server and "gmsv_" or "gmcl_") .. _SOLUTION.name
-	local project = project(name)
-	if project.gmcommon ~= nil then
+	local is_server = config.serverside
+	if is_server == nil then
+		error("you didn't specify if the project is for a serverside module or not")
+	end
+
+	local manual_files = config.manual_files
+	if manual_files == nil then
+		manual_files = false
+	end
+
+	local sourcepath = config.source_path or _OPTIONS["source"] or DEFAULT_SOURCE_DIRECTORY
+	if sourcepath == nil then
+		error("you didn't supply a path to your source directory")
+	end
+
+	local _solution = solution()
+
+	local name = (is_server and "gmsv_" or "gmcl_") .. _solution.name
+	local _project = project(name)
+	if _project.directory ~= nil then
 		error("a project with this name ('" .. name .. "') already exists")
 	end
 
-	project.gmcommon = {}
-	_PROJECT = project.gmcommon
-	_PROJECT.name = name
-	_PROJECT.directory = CleanPath(sourcepath)
-	_PROJECT.serverside = is_server
-	_PROJECT.packages = {}
+	_project.directory = CleanPath(sourcepath)
+	_project.serverside = is_server
 
 		kind("SharedLib")
 		defines({
 			"GMMODULE",
-			string.upper(string.gsub(_SOLUTION.name, "%.", "_")) .. (_PROJECT.serverside and "_SERVER" or "_CLIENT"),
+			string.upper(string.gsub(_solution.name, "%.", "_")) .. (_project.serverside and "_SERVER" or "_CLIENT"),
 			"IS_SERVERSIDE=" .. tostring(is_server)
 		})
 		includedirs({
-			_PROJECT.directory,
+			_project.directory,
 			_GARRYSMOD_COMMON_DIRECTORY .. "/include"
 		})
 
 		if not manual_files then
 			files({
-				_PROJECT.directory .. "/*.h",
-				_PROJECT.directory .. "/*.hpp",
-				_PROJECT.directory .. "/*.hxx",
-				_PROJECT.directory .. "/*.c",
-				_PROJECT.directory .. "/*.cpp",
-				_PROJECT.directory .. "/*.cxx"
+				_project.directory .. "/*.h",
+				_project.directory .. "/*.hpp",
+				_project.directory .. "/*.hxx",
+				_project.directory .. "/*.c",
+				_project.directory .. "/*.cpp",
+				_project.directory .. "/*.cxx"
 			})
 		end
 
 		vpaths({
 			["Header files/*"] = {
-				_PROJECT.directory .. "/**.h",
-				_PROJECT.directory .. "/**.hpp",
-				_PROJECT.directory .. "/**.hxx"
+				_project.directory .. "/**.h",
+				_project.directory .. "/**.hpp",
+				_project.directory .. "/**.hxx"
 			},
 			["Source files/*"] = {
-				_PROJECT.directory .. "/**.c",
-				_PROJECT.directory .. "/**.cpp",
-				_PROJECT.directory .. "/**.cxx"
+				_project.directory .. "/**.c",
+				_project.directory .. "/**.cpp",
+				_project.directory .. "/**.cxx"
 			}
 		})
 
@@ -161,9 +183,9 @@ function CreateProject(is_server, manual_files, sourcepath)
 end
 
 function HasIncludedPackage(name)
-	local project = project()
-	project.packages = project.packages or {}
-	return project.packages[name] == true
+	local _project = project()
+	_project.packages = _project.packages or {}
+	return _project.packages[name] == true
 end
 
 function IncludePackage(name)

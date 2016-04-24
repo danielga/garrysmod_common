@@ -1,18 +1,18 @@
 function IncludeScanning()
 	IncludePackage("scanning")
 
-	local folder = _GARRYSMOD_COMMON_DIRECTORY .. "/scanning"
+	local directory = _GARRYSMOD_COMMON_DIRECTORY .. "/scanning"
 
 	filter({})
 
-	includedirs(folder)
+	includedirs(directory)
 	files({
-		folder .. "/*.hpp",
-		folder .. "/*.cpp"
+		directory .. "/*.hpp",
+		directory .. "/*.cpp"
 	})
 	vpaths({
-		["Header files"] = folder .. "/**.hpp",
-		["Source files"] = folder .. "/**.cpp"
+		["Header files/*"] = directory .. "/*.hpp",
+		["Source files/*"] = directory .. "/*.cpp"
 	})
 
 	filter("system:linux or macosx")

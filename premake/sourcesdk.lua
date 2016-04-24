@@ -4,136 +4,143 @@ newoption({
 	value = "path to SourceSDK directory"
 })
 
-local function GetSDKPath(folder)
-	folder = folder or _OPTIONS["sourcesdk"] or os.getenv("SOURCE_SDK") or DEFAULT_SOURCESDK_FOLDER
-
-	if folder == nil then
+local function GetSDKPath(directory)
+	directory = directory or _OPTIONS["sourcesdk"] or os.getenv("SOURCE_SDK") or DEFAULT_SOURCESDK_DIRECTORY
+	if directory == nil then
 		error("you didn't supply a path to your SourceSDK copy")
 	end
 
-	folder = CleanPath(folder)
-	local dir = path.getabsolute(folder)
+	directory = CleanPath(directory)
+	local dir = path.getabsolute(directory)
 	if not os.isdir(dir) then
 		error(dir .. " doesn't exist (SourceSDK)")
 	end
 
-	return folder
+	return directory
 end
 
-local function IncludeSDKCommonInternal(folder)
+local function IncludeSDKCommonInternal(directory)
+	local _project = project()
+
 	filter({})
 
-	defines(_PROJECT.serverside and "GAME_DLL" or "CLIENT_DLL")
+	defines(_project.serverside and "GAME_DLL" or "CLIENT_DLL")
 	includedirs({
-		folder .. "/common",
-		folder .. "/public"
+		directory .. "/common",
+		directory .. "/public"
 	})
 
-	if _PROJECT.serverside then
+	if _project.serverside then
 		includedirs({
-			folder .. "/game/server",
-			folder .. "/game/shared"
+			directory .. "/game/server",
+			directory .. "/game/shared"
 		})
 	else
 		includedirs({
-			folder .. "/game/client",
-			folder .. "/game/shared"
+			directory .. "/game/client",
+			directory .. "/game/shared"
 		})
 	end
 
 	filter("system:windows")
 		defines("WIN32")
-		libdirs(folder .. "/lib/public")
+		libdirs(directory .. "/lib/public")
 
 		filter({"system:windows", "configurations:Debug"})
 			linkoptions("/NODEFAULTLIB:\"libcmt\"")
 
 	filter("system:linux")
 		defines({"COMPILER_GCC", "POSIX", "_POSIX", "LINUX", "_LINUX", "GNUC", "NO_MALLOC_OVERRIDE"})
-		libdirs(folder .. "/lib/public/linux32")
-		prelinkcommands("mkdir -p " .. path.getabsolute(folder) .. "/lib/public/linux32/bin")
+		libdirs(directory .. "/lib/public/linux32")
+		prelinkcommands("mkdir -p " .. path.getabsolute(directory) .. "/lib/public/linux32/bin")
 
 	filter("system:macosx")
 		defines({"COMPILER_GCC", "POSIX", "_POSIX", "OSX", "GNUC", "NO_MALLOC_OVERRIDE"})
-		libdirs(folder .. "/lib/public/osx32")
+		libdirs(directory .. "/lib/public/osx32")
 
 	filter({})
 end
 
-function IncludeSDKCommon(folder)
+function IncludeSDKCommon(directory)
 	IncludePackage("sdkcommon")
 
-	folder = GetSDKPath(folder)
+	local _project = project()
+
+	directory = GetSDKPath(directory)
 
 	filter({})
 
-	defines(_PROJECT.serverside and "GAME_DLL" or "CLIENT_DLL")
+	defines(_project.serverside and "GAME_DLL" or "CLIENT_DLL")
 	includedirs({
-		folder .. "/common",
-		folder .. "/public"
+		directory .. "/common",
+		directory .. "/public"
 	})
 
-	if _PROJECT.serverside then
+	if _project.serverside then
 		includedirs({
-			folder .. "/game/server",
-			folder .. "/game/shared"
+			directory .. "/game/server",
+			directory .. "/game/shared"
 		})
 	else
 		includedirs({
-			folder .. "/game/client",
-			folder .. "/game/shared"
+			directory .. "/game/client",
+			directory .. "/game/shared"
 		})
 	end
 
 	filter("system:windows")
 		defines("WIN32")
-		libdirs(folder .. "/lib/public")
+		libdirs(directory .. "/lib/public")
 
 		filter({"system:windows", "configurations:Debug"})
 			linkoptions("/NODEFAULTLIB:\"libcmt\"")
 
 	filter("system:linux")
 		defines({"COMPILER_GCC", "POSIX", "_POSIX", "LINUX", "_LINUX", "GNUC", "NO_MALLOC_OVERRIDE"})
-		libdirs(folder .. "/lib/public/linux32")
-		prelinkcommands("mkdir -p " .. path.getabsolute(folder) .. "/lib/public/linux32/bin")
+		libdirs(directory .. "/lib/public/linux32")
+		prelinkcommands("mkdir -p " .. path.getabsolute(directory) .. "/lib/public/linux32/bin")
 
 	filter("system:macosx")
 		defines({"COMPILER_GCC", "POSIX", "_POSIX", "OSX", "GNUC", "NO_MALLOC_OVERRIDE"})
-		libdirs(folder .. "/lib/public/osx32")
+		libdirs(directory .. "/lib/public/osx32")
 
 	filter({})
 end
 
-function IncludeSDKTier0(folder)
+function IncludeSDKTier0(directory)
 	IncludePackage("sdktier0")
 
-	folder = GetSDKPath(folder)
+	local _project = project()
+
+	directory = GetSDKPath(directory)
 
 	filter({})
 
-	includedirs(folder .. "/public/tier0")
+	includedirs(directory .. "/public/tier0")
 
 	filter("system:windows or macosx")
 		links("tier0")
 
 	filter("system:linux")
 		prelinkcommands({
-			"ln -f " .. path.getabsolute(folder) .. "/lib/public/linux32/libtier0.so " .. path.getabsolute(folder) .. "/lib/public/linux32/bin/libtier0.so",
-			"ln -f " .. path.getabsolute(folder) .. "/lib/public/linux32/libtier0.so " .. path.getabsolute(folder) .. "/lib/public/linux32/bin/libtier0_srv.so"
+			"ln -f " .. path.getabsolute(directory) .. "/lib/public/linux32/libtier0.so " .. path.getabsolute(directory) .. "/lib/public/linux32/bin/libtier0.so",
+			"ln -f " .. path.getabsolute(directory) .. "/lib/public/linux32/libtier0.so " .. path.getabsolute(directory) .. "/lib/public/linux32/bin/libtier0_srv.so"
 		})
-		linkoptions("-l:bin/" .. (_PROJECT.serverside and "libtier0_srv.so" or "libtier0.so"))
+		linkoptions("-l:bin/" .. (_project.serverside and "libtier0_srv.so" or "libtier0.so"))
 
 	filter({})
 end
 
-function IncludeSDKTier1(folder)
+function IncludeSDKTier1(directory)
 	IncludePackage("sdktier1")
 
-	folder = GetSDKPath(folder)
+	local _project = project()
+
+	directory = GetSDKPath(directory)
 
 	filter({})
 
-	includedirs(folder .. "/public/tier1")
+	includedirs(directory .. "/public/tier1")
 	links("tier1")
 
 	filter("system:windows")
@@ -141,10 +148,10 @@ function IncludeSDKTier1(folder)
 
 	filter("system:linux")
 		prelinkcommands({
-			"ln -f " .. path.getabsolute(folder) .. "/lib/public/linux32/libvstdlib.so " .. path.getabsolute(folder) .. "/lib/public/linux32/bin/libvstdlib.so",
-			"ln -f " .. path.getabsolute(folder) .. "/lib/public/linux32/libvstdlib.so " .. path.getabsolute(folder) .. "/lib/public/linux32/bin/libvstdlib_srv.so"
+			"ln -f " .. path.getabsolute(directory) .. "/lib/public/linux32/libvstdlib.so " .. path.getabsolute(directory) .. "/lib/public/linux32/bin/libvstdlib.so",
+			"ln -f " .. path.getabsolute(directory) .. "/lib/public/linux32/libvstdlib.so " .. path.getabsolute(directory) .. "/lib/public/linux32/bin/libvstdlib_srv.so"
 		})
-		linkoptions("-l:bin/" .. (_PROJECT.serverside and "libvstdlib_srv.so" or "libvstdlib.so"))
+		linkoptions("-l:bin/" .. (_project.serverside and "libvstdlib_srv.so" or "libvstdlib.so"))
 
 	filter("system:macosx")
 		links("vstdlib")
@@ -154,154 +161,158 @@ function IncludeSDKTier1(folder)
 		warnings("Default")
 		defines("TIER1_STATIC_LIB")
 		includedirs({
-			folder .. "/public/tier0",
-			folder .. "/public/tier1"
+			directory .. "/public/tier0",
+			directory .. "/public/tier1"
 		})
-		vpaths({["Source files"] = {
-			folder .. "/tier1/**.cpp",
-			folder .. "/utils/lzma/C/**.c"
+		vpaths({["Source files/*"] = {
+			directory .. "/tier1/*.cpp",
+			directory .. "/utils/lzma/C/*.c"
 		}})
-		IncludeSDKCommonInternal(folder)
+		IncludeSDKCommonInternal(directory)
 		files({
-			folder .. "/tier1/bitbuf.cpp",
-			folder .. "/tier1/byteswap.cpp",
-			folder .. "/tier1/characterset.cpp",
-			folder .. "/tier1/checksum_crc.cpp",
-			folder .. "/tier1/checksum_md5.cpp",
-			folder .. "/tier1/checksum_sha1.cpp",
-			folder .. "/tier1/commandbuffer.cpp",
-			folder .. "/tier1/convar.cpp",
-			folder .. "/tier1/datamanager.cpp",
-			folder .. "/tier1/diff.cpp",
-			folder .. "/tier1/generichash.cpp",
-			folder .. "/tier1/ilocalize.cpp",
-			folder .. "/tier1/interface.cpp",
-			folder .. "/tier1/KeyValues.cpp",
-			folder .. "/tier1/kvpacker.cpp",
-			folder .. "/tier1/lzmaDecoder.cpp",
-			folder .. "/tier1/mempool.cpp",
-			folder .. "/tier1/memstack.cpp",
-			folder .. "/tier1/NetAdr.cpp",
-			folder .. "/tier1/splitstring.cpp",
-			folder .. "/tier1/rangecheckedvar.cpp",
-			folder .. "/tier1/reliabletimer.cpp",
-			folder .. "/tier1/stringpool.cpp",
-			folder .. "/tier1/strtools.cpp",
-			folder .. "/tier1/strtools_unicode.cpp",
-			folder .. "/tier1/tier1.cpp",
-			folder .. "/tier1/tokenreader.cpp",
-			folder .. "/tier1/sparsematrix.cpp",
-			folder .. "/tier1/uniqueid.cpp",
-			folder .. "/tier1/utlbuffer.cpp",
-			folder .. "/tier1/utlbufferutil.cpp",
-			folder .. "/tier1/utlstring.cpp",
-			folder .. "/tier1/utlsymbol.cpp",
-			folder .. "/tier1/utlbinaryblock.cpp",
-			folder .. "/tier1/snappy.cpp",
-			folder .. "/tier1/snappy-sinksource.cpp",
-			folder .. "/tier1/snappy-stubs-internal.cpp",
-			folder .. "/utils/lzma/C/LzmaDec.c"
+			directory .. "/tier1/bitbuf.cpp",
+			directory .. "/tier1/byteswap.cpp",
+			directory .. "/tier1/characterset.cpp",
+			directory .. "/tier1/checksum_crc.cpp",
+			directory .. "/tier1/checksum_md5.cpp",
+			directory .. "/tier1/checksum_sha1.cpp",
+			directory .. "/tier1/commandbuffer.cpp",
+			directory .. "/tier1/convar.cpp",
+			directory .. "/tier1/datamanager.cpp",
+			directory .. "/tier1/diff.cpp",
+			directory .. "/tier1/generichash.cpp",
+			directory .. "/tier1/ilocalize.cpp",
+			directory .. "/tier1/interface.cpp",
+			directory .. "/tier1/KeyValues.cpp",
+			directory .. "/tier1/kvpacker.cpp",
+			directory .. "/tier1/lzmaDecoder.cpp",
+			directory .. "/tier1/mempool.cpp",
+			directory .. "/tier1/memstack.cpp",
+			directory .. "/tier1/NetAdr.cpp",
+			directory .. "/tier1/splitstring.cpp",
+			directory .. "/tier1/rangecheckedvar.cpp",
+			directory .. "/tier1/reliabletimer.cpp",
+			directory .. "/tier1/stringpool.cpp",
+			directory .. "/tier1/strtools.cpp",
+			directory .. "/tier1/strtools_unicode.cpp",
+			directory .. "/tier1/tier1.cpp",
+			directory .. "/tier1/tokenreader.cpp",
+			directory .. "/tier1/sparsematrix.cpp",
+			directory .. "/tier1/uniqueid.cpp",
+			directory .. "/tier1/utlbuffer.cpp",
+			directory .. "/tier1/utlbufferutil.cpp",
+			directory .. "/tier1/utlstring.cpp",
+			directory .. "/tier1/utlsymbol.cpp",
+			directory .. "/tier1/utlbinaryblock.cpp",
+			directory .. "/tier1/snappy.cpp",
+			directory .. "/tier1/snappy-sinksource.cpp",
+			directory .. "/tier1/snappy-stubs-internal.cpp",
+			directory .. "/utils/lzma/C/LzmaDec.c"
 		})
 
 		filter("system:windows")
 			defines("_DLL_EXT=dll")
-			files(folder .. "/tier1/processor_detect.cpp")
+			files(directory .. "/tier1/processor_detect.cpp")
 
 		filter("system:linux")
 			defines("_DLL_EXT=so")
 			files({
-				folder .. "/tier1/processor_detect_linux.cpp",
-				folder .. "/tier1/qsort_s.cpp",
-				folder .. "/tier1/pathmatch.cpp"
+				directory .. "/tier1/processor_detect_linux.cpp",
+				directory .. "/tier1/qsort_s.cpp",
+				directory .. "/tier1/pathmatch.cpp"
 			})
 
 		filter("system:macosx")
 			defines("_DLL_EXT=dylib")
 			files({
-				folder .. "/tier1/processor_detect_linux.cpp",
-				folder .. "/tier1/qsort_s.cpp",
-				folder .. "/tier1/pathmatch.cpp"
+				directory .. "/tier1/processor_detect_linux.cpp",
+				directory .. "/tier1/qsort_s.cpp",
+				directory .. "/tier1/pathmatch.cpp"
 			})
 
 		filter("action:gmake")
 			buildoptions("-std=gnu++11")
 
-	project(_PROJECT.name)
+	project(_project.name)
 end
 
-function IncludeSDKTier2(folder)
+function IncludeSDKTier2(directory)
 	IncludePackage("sdktier2")
 
-	folder = GetSDKPath(folder)
+	directory = GetSDKPath(directory)
 
 	filter({})
 
-	includedirs(folder .. "/public/tier2")
+	includedirs(directory .. "/public/tier2")
 	links("tier2")
 end
 
-function IncludeSDKTier3(folder)
+function IncludeSDKTier3(directory)
 	IncludePackage("sdktier3")
 
-	folder = GetSDKPath(folder)
+	directory = GetSDKPath(directory)
 
 	filter({})
 
-	includedirs(folder .. "/public/tier3")
+	includedirs(directory .. "/public/tier3")
 	links("tier3")
 end
 
-function IncludeSDKMathlib(folder)
+function IncludeSDKMathlib(directory)
 	IncludePackage("sdkmathlib")
 
-	folder = GetSDKPath(folder)
+	local _project = project()
+
+	directory = GetSDKPath(directory)
 
 	filter({})
 
-	includedirs(folder .. "/public/mathlib")
+	includedirs(directory .. "/public/mathlib")
 	links("mathlib")
 
 	project("mathlib")
 		kind("StaticLib")
 		warnings("Default")
 		defines("MATHLIB_LIB")
-		includedirs(folder .. "/public/mathlib")
-		vpaths({["Source files"] = folder .. "/mathlib/**.cpp"})
-		IncludeSDKCommonInternal(folder)
+		includedirs(directory .. "/public/mathlib")
+		vpaths({["Source files/*"] = directory .. "/mathlib/*.cpp"})
+		IncludeSDKCommonInternal(directory)
 		files({
-			folder .. "/mathlib/color_conversion.cpp",
-			folder .. "/mathlib/halton.cpp",
-			folder .. "/mathlib/lightdesc.cpp",
-			folder .. "/mathlib/mathlib_base.cpp",
-			folder .. "/mathlib/powsse.cpp",
-			folder .. "/mathlib/sparse_convolution_noise.cpp",
-			folder .. "/mathlib/sseconst.cpp",
-			folder .. "/mathlib/sse.cpp",
-			folder .. "/mathlib/ssenoise.cpp",
-			folder .. "/mathlib/anorms.cpp",
-			folder .. "/mathlib/bumpvects.cpp",
-			folder .. "/mathlib/IceKey.cpp",
-			folder .. "/mathlib/imagequant.cpp",
-			folder .. "/mathlib/polyhedron.cpp",
-			folder .. "/mathlib/quantize.cpp",
-			folder .. "/mathlib/randsse.cpp",
-			folder .. "/mathlib/spherical.cpp",
-			folder .. "/mathlib/simdvectormatrix.cpp",
-			folder .. "/mathlib/vector.cpp",
-			folder .. "/mathlib/vmatrix.cpp",
-			folder .. "/mathlib/almostequal.cpp"
+			directory .. "/mathlib/color_conversion.cpp",
+			directory .. "/mathlib/halton.cpp",
+			directory .. "/mathlib/lightdesc.cpp",
+			directory .. "/mathlib/mathlib_base.cpp",
+			directory .. "/mathlib/powsse.cpp",
+			directory .. "/mathlib/sparse_convolution_noise.cpp",
+			directory .. "/mathlib/sseconst.cpp",
+			directory .. "/mathlib/sse.cpp",
+			directory .. "/mathlib/ssenoise.cpp",
+			directory .. "/mathlib/anorms.cpp",
+			directory .. "/mathlib/bumpvects.cpp",
+			directory .. "/mathlib/IceKey.cpp",
+			directory .. "/mathlib/imagequant.cpp",
+			directory .. "/mathlib/polyhedron.cpp",
+			directory .. "/mathlib/quantize.cpp",
+			directory .. "/mathlib/randsse.cpp",
+			directory .. "/mathlib/spherical.cpp",
+			directory .. "/mathlib/simdvectormatrix.cpp",
+			directory .. "/mathlib/vector.cpp",
+			directory .. "/mathlib/vmatrix.cpp",
+			directory .. "/mathlib/almostequal.cpp"
 		})
 
 		filter("system:windows or linux")
-			files(folder .. "/mathlib/3dnow.cpp")
+			files(directory .. "/mathlib/3dnow.cpp")
 
-	project(_PROJECT.name)
+	project(_project.name)
 end
 
-function IncludeSDKRaytrace(folder)
+function IncludeSDKRaytrace(directory)
 	IncludePackage("sdkraytrace")
 
-	folder = GetSDKPath(folder)
+	local _project = project()
+
+	directory = GetSDKPath(directory)
 
 	filter({})
 
@@ -310,32 +321,32 @@ function IncludeSDKRaytrace(folder)
 	project("raytrace")
 		kind("StaticLib")
 		warnings("Default")
-		includedirs(folder .. "/utils/common")
-		vpaths({["Source files"] = folder .. "/raytrace/**.cpp"})
-		IncludeSDKCommonInternal(folder)
+		includedirs(directory .. "/utils/common")
+		vpaths({["Source files/*"] = directory .. "/raytrace/*.cpp"})
+		IncludeSDKCommonInternal(directory)
 		files({
-			folder .. "/raytrace/raytrace.cpp",
-			folder .. "/raytrace/trace2.cpp",
-			folder .. "/raytrace/trace3.cpp"
+			directory .. "/raytrace/raytrace.cpp",
+			directory .. "/raytrace/trace2.cpp",
+			directory .. "/raytrace/trace3.cpp"
 		})
 
-	project(_PROJECT.name)
+	project(_project.name)
 end
 
-function IncludeSteamAPI(folder)
+function IncludeSteamAPI(directory)
 	IncludePackage("steamapi")
 
-	folder = GetSDKPath(folder)
+	directory = GetSDKPath(directory)
 
 	filter({})
 
-	includedirs(folder .. "/public/steam")
+	includedirs(directory .. "/public/steam")
 
 	filter("system:windows or macosx")
 		links("steam_api")
 
 	filter("system:linux")
-		prelinkcommands("ln -f " .. path.getabsolute(folder) .. "/lib/public/linux32/libsteam_api.so " .. path.getabsolute(folder) .. "/lib/public/linux32/bin/libsteam_api.so")
+		prelinkcommands("ln -f " .. path.getabsolute(directory) .. "/lib/public/linux32/libsteam_api.so " .. path.getabsolute(directory) .. "/lib/public/linux32/bin/libsteam_api.so")
 		linkoptions("-l:bin/libsteam_api.so")
 
 	filter({})
