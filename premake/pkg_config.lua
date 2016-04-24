@@ -1,3 +1,7 @@
+if os.is("windows") then
+	return
+end
+
 local pkg_config_parsers = {
 	l = function(lib)
 		links(lib)

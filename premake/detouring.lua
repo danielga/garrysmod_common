@@ -1,7 +1,11 @@
 function IncludeDetouring()
-	local folder = _GARRYSMOD_COMMON_FOLDER .. "/detouring"
+	IncludePackage("detouring")
 
-	includedirs({folder})
+	local folder = _GARRYSMOD_COMMON_DIRECTORY .. "/detouring"
+
+	filter({})
+
+	includedirs(folder)
 	files({
 		folder .. "/*.hpp",
 		folder .. "/*.cpp"

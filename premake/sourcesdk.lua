@@ -20,21 +20,16 @@ local function GetSDKPath(folder)
 	return folder
 end
 
-function IncludeSourceSDK(folder)
-	folder = GetSDKPath(folder)
-
-	local curfilter = GetFilter()
-	local nosystem = curfilter.system == nil
-
+local function IncludeSDKCommonInternal(folder)
 	filter({})
 
-	defines(_PROJECT_SERVERSIDE and "GAME_DLL" or "CLIENT_DLL")
+	defines(_PROJECT.serverside and "GAME_DLL" or "CLIENT_DLL")
 	includedirs({
 		folder .. "/common",
 		folder .. "/public"
 	})
 
-	if _PROJECT_SERVERSIDE then
+	if _PROJECT.serverside then
 		includedirs({
 			folder .. "/game/server",
 			folder .. "/game/shared"
@@ -46,97 +41,113 @@ function IncludeSourceSDK(folder)
 		})
 	end
 
-	if nosystem or HasFilter(FILTER_WINDOWS) then
-		filter(MergeFilters({"system:windows", curfilter.configurations}, curfilter.extra))
-			defines("WIN32")
-			libdirs(folder .. "/lib/public")
+	filter("system:windows")
+		defines("WIN32")
+		libdirs(folder .. "/lib/public")
 
-			if curfilter.configurations == nil or HasFilter(FILTER_DEBUG) then
-				filter(MergeFilters({"system:windows", "configurations:Debug"}, curfilter.extra))
-					linkoptions("/NODEFAULTLIB:\"libcmt\"")
-			end
+		filter({"system:windows", "configurations:Debug"})
+			linkoptions("/NODEFAULTLIB:\"libcmt\"")
+
+	filter("system:linux")
+		defines({"COMPILER_GCC", "POSIX", "_POSIX", "LINUX", "_LINUX", "GNUC", "NO_MALLOC_OVERRIDE"})
+		libdirs(folder .. "/lib/public/linux32")
+		prelinkcommands("mkdir -p " .. path.getabsolute(folder) .. "/lib/public/linux32/bin")
+
+	filter("system:macosx")
+		defines({"COMPILER_GCC", "POSIX", "_POSIX", "OSX", "GNUC", "NO_MALLOC_OVERRIDE"})
+		libdirs(folder .. "/lib/public/osx32")
+
+	filter({})
+end
+
+function IncludeSDKCommon(folder)
+	IncludePackage("sdkcommon")
+
+	folder = GetSDKPath(folder)
+
+	filter({})
+
+	defines(_PROJECT.serverside and "GAME_DLL" or "CLIENT_DLL")
+	includedirs({
+		folder .. "/common",
+		folder .. "/public"
+	})
+
+	if _PROJECT.serverside then
+		includedirs({
+			folder .. "/game/server",
+			folder .. "/game/shared"
+		})
+	else
+		includedirs({
+			folder .. "/game/client",
+			folder .. "/game/shared"
+		})
 	end
 
-	if nosystem or HasFilter(FILTER_LINUX) then
-		filter(MergeFilters({"system:linux", curfilter.configurations}, curfilter.extra))
-			defines({"COMPILER_GCC", "POSIX", "_POSIX", "LINUX", "_LINUX", "GNUC", "NO_MALLOC_OVERRIDE"})
-			libdirs(folder .. "/lib/public/linux32")
-			prelinkcommands("mkdir -p " .. path.getabsolute(folder) .. "/lib/public/linux32/bin")
-	end
+	filter("system:windows")
+		defines("WIN32")
+		libdirs(folder .. "/lib/public")
 
-	if nosystem or HasFilter(FILTER_MACOSX) then
-		filter(MergeFilters({"system:macosx", curfilter.configurations}, curfilter.extra))
-			defines({"COMPILER_GCC", "POSIX", "_POSIX", "OSX", "GNUC", "NO_MALLOC_OVERRIDE"})
-			libdirs(folder .. "/lib/public/osx32")
-	end
+		filter({"system:windows", "configurations:Debug"})
+			linkoptions("/NODEFAULTLIB:\"libcmt\"")
 
-	filter(curfilter.patterns)
+	filter("system:linux")
+		defines({"COMPILER_GCC", "POSIX", "_POSIX", "LINUX", "_LINUX", "GNUC", "NO_MALLOC_OVERRIDE"})
+		libdirs(folder .. "/lib/public/linux32")
+		prelinkcommands("mkdir -p " .. path.getabsolute(folder) .. "/lib/public/linux32/bin")
 
-	_SOURCE_SDK_INCLUDED = true
+	filter("system:macosx")
+		defines({"COMPILER_GCC", "POSIX", "_POSIX", "OSX", "GNUC", "NO_MALLOC_OVERRIDE"})
+		libdirs(folder .. "/lib/public/osx32")
+
+	filter({})
 end
 
 function IncludeSDKTier0(folder)
-	folder = GetSDKPath(folder)
+	IncludePackage("sdktier0")
 
-	local curfilter = GetFilter()
-	local nosystem = curfilter.system == nil
+	folder = GetSDKPath(folder)
 
 	filter({})
 
 	includedirs(folder .. "/public/tier0")
 
-	if nosystem or HasFilter(FILTER_WINDOWS) then
-		filter(MergeFilters({"system:windows", curfilter.configurations}, curfilter.extra))
-			links("tier0")
-	end
+	filter("system:windows or macosx")
+		links("tier0")
 
-	if nosystem or HasFilter(FILTER_LINUX) then
-		filter(MergeFilters({"system:linux", curfilter.configurations}, curfilter.extra))
-			prelinkcommands({
-				"ln -f " .. path.getabsolute(folder) .. "/lib/public/linux32/libtier0.so " .. path.getabsolute(folder) .. "/lib/public/linux32/bin/libtier0.so",
-				"ln -f " .. path.getabsolute(folder) .. "/lib/public/linux32/libtier0.so " .. path.getabsolute(folder) .. "/lib/public/linux32/bin/libtier0_srv.so"
-			})
-			linkoptions("-l:bin/" .. (_PROJECT_SERVERSIDE and "libtier0_srv.so" or "libtier0.so"))
-	end
+	filter("system:linux")
+		prelinkcommands({
+			"ln -f " .. path.getabsolute(folder) .. "/lib/public/linux32/libtier0.so " .. path.getabsolute(folder) .. "/lib/public/linux32/bin/libtier0.so",
+			"ln -f " .. path.getabsolute(folder) .. "/lib/public/linux32/libtier0.so " .. path.getabsolute(folder) .. "/lib/public/linux32/bin/libtier0_srv.so"
+		})
+		linkoptions("-l:bin/" .. (_PROJECT.serverside and "libtier0_srv.so" or "libtier0.so"))
 
-	if nosystem or HasFilter(FILTER_MACOSX) then
-		filter(MergeFilters({"system:macosx", curfilter.configurations}, curfilter.extra))
-			links("tier0")
-	end
-
-	filter(curfilter.patterns)
+	filter({})
 end
 
 function IncludeSDKTier1(folder)
-	folder = GetSDKPath(folder)
+	IncludePackage("sdktier1")
 
-	local name = project().name
-	local curfilter = GetFilter()
-	local nosystem = curfilter.system == nil
+	folder = GetSDKPath(folder)
 
 	filter({})
 
 	includedirs(folder .. "/public/tier1")
 	links("tier1")
 
-	if nosystem or HasFilter(FILTER_WINDOWS) then
-		filter(MergeFilters({"system:windows", curfilter.configurations}, curfilter.extra))
-			links({"vstdlib", "ws2_32", "rpcrt4"})
-	end
+	filter("system:windows")
+		links({"vstdlib", "ws2_32", "rpcrt4"})
 
-	if nosystem or HasFilter(FILTER_LINUX) then
-		filter(MergeFilters({"system:linux", curfilter.configurations}, curfilter.extra))
-			prelinkcommands({
-				"ln -f " .. path.getabsolute(folder) .. "/lib/public/linux32/libvstdlib.so " .. path.getabsolute(folder) .. "/lib/public/linux32/bin/libvstdlib.so",
-				"ln -f " .. path.getabsolute(folder) .. "/lib/public/linux32/libvstdlib.so " .. path.getabsolute(folder) .. "/lib/public/linux32/bin/libvstdlib_srv.so"
-			})
-			linkoptions("-l:bin/" .. (_PROJECT_SERVERSIDE and "libvstdlib_srv.so" or "libvstdlib.so"))
-	end
+	filter("system:linux")
+		prelinkcommands({
+			"ln -f " .. path.getabsolute(folder) .. "/lib/public/linux32/libvstdlib.so " .. path.getabsolute(folder) .. "/lib/public/linux32/bin/libvstdlib.so",
+			"ln -f " .. path.getabsolute(folder) .. "/lib/public/linux32/libvstdlib.so " .. path.getabsolute(folder) .. "/lib/public/linux32/bin/libvstdlib_srv.so"
+		})
+		linkoptions("-l:bin/" .. (_PROJECT.serverside and "libvstdlib_srv.so" or "libvstdlib.so"))
 
-	if nosystem or HasFilter(FILTER_MACOSX) then
-		filter(MergeFilters({"system:macosx", curfilter.configurations}, curfilter.extra))
-			links("vstdlib")
-	end
+	filter("system:macosx")
+		links("vstdlib")
 
 	project("tier1")
 		kind("StaticLib")
@@ -150,7 +161,7 @@ function IncludeSDKTier1(folder)
 			folder .. "/tier1/**.cpp",
 			folder .. "/utils/lzma/C/**.c"
 		}})
-		IncludeSourceSDK(folder)
+		IncludeSDKCommonInternal(folder)
 		files({
 			folder .. "/tier1/bitbuf.cpp",
 			folder .. "/tier1/byteswap.cpp",
@@ -215,41 +226,35 @@ function IncludeSDKTier1(folder)
 		filter("action:gmake")
 			buildoptions("-std=gnu++11")
 
-	project(name)
-
-	filter(curfilter.patterns)
+	project(_PROJECT.name)
 end
 
 function IncludeSDKTier2(folder)
-	folder = GetSDKPath(folder)
+	IncludePackage("sdktier2")
 
-	local curfilter = GetFilter()
+	folder = GetSDKPath(folder)
 
 	filter({})
 
 	includedirs(folder .. "/public/tier2")
 	links("tier2")
-
-	filter(curfilter.patterns)
 end
 
 function IncludeSDKTier3(folder)
-	folder = GetSDKPath(folder)
+	IncludePackage("sdktier3")
 
-	local curfilter = GetFilter()
+	folder = GetSDKPath(folder)
 
 	filter({})
 
 	includedirs(folder .. "/public/tier3")
 	links("tier3")
-
-	filter(curfilter.patterns)
 end
 
 function IncludeSDKMathlib(folder)
-	folder = GetSDKPath(folder)
+	IncludePackage("sdkmathlib")
 
-	local curfilter = GetFilter()
+	folder = GetSDKPath(folder)
 
 	filter({})
 
@@ -262,7 +267,7 @@ function IncludeSDKMathlib(folder)
 		defines("MATHLIB_LIB")
 		includedirs(folder .. "/public/mathlib")
 		vpaths({["Source files"] = folder .. "/mathlib/**.cpp"})
-		IncludeSourceSDK(folder)
+		IncludeSDKCommonInternal(folder)
 		files({
 			folder .. "/mathlib/color_conversion.cpp",
 			folder .. "/mathlib/halton.cpp",
@@ -288,15 +293,15 @@ function IncludeSDKMathlib(folder)
 		})
 
 		filter("system:windows or linux")
-			files({	folder .. "/mathlib/3dnow.cpp"})
+			files(folder .. "/mathlib/3dnow.cpp")
 
-	filter(curfilter.patterns)
+	project(_PROJECT.name)
 end
 
 function IncludeSDKRaytrace(folder)
-	folder = GetSDKPath(folder)
+	IncludePackage("sdkraytrace")
 
-	local curfilter = GetFilter()
+	folder = GetSDKPath(folder)
 
 	filter({})
 
@@ -307,41 +312,31 @@ function IncludeSDKRaytrace(folder)
 		warnings("Default")
 		includedirs(folder .. "/utils/common")
 		vpaths({["Source files"] = folder .. "/raytrace/**.cpp"})
-		IncludeSourceSDK(folder)
+		IncludeSDKCommonInternal(folder)
 		files({
 			folder .. "/raytrace/raytrace.cpp",
 			folder .. "/raytrace/trace2.cpp",
 			folder .. "/raytrace/trace3.cpp"
 		})
 
-	filter(curfilter.patterns)
+	project(_PROJECT.name)
 end
 
 function IncludeSteamAPI(folder)
-	folder = GetSDKPath(folder)
+	IncludePackage("steamapi")
 
-	local curfilter = GetFilter()
-	local nosystem = curfilter.system == nil
+	folder = GetSDKPath(folder)
 
 	filter({})
 
 	includedirs(folder .. "/public/steam")
 
-	if nosystem or HasFilter(FILTER_WINDOWS) then
-		filter(MergeFilters({"system:windows", curfilter.configurations}, curfilter.extra))
-			links("steam_api")
-	end
+	filter("system:windows or macosx")
+		links("steam_api")
 
-	if nosystem or HasFilter(FILTER_LINUX) then
-		filter(MergeFilters({"system:linux", curfilter.configurations}, curfilter.extra))
-			prelinkcommands("ln -f " .. path.getabsolute(folder) .. "/lib/public/linux32/libsteam_api.so " .. path.getabsolute(folder) .. "/lib/public/linux32/bin/libsteam_api.so")
-			linkoptions("-l:bin/libsteam_api.so")
-	end
+	filter("system:linux")
+		prelinkcommands("ln -f " .. path.getabsolute(folder) .. "/lib/public/linux32/libsteam_api.so " .. path.getabsolute(folder) .. "/lib/public/linux32/bin/libsteam_api.so")
+		linkoptions("-l:bin/libsteam_api.so")
 
-	if nosystem or HasFilter(FILTER_MACOSX) then
-		filter(MergeFilters({"system:macosx", curfilter.configurations}, curfilter.extra))
-			links("steam_api")
-	end
-
-	filter(curfilter.patterns)
+	filter({})
 end
