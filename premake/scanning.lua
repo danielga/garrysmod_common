@@ -18,5 +18,8 @@ function IncludeScanning()
 	filter("system:linux or macosx")
 		links("dl")
 
+	filter("system:macosx")
+		links("CoreServices.framework")
+
 	filter({})
 end
