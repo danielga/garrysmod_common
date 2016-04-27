@@ -230,8 +230,11 @@ function IncludeSDKTier1(directory)
 				directory .. "/tier1/pathmatch.cpp"
 			})
 
-		filter("action:gmake")
+		filter({"action:gmake", "files:**.cpp or **.cxx"})
 			buildoptions("-std=gnu++11")
+
+		filter({"action:gmake", "files:**.c"})
+			buildoptions("-std=gnu11")
 
 	project(_project.name)
 end
