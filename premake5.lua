@@ -177,8 +177,11 @@ function CreateProject(config)
 		filter("system:macosx")
 			targetsuffix("_mac")
 
-		filter("action:gmake")
+		filter({"action:gmake", "files:**.cpp or **.cxx"})
 			buildoptions("-std=c++11")
+
+		filter({"action:gmake", "files:**.c"})
+			buildoptions("-std=c11")
 
 		filter({})
 end
