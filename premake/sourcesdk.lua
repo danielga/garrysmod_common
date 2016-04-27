@@ -154,7 +154,7 @@ function IncludeSDKTier1(directory)
 		linkoptions("-l:bin/" .. (_project.serverside and "libvstdlib_srv.so" or "libvstdlib.so"))
 
 	filter("system:macosx")
-		links("vstdlib")
+		links({"vstdlib", "iconv"})
 
 	project("tier1")
 		kind("StaticLib")

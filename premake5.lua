@@ -87,7 +87,7 @@ function CreateSolution(config)
 			objdir(_solution.directory .. "/intermediate")
 			targetdir(_solution.directory .. "/debug")
 
-		filter("system:linux or macosx")
+		filter("system:linux")
 			linkoptions({"-static-libgcc", "-static-libstdc++"})
 
 		filter({})
