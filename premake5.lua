@@ -194,6 +194,7 @@ function CreateProject(config)
 	_project.serverside = is_server
 
 		kind("SharedLib")
+		flags("C++11")
 		defines({
 			"GMMODULE",
 			string.upper(string.gsub(_solution.name, "%.", "_")) .. (_project.serverside and "_SERVER" or "_CLIENT"),
@@ -239,12 +240,6 @@ function CreateProject(config)
 
 		filter("system:macosx")
 			targetsuffix("_mac")
-
-		filter({"action:gmake", "files:**.cpp or **.cxx"})
-			buildoptions("-std=c++11")
-
-		filter({"action:gmake", "files:**.c"})
-			buildoptions("-std=c11")
 
 		filter({})
 end
