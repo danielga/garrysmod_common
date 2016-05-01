@@ -159,6 +159,7 @@ function IncludeSDKTier1(directory)
 	project("tier1")
 		kind("StaticLib")
 		warnings("Default")
+		flags("GNU++11")
 		defines("TIER1_STATIC_LIB")
 		includedirs({
 			directory .. "/public/tier0",
@@ -229,12 +230,6 @@ function IncludeSDKTier1(directory)
 				directory .. "/tier1/qsort_s.cpp",
 				directory .. "/tier1/pathmatch.cpp"
 			})
-
-		filter({"action:gmake", "files:**.cpp or **.cxx"})
-			buildoptions("-std=gnu++11")
-
-		filter({"action:gmake", "files:**.c"})
-			buildoptions("-std=gnu11")
 
 	project(_project.name)
 end

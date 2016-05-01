@@ -2,6 +2,69 @@ if _ACTION == nil then
 	error("no action (vs20**, gmake or xcode for example) provided")
 end
 
+-- START OF NEW FLAGS BLOCK (C11, GNU11, GNU++11, GNU++14)
+
+table.insert(premake.field._list.flags.allowed, "C11")
+table.insert(premake.field._list.flags.allowed, "GNU11")
+table.insert(premake.field._list.flags.allowed, "GNU++11")
+table.insert(premake.field._list.flags.allowed, "GNU++14")
+premake.field._list.flags.allowed["c11"] = "C11"
+premake.field._list.flags.allowed["gnu11"] = "GNU11"
+premake.field._list.flags.allowed["gnu++11"] = "GNU++11"
+premake.field._list.flags.allowed["gnu++14"] = "GNU++14"
+
+table.insert(premake.field._loweredList.flags.allowed, "C11")
+table.insert(premake.field._loweredList.flags.allowed, "GNU11")
+table.insert(premake.field._loweredList.flags.allowed, "GNU++11")
+table.insert(premake.field._loweredList.flags.allowed, "GNU++14")
+premake.field._loweredList.flags.allowed["c11"] = "C11"
+premake.field._loweredList.flags.allowed["gnu11"] = "GNU11"
+premake.field._loweredList.flags.allowed["gnu++11"] = "GNU++11"
+premake.field._loweredList.flags.allowed["gnu++14"] = "GNU++14"
+
+table.insert(premake.fields.flags.allowed, "C11")
+table.insert(premake.fields.flags.allowed, "GNU11")
+table.insert(premake.fields.flags.allowed, "GNU++11")
+table.insert(premake.fields.flags.allowed, "GNU++14")
+premake.fields.flags.allowed["c11"] = "C11"
+premake.fields.flags.allowed["gnu11"] = "GNU11"
+premake.fields.flags.allowed["gnu++11"] = "GNU++11"
+premake.fields.flags.allowed["gnu++14"] = "GNU++14"
+
+if premake.tools.clang.cflags and premake.tools.clang.cflags.flags then
+	premake.tools.clang.cflags.flags["C11"] = "-std=c11"
+end
+
+if premake.tools.clang.cflags and premake.tools.clang.cflags.flags then
+	premake.tools.clang.cflags.flags["GNU11"] = "-std=gnu11"
+end
+
+if premake.tools.clang.cxxflags and premake.tools.clang.cxxflags.flags then
+	premake.tools.clang.cxxflags.flags["GNU++11"] = "-std=gnu++11"
+end
+
+if premake.tools.clang.cxxflags and premake.tools.clang.cxxflags.flags then
+	premake.tools.clang.cxxflags.flags["GNU++14"] = "-std=gnu++14"
+end
+
+if premake.tools.gcc.cflags and premake.tools.gcc.cflags.flags then
+	premake.tools.gcc.cflags.flags["C11"] = "-std=c11"
+end
+
+if premake.tools.gcc.cflags and premake.tools.gcc.cflags.flags then
+	premake.tools.gcc.cflags.flags["GNU11"] = "-std=gnu11"
+end
+
+if premake.tools.gcc.cxxflags and premake.tools.gcc.cxxflags.flags then
+	premake.tools.gcc.cxxflags.flags["GNU++11"] = "-std=gnu++11"
+end
+
+if premake.tools.gcc.cxxflags and premake.tools.gcc.cxxflags.flags then
+	premake.tools.gcc.cxxflags.flags["GNU++14"] = "-std=gnu++14"
+end
+
+-- END OF NEW FLAGS BLOCK (C11, GNU11, GNU++11, GNU++14)
+
 include("config.lua")
 include("premake/lua_shared.lua")
 include("premake/detouring.lua")
