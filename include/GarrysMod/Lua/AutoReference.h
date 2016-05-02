@@ -1,7 +1,7 @@
 #pragma once
 
 #include "LuaBase.h"
-#include <cstdint>
+#include <stdint.h>
 
 namespace GarrysMod
 {
