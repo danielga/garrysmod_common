@@ -239,7 +239,7 @@ function CreateProject(config)
 			targetsuffix("_linux")
 
 		filter("system:macosx")
-			targetsuffix("_mac")
+			targetsuffix("_osx")
 
 		filter({})
 end
