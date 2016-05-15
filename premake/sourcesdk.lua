@@ -79,7 +79,7 @@ function IncludeSDKTier0(directory)
 
 	filter("system:linux")
 		local library = _project.serverside and "libtier0_srv.so" or "libtier0.so"
-		prelinkcommands("ln -f " .. path.getabsolute(directory) .. "/lib/public/linux32/" .. library .. " " .. path.getabsolute(_workspace.directory) .. "/bin/" .. library)
+		prelinkcommands("ln -f " .. path.getabsolute(directory) .. "/lib/public/linux32/libtier0.so " .. path.getabsolute(_workspace.directory) .. "/bin/" .. library)
 		linkoptions("-l:bin/" .. library)
 
 	filter({})
@@ -101,7 +101,7 @@ function IncludeSDKTier1(directory)
 
 	filter("system:linux")
 		local library = _project.serverside and "libvstdlib_srv.so" or "libvstdlib.so"
-		prelinkcommands("ln -f " .. path.getabsolute(directory) .. "/lib/public/linux32/" .. library .. " " .. path.getabsolute(_workspace.directory) .. "/bin/" .. library)
+		prelinkcommands("ln -f " .. path.getabsolute(directory) .. "/lib/public/linux32/libvstdlib.so " .. path.getabsolute(_workspace.directory) .. "/bin/" .. library)
 		linkoptions("-l:bin/" .. library)
 
 	filter("system:macosx")
