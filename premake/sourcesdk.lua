@@ -80,7 +80,7 @@ function IncludeSDKTier0(directory)
 	filter("system:linux")
 		local library = _project.serverside and "libtier0_srv.so" or "libtier0.so"
 		prelinkcommands("ln -f " .. path.getabsolute(directory) .. "/lib/public/linux32/libtier0.so " .. path.getabsolute(_workspace.directory) .. "/bin/" .. library)
-		linkoptions("-l:bin/" .. library)
+		linkoptions("bin/" .. library)
 
 	filter({})
 end
@@ -102,7 +102,7 @@ function IncludeSDKTier1(directory)
 	filter("system:linux")
 		local library = _project.serverside and "libvstdlib_srv.so" or "libvstdlib.so"
 		prelinkcommands("ln -f " .. path.getabsolute(directory) .. "/lib/public/linux32/libvstdlib.so " .. path.getabsolute(_workspace.directory) .. "/bin/" .. library)
-		linkoptions("-l:bin/" .. library)
+		linkoptions("bin/" .. library)
 
 	filter("system:macosx")
 		links({"vstdlib", "iconv"})
@@ -292,7 +292,7 @@ function IncludeSteamAPI(directory)
 
 	filter("system:linux")
 		prelinkcommands("ln -f " .. path.getabsolute(directory) .. "/lib/public/linux32/libsteam_api.so " .. path.getabsolute(_workspace.directory) .. "/bin/libsteam_api.so")
-		linkoptions("-l:bin/libsteam_api.so")
+		linkoptions("bin/libsteam_api.so")
 
 	filter({})
 end

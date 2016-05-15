@@ -18,7 +18,7 @@ function IncludeLuaShared()
 		})
 		linkoptions({
 			"-Wl,--no-as-needed",
-			"-l:garrysmod/bin/" .. library,
+			"garrysmod/bin/" .. library,
 			"-Wl,--as-needed"
 		})
 
