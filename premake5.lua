@@ -73,9 +73,9 @@ include("premake/sourcesdk.lua")
 include("premake/pkg_config.lua")
 
 newoption({
-	trigger = "solution",
-	description = "Sets the path for the solution directory",
-	value = "path for solution directory"
+	trigger = "workspace",
+	description = "Sets the path for the workspace directory",
+	value = "path for workspace directory"
 })
 
 function CleanPath(p)
@@ -93,19 +93,19 @@ end
 
 _GARRYSMOD_COMMON_DIRECTORY = CleanPath(path.getrelative(_MAIN_SCRIPT_DIR, _SCRIPT_DIR))
 
-function CreateSolution(config)
+function CreateWorkspace(config)
 	if type(config) ~= "table" then
 		error("supplied argument is not a table")
 	end
 
 	local name = config.name
 	if name == nil then
-		error("you didn't supply a name for your solution")
+		error("you didn't supply a name for your workspace")
 	end
 
-	local directory = config.path or _OPTIONS["solution"] or DEFAULT_SOLUTION_DIRECTORY
+	local directory = config.path or _OPTIONS["workspace"] or DEFAULT_WORKSPACE_DIRECTORY
 	if directory == nil then
-		error("you didn't supply a path for your solution directory")
+		error("you didn't supply a path for your workspace directory")
 	end
 
 	directory = CleanPath(directory)
@@ -115,15 +115,15 @@ function CreateSolution(config)
 		allowdebug = true
 	end
 
-	local _solution = solution(name)
-	if _solution.directory ~= nil then
-		error("a solution with this name ('" .. name .. "') already exists")
+	local _workspace = workspace(name)
+	if _workspace.directory ~= nil then
+		error("a workspace with this name ('" .. name .. "') already exists")
 	end
 
-	_solution.directory = directory
+	_workspace.directory = directory
 
 		language("C++")
-		location(_solution.directory)
+		location(_workspace.directory)
 		warnings("Extra")
 		flags({"NoPCH", "StaticRuntime"})
 		characterset("MBCS")
@@ -141,14 +141,14 @@ function CreateSolution(config)
 		filter("configurations:Release")
 			optimize("On")
 			vectorextensions("SSE2")
-			objdir(_solution.directory .. "/intermediate")
-			targetdir(_solution.directory .. "/release")
+			objdir(_workspace.directory .. "/intermediate")
+			targetdir(_workspace.directory .. "/release")
 
 		filter("configurations:Debug")
 			flags("Symbols")
 			defines({"DEBUG", "_DEBUG"})
-			objdir(_solution.directory .. "/intermediate")
-			targetdir(_solution.directory .. "/debug")
+			objdir(_workspace.directory .. "/intermediate")
+			targetdir(_workspace.directory .. "/debug")
 
 		filter("system:linux")
 			linkoptions({"-static-libgcc", "-static-libstdc++"})
@@ -182,9 +182,9 @@ function CreateProject(config)
 		error("you didn't supply a path to your source directory")
 	end
 
-	local _solution = solution()
+	local _workspace = workspace()
 
-	local name = (is_server and "gmsv_" or "gmcl_") .. _solution.name
+	local name = (is_server and "gmsv_" or "gmcl_") .. _workspace.name
 	local _project = project(name)
 	if _project.directory ~= nil then
 		error("a project with this name ('" .. name .. "') already exists")
@@ -197,7 +197,7 @@ function CreateProject(config)
 		flags("C++11")
 		defines({
 			"GMMODULE",
-			string.upper(string.gsub(_solution.name, "%.", "_")) .. (_project.serverside and "_SERVER" or "_CLIENT"),
+			string.upper(string.gsub(_workspace.name, "%.", "_")) .. (_project.serverside and "_SERVER" or "_CLIENT"),
 			"IS_SERVERSIDE=" .. tostring(is_server)
 		})
 		includedirs({

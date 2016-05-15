@@ -2,8 +2,7 @@ function IncludeLuaShared()
 	IncludePackage("luashared")
 
 	local _project = project()
-
-	filter({})
+	local _workspace = _project.workspace
 
 	includedirs(_GARRYSMOD_COMMON_DIRECTORY .. "/include")
 
@@ -12,10 +11,14 @@ function IncludeLuaShared()
 		links("lua_shared")
 
 	filter("system:linux")
-		libdirs(_GARRYSMOD_COMMON_DIRECTORY .. "/lib/linux")
+		local library = _project.serverside and "lua_shared_srv.so" or "lua_shared.so"
+		prelinkcommands({
+			"mkdir -p " .. path.getabsolute(_workspace.directory) .. "/garrysmod/bin",
+			"ln -f " .. _GARRYSMOD_COMMON_DIRECTORY .. "/lib/linux/" .. library .. " " .. path.getabsolute(_workspace.directory) .. "garrysmod/bin/" .. library
+		})
 		linkoptions({
 			"-Wl,--no-as-needed",
-			"-l:garrysmod/bin/" .. (_project.serverside and "lua_shared_srv.so" or "lua_shared.so"),
+			"-l:garrysmod/bin/" .. library,
 			"-Wl,--as-needed"
 		})
 

@@ -21,8 +21,7 @@ end
 
 local function IncludeSDKCommonInternal(directory)
 	local _project = project()
-
-	filter({})
+	local _workspace = _project.workspace
 
 	defines(_project.serverside and "GAME_DLL" or "CLIENT_DLL")
 	includedirs({
@@ -51,8 +50,7 @@ local function IncludeSDKCommonInternal(directory)
 
 	filter("system:linux")
 		defines({"COMPILER_GCC", "POSIX", "_POSIX", "LINUX", "_LINUX", "GNUC", "NO_MALLOC_OVERRIDE"})
-		libdirs(directory .. "/lib/public/linux32")
-		prelinkcommands("mkdir -p " .. path.getabsolute(directory) .. "/lib/public/linux32/bin")
+		prelinkcommands("mkdir -p " .. path.getabsolute(_workspace.directory) .. "/bin")
 
 	filter("system:macosx")
 		defines({"COMPILER_GCC", "POSIX", "_POSIX", "OSX", "GNUC", "NO_MALLOC_OVERRIDE"})
@@ -63,58 +61,16 @@ end
 
 function IncludeSDKCommon(directory)
 	IncludePackage("sdkcommon")
-
-	local _project = project()
-
-	directory = GetSDKPath(directory)
-
-	filter({})
-
-	defines(_project.serverside and "GAME_DLL" or "CLIENT_DLL")
-	includedirs({
-		directory .. "/common",
-		directory .. "/public"
-	})
-
-	if _project.serverside then
-		includedirs({
-			directory .. "/game/server",
-			directory .. "/game/shared"
-		})
-	else
-		includedirs({
-			directory .. "/game/client",
-			directory .. "/game/shared"
-		})
-	end
-
-	filter("system:windows")
-		defines("WIN32")
-		libdirs(directory .. "/lib/public")
-
-		filter({"system:windows", "configurations:Debug"})
-			linkoptions("/NODEFAULTLIB:\"libcmt\"")
-
-	filter("system:linux")
-		defines({"COMPILER_GCC", "POSIX", "_POSIX", "LINUX", "_LINUX", "GNUC", "NO_MALLOC_OVERRIDE"})
-		libdirs(directory .. "/lib/public/linux32")
-		prelinkcommands("mkdir -p " .. path.getabsolute(directory) .. "/lib/public/linux32/bin")
-
-	filter("system:macosx")
-		defines({"COMPILER_GCC", "POSIX", "_POSIX", "OSX", "GNUC", "NO_MALLOC_OVERRIDE"})
-		libdirs(directory .. "/lib/public/osx32")
-
-	filter({})
+	IncludeSDKCommonInternal(GetSDKPath(directory))
 end
 
 function IncludeSDKTier0(directory)
 	IncludePackage("sdktier0")
 
 	local _project = project()
+	local _workspace = _project.workspace
 
 	directory = GetSDKPath(directory)
-
-	filter({})
 
 	includedirs(directory .. "/public/tier0")
 
@@ -122,11 +78,9 @@ function IncludeSDKTier0(directory)
 		links("tier0")
 
 	filter("system:linux")
-		prelinkcommands({
-			"ln -f " .. path.getabsolute(directory) .. "/lib/public/linux32/libtier0.so " .. path.getabsolute(directory) .. "/lib/public/linux32/bin/libtier0.so",
-			"ln -f " .. path.getabsolute(directory) .. "/lib/public/linux32/libtier0.so " .. path.getabsolute(directory) .. "/lib/public/linux32/bin/libtier0_srv.so"
-		})
-		linkoptions("-l:bin/" .. (_project.serverside and "libtier0_srv.so" or "libtier0.so"))
+		local library = _project.serverside and "libtier0_srv.so" or "libtier0.so"
+		prelinkcommands("ln -f " .. path.getabsolute(directory) .. "/lib/public/linux32/" .. library .. " " .. path.getabsolute(_workspace.directory) .. "/bin/" .. library)
+		linkoptions("-l:bin/" .. library)
 
 	filter({})
 end
@@ -135,10 +89,9 @@ function IncludeSDKTier1(directory)
 	IncludePackage("sdktier1")
 
 	local _project = project()
+	local _workspace = _project.workspace
 
 	directory = GetSDKPath(directory)
-
-	filter({})
 
 	includedirs(directory .. "/public/tier1")
 	links("tier1")
@@ -147,11 +100,9 @@ function IncludeSDKTier1(directory)
 		links({"vstdlib", "ws2_32", "rpcrt4"})
 
 	filter("system:linux")
-		prelinkcommands({
-			"ln -f " .. path.getabsolute(directory) .. "/lib/public/linux32/libvstdlib.so " .. path.getabsolute(directory) .. "/lib/public/linux32/bin/libvstdlib.so",
-			"ln -f " .. path.getabsolute(directory) .. "/lib/public/linux32/libvstdlib.so " .. path.getabsolute(directory) .. "/lib/public/linux32/bin/libvstdlib_srv.so"
-		})
-		linkoptions("-l:bin/" .. (_project.serverside and "libvstdlib_srv.so" or "libvstdlib.so"))
+		local library = _project.serverside and "libvstdlib_srv.so" or "libvstdlib.so"
+		prelinkcommands("ln -f " .. path.getabsolute(directory) .. "/lib/public/linux32/" .. library .. " " .. path.getabsolute(_workspace.directory) .. "/bin/" .. library)
+		linkoptions("-l:bin/" .. library)
 
 	filter("system:macosx")
 		links({"vstdlib", "iconv"})
@@ -263,8 +214,6 @@ function IncludeSDKMathlib(directory)
 
 	directory = GetSDKPath(directory)
 
-	filter({})
-
 	includedirs(directory .. "/public/mathlib")
 	links("mathlib")
 
@@ -312,8 +261,6 @@ function IncludeSDKRaytrace(directory)
 
 	directory = GetSDKPath(directory)
 
-	filter({})
-
 	links("raytrace")
 
 	project("raytrace")
@@ -334,9 +281,9 @@ end
 function IncludeSteamAPI(directory)
 	IncludePackage("steamapi")
 
-	directory = GetSDKPath(directory)
+	local _workspace = project().workspace
 
-	filter({})
+	directory = GetSDKPath(directory)
 
 	includedirs(directory .. "/public/steam")
 
@@ -344,7 +291,7 @@ function IncludeSteamAPI(directory)
 		links("steam_api")
 
 	filter("system:linux")
-		prelinkcommands("ln -f " .. path.getabsolute(directory) .. "/lib/public/linux32/libsteam_api.so " .. path.getabsolute(directory) .. "/lib/public/linux32/bin/libsteam_api.so")
+		prelinkcommands("ln -f " .. path.getabsolute(directory) .. "/lib/public/linux32/libsteam_api.so " .. path.getabsolute(_workspace.directory) .. "/bin/libsteam_api.so")
 		linkoptions("-l:bin/libsteam_api.so")
 
 	filter({})
