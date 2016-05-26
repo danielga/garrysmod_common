@@ -11,7 +11,7 @@ As you can see by the filename, you need premake5.
 
 ## Warning
 
-Do not use internal classes/structures (like the GameDepot::System class or the IGamemodeSystem::Information structure) unless you compile with **Visual Studio 2010 SP1** on **release** mode for Windows. Unsure about Linux and Mac OSX but try using GCC 4.4 or above.
+Do not use internal classes/structures (like the GameDepot::System class or the IGamemodeSystem::Information structure) unless you compile with **Visual Studio 2010 SP1** on **release** mode for Windows. On Linux, use **GCC** between **4.4** and **4.9**. For Mac OSX, any **Xcode (using the GCC compiler)** version *MIGHT* work as long as the **Mac OSX 10.5 SDK** is used.
 
 ## Usage
 
@@ -86,3 +86,4 @@ HasFilter(filter) -- check if filter is set
 ## Relevant URLs
 
 https://github.com/ValveSoftware/source-sdk-2013
+https://github.com/danielga/sourcesdk-minimal
