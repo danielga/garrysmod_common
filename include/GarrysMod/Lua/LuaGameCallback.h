@@ -9,11 +9,6 @@ namespace GarrysMod
 		class ILuaObject;
 		class ILuaInterface;
 
-		struct CLuaError
-		{
-			const char *text;
-		};
-
 		class ILuaGameCallback
 		{
 		public:
@@ -25,7 +20,7 @@ namespace GarrysMod
 			virtual void Msg( const char *msg, bool useless ) = 0;
 			virtual void MsgColour( const char *msg, const Color &color ) = 0;
 
-			virtual void LuaError( CLuaError *error ) = 0;
+			virtual void LuaError( const std::string &error ) = 0;
 
 			virtual void InterfaceCreated( ILuaInterface *iface ) = 0;
 		};

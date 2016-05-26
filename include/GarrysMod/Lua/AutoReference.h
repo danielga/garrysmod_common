@@ -38,7 +38,7 @@ namespace GarrysMod
 				return lua != nullptr && ref != -2;
 			}
 
-			explicit operator bool( ) const
+			operator bool( ) const
 			{
 				return IsValid( );
 			}
