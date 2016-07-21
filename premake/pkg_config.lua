@@ -1,4 +1,6 @@
 if os.is("windows") then
+	function pkg_config() end
+
 	return
 end
 
