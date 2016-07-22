@@ -21,14 +21,14 @@ In your project's premake5.lua (or whatever you named it) you should include you
 include("path/to/this/repos/local/copy")
 ```
 
-You don't need to place premake5.lua on the path as said on the previous section.
+You don't need to place premake5.lua on the path as said on the first section.
 
 Example:
 ```lua
 newoption({
 	trigger = "gmcommon",
 	description = "Sets the path to the garrysmod_common (https://github.com/danielga/garrysmod_common) directory",
-	value = "path to garrysmod_common dir"
+	value = "path to garrysmod_common directory"
 })
 
 local gmcommon = _OPTIONS.gmcommon or os.getenv("GARRYSMOD_COMMON")
@@ -39,48 +39,38 @@ end
 include(gmcommon)
 ```
 
-Creates the solution with the provided name and optional path for files (can also be set by premake option (--solution=path) and by default uses the value in the config file). Must be called at least once before the next functions.
+Creates the workspace with the provided workspace_name, optional workspace_add_debug for including a debug compilation mode (default is true) and optional workspace_path for files (can also be set by premake option (--workspace=path) and by default uses the value in the config file). Must be called at least once before the next functions.
 ```lua
-CreateSolution(name [, solutionpath])
+CreateWorkspace({
+	name = workspace_name
+	[, allow_debug = workspace_add_debug]
+	[, path = workspace_path]
+})
 ```
 
-Creates the project with the provided name and optional path for source files (can also be set by premake option (--source=path, beware it will be used by all projects) and by default uses the value in the config file). is_server receives a boolean saying if the module is serverside or not (also accepts the globals SERVERSIDE or CLIENTSIDE). manual_files allows you to add the source/header files manually through AddFiles. Must be called at least once before the next functions.
+Creates the project for the provided state on project_serverside (it's a boolean), optional project_manual_files (allows you to add the source/header files manually through the function files and default is false) and optional project_source_path for source files path (can also be set by premake option (--source=path, beware it will be used by all projects) and by default uses the value in the config file).
 ```lua
-CreateProject(is_server [, manual_files [, sourcepath]])
+CreateProject({
+	serverside = project_serverside
+	[, manual_files = project_manual_files]
+	[, source_path = project_source_path]
+})
 ```
 
-Helper globals
-```lua
-SERVERSIDE -- Serverside module
-CLIENTSIDE -- Clientside module
-
-SOURCES_MANUAL -- add source/header files manually
-SOURCES_ALL -- adds all files in the sourcepath automatically
-
--- These filters work as a OR operation
-FILTER_WINDOWS -- Windows filter
-FILTER_LINUX -- Linux filter
-FILTER_MACOSX -- Mac OSX filter
-
-FILTER_DEBUG -- Debug filter
-FILTER_RELEASE -- Release filter
-
-AddFiles(files) -- a string/a table of strings which are paths, they can also contain wildcards
-```
-
-Call the next functions as needed. [path] means it's optional because you can also use premake options, environments variables or the config file in this repo.
+Call the next functions as needed. [directory] means it's optional because you can also use premake options, environments variables or the config file in this repo.
 ```lua
 IncludeLuaShared() -- uses this repo path
 IncludeDetouring() -- uses this repo detouring submodule
 IncludeScanning() -- uses this repo scanning submodule
-IncludeSourceSDK([path]) -- premake option: --sourcesdk=path - env var: SOURCE_SDK
-```
 
-There are also filters for operating systems (currently only Windows, Mac OSX and Linux are supported) and other things.
-```lua
-SetFilter(...) -- a variable number of strings/constants which work as filters
-GetFilter() -- get the current filter as a table
-HasFilter(filter) -- check if filter is set
+IncludeSDKCommon([directory]) -- premake option: --sourcesdk=directory - env var: SOURCE_SDK
+IncludeSDKTier0([directory]) -- premake option: --sourcesdk=directory - env var: SOURCE_SDK
+IncludeSDKTier1([directory]) -- premake option: --sourcesdk=directory - env var: SOURCE_SDK
+IncludeSDKTier2([directory]) -- premake option: --sourcesdk=directory - env var: SOURCE_SDK
+IncludeSDKTier3([directory]) -- premake option: --sourcesdk=directory - env var: SOURCE_SDK
+IncludeSDKMathlib([directory]) -- premake option: --sourcesdk=directory - env var: SOURCE_SDK
+IncludeSDKRaytrace([directory]) -- premake option: --sourcesdk=directory - env var: SOURCE_SDK
+IncludeSteamAPI([directory]) -- premake option: --sourcesdk=directory - env var: SOURCE_SDK
 ```
 
 ## Relevant URLs
