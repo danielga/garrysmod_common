@@ -14,7 +14,7 @@ function IncludeLuaShared()
 		local library = _project.serverside and "lua_shared_srv.so" or "lua_shared.so"
 		prelinkcommands({
 			"mkdir -p " .. path.getabsolute(_workspace.directory) .. "/garrysmod/bin",
-			"ln -f " .. _GARRYSMOD_COMMON_DIRECTORY .. "/lib/linux/" .. library .. " " .. path.getabsolute(_workspace.directory) .. "garrysmod/bin/" .. library
+			"ln -f " .. _GARRYSMOD_COMMON_DIRECTORY .. "/lib/linux/" .. library .. " " .. path.getabsolute(_workspace.directory) .. "/garrysmod/bin/" .. library
 		})
 		linkoptions({
 			"-Wl,--no-as-needed",

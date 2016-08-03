@@ -91,7 +91,7 @@ function CleanPath(p)
 	return p
 end
 
-_GARRYSMOD_COMMON_DIRECTORY = CleanPath(path.getrelative(_MAIN_SCRIPT_DIR, _SCRIPT_DIR))
+_GARRYSMOD_COMMON_DIRECTORY = CleanPath(_SCRIPT_DIR)
 
 function CreateWorkspace(config)
 	if type(config) ~= "table" then
