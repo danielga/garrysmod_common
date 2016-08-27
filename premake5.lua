@@ -145,7 +145,7 @@ function CreateWorkspace(config)
 			targetdir(_workspace.directory .. "/release")
 
 		filter("configurations:Debug")
-			flags("Symbols")
+			symbols("On")
 			defines({"DEBUG", "_DEBUG"})
 			objdir(_workspace.directory .. "/intermediate")
 			targetdir(_workspace.directory .. "/debug")
