@@ -163,11 +163,11 @@ function IncludeSDKTier1(directory)
 		})
 
 		filter("system:windows")
-			defines("_DLL_EXT=dll")
+			defines({"_DLL_EXT=dll", "WIN32"})
 			files(directory .. "/tier1/processor_detect.cpp")
 
 		filter("system:linux")
-			defines("_DLL_EXT=so")
+			defines({"_DLL_EXT=so", "COMPILER_GCC", "POSIX", "_POSIX", "OSX", "GNUC", "NO_MALLOC_OVERRIDE"})
 			files({
 				directory .. "/tier1/processor_detect_linux.cpp",
 				directory .. "/tier1/qsort_s.cpp",
@@ -175,7 +175,7 @@ function IncludeSDKTier1(directory)
 			})
 
 		filter("system:macosx")
-			defines("_DLL_EXT=dylib")
+			defines({"_DLL_EXT=dylib", "COMPILER_GCC", "POSIX", "_POSIX", "OSX", "GNUC", "NO_MALLOC_OVERRIDE"})
 			files({
 				directory .. "/tier1/processor_detect_linux.cpp",
 				directory .. "/tier1/qsort_s.cpp",
@@ -251,6 +251,15 @@ function IncludeSDKMathlib(directory)
 		filter("system:windows or linux")
 			files(directory .. "/mathlib/3dnow.cpp")
 
+		filter("system:windows")
+			defines("WIN32")
+
+		filter("system:linux")
+			defines({"COMPILER_GCC", "POSIX", "_POSIX", "OSX", "GNUC", "NO_MALLOC_OVERRIDE"})
+
+		filter("system:macosx")
+			defines({"COMPILER_GCC", "POSIX", "_POSIX", "OSX", "GNUC", "NO_MALLOC_OVERRIDE"})
+
 	project(_project.name)
 end
 
@@ -274,6 +283,15 @@ function IncludeSDKRaytrace(directory)
 			directory .. "/raytrace/trace2.cpp",
 			directory .. "/raytrace/trace3.cpp"
 		})
+
+		filter("system:windows")
+			defines("WIN32")
+
+		filter("system:linux")
+			defines({"COMPILER_GCC", "POSIX", "_POSIX", "OSX", "GNUC", "NO_MALLOC_OVERRIDE"})
+
+		filter("system:macosx")
+			defines({"COMPILER_GCC", "POSIX", "_POSIX", "OSX", "GNUC", "NO_MALLOC_OVERRIDE"})
 
 	project(_project.name)
 end
