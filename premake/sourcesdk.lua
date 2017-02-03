@@ -167,7 +167,7 @@ function IncludeSDKTier1(directory)
 			files(directory .. "/tier1/processor_detect.cpp")
 
 		filter("system:linux")
-			defines({"_DLL_EXT=so", "COMPILER_GCC", "POSIX", "_POSIX", "OSX", "GNUC", "NO_MALLOC_OVERRIDE"})
+			defines({"_DLL_EXT=so", "COMPILER_GCC", "POSIX", "_POSIX", "LINUX", "_LINUX", "GNUC", "NO_MALLOC_OVERRIDE"})
 			files({
 				directory .. "/tier1/processor_detect_linux.cpp",
 				directory .. "/tier1/qsort_s.cpp",
@@ -255,7 +255,7 @@ function IncludeSDKMathlib(directory)
 			defines("WIN32")
 
 		filter("system:linux")
-			defines({"COMPILER_GCC", "POSIX", "_POSIX", "OSX", "GNUC", "NO_MALLOC_OVERRIDE"})
+			defines({"COMPILER_GCC", "POSIX", "_POSIX", "LINUX", "_LINUX", "GNUC", "NO_MALLOC_OVERRIDE"})
 
 		filter("system:macosx")
 			defines({"COMPILER_GCC", "POSIX", "_POSIX", "OSX", "GNUC", "NO_MALLOC_OVERRIDE"})
@@ -288,7 +288,7 @@ function IncludeSDKRaytrace(directory)
 			defines("WIN32")
 
 		filter("system:linux")
-			defines({"COMPILER_GCC", "POSIX", "_POSIX", "OSX", "GNUC", "NO_MALLOC_OVERRIDE"})
+			defines({"COMPILER_GCC", "POSIX", "_POSIX", "LINUX", "_LINUX", "GNUC", "NO_MALLOC_OVERRIDE"})
 
 		filter("system:macosx")
 			defines({"COMPILER_GCC", "POSIX", "_POSIX", "OSX", "GNUC", "NO_MALLOC_OVERRIDE"})
