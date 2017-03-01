@@ -80,7 +80,11 @@ function IncludeSDKTier0(directory)
 	filter("system:linux")
 		local library = _project.serverside and "libtier0_srv.so" or "libtier0.so"
 		prelinkcommands("ln -f " .. path.getabsolute(directory) .. "/lib/public/linux32/libtier0.so " .. path.getabsolute(_workspace.directory) .. "/bin/" .. library)
-		linkoptions("bin/" .. library)
+		-- The flag --no-as-needed forces tier0 to be linked.
+		-- This was added because certain modules (gm_luaerror for example)
+		-- were having these binaries dropped when linking with SourceSDK.
+		-- Hopefully only tier0 will need these.
+		linkoptions({"-Wl,--no-as-needed", "bin/" .. library, "-Wl,--as-needed"})
 
 	filter({})
 end
