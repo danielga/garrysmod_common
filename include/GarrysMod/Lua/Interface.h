@@ -25,5 +25,19 @@ struct lua_State
 
 #define LUA state->luabase
 
+#if !defined _MSC_VER || _MSC_VER >= 1900
+
+#define LUA_FUNCTION( name ) int name( lua_State *state ) noexcept
+
+#elif defined _MSC_VER >= 1700
+
+#include <yvals.h>
+#define LUA_FUNCTION( name ) int name( lua_State *state ) _NOEXCEPT
+
+#else
+
 #define LUA_FUNCTION( name ) int name( lua_State *state )
+
+#endif
+
 #define LUA_FUNCTION_STATIC( name ) static LUA_FUNCTION( name )

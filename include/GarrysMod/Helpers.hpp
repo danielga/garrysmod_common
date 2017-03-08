@@ -114,10 +114,12 @@ static bool CallHookRun(
 				"\n%s\n\n",
 				lua->GetString( -1 )
 			);
+
 		if( pop_error )
 			lua->Pop( 2 ); /* pop error string and debug.traceback */
 		else
 			lua->Remove( -2 ); /* remove debug.traceback */
+
 		return false;
 	}
 
