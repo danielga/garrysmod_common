@@ -3,6 +3,8 @@
 #include <cstddef>
 
 struct lua_State;
+class QAngle;
+class Vector;
 
 namespace GarrysMod 
 {
@@ -86,6 +88,16 @@ namespace GarrysMod
 			virtual double CheckNumber( int iStackPos = -1 ) = 0;
 
 			virtual size_t ObjLen( int index ) = 0;
+
+			virtual void GetAngle( int iStackPos ) = 0;
+			virtual void GetVector( int iStackPos ) = 0;
+			virtual void PushAngle( QAngle const& val ) = 0;
+			virtual void PushVector( Vector const& val ) = 0;
+			virtual void SetState( lua_State *state ) = 0;
+			virtual void CreateMetaTable( char const* strName ) = 0;
+			virtual void PushMetaTable( int iStackPos ) = 0;
+			virtual void PushUserType( void *, int iType ) = 0;
+			virtual void SetUserType( int iType, void* ) = 0;
 		};
 
 		enum 

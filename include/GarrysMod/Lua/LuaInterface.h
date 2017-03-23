@@ -22,15 +22,11 @@ namespace GarrysMod
 		class ILuaInterface : public ILuaBase
 		{
 		public:
-			virtual void *AddThreadedCall( IThreadedCall * ) = 0; // returns something?
 			virtual bool Init( ILuaGameCallback *, bool ) = 0;
 			virtual void Shutdown( ) = 0;
 			virtual void Cycle( ) = 0;
-			virtual lua_State *GetLuaState( ) = 0;
 			virtual ILuaObject *Global( ) = 0;
 			virtual ILuaObject *GetObject( int index ) = 0;
-			virtual void DELETE_ME_5437( int ) = 0;
-			virtual void _DELETE_ME2466( int ) = 0;
 			virtual void PushLuaObject( ILuaObject *obj ) = 0;
 			virtual void PushLuaFunction( CFunc func ) = 0;
 			virtual void LuaError( const char *err, int index ) = 0;
@@ -40,7 +36,6 @@ namespace GarrysMod
 			virtual bool CallInternalGetBool( int args ) = 0;
 			virtual const char *CallInternalGetString( int args ) = 0;
 			virtual bool CallInternalGet( int args, ILuaObject *obj ) = 0;
-			virtual void _DELETE_ME( ILuaObject *, void * ) = 0;
 			virtual void NewGlobalTable( const char *name ) = 0;
 			virtual ILuaObject *NewTemporaryObject( ) = 0;
 			virtual bool isUserData( int index ) = 0;
@@ -84,24 +79,19 @@ namespace GarrysMod
 			virtual const char *GetLocal( lua_Debug *dbg, int n ) = 0;
 			virtual const char *GetUpvalue( int funcIndex, int n ) = 0;
 			virtual bool RunStringEx( const char *filename, const char *path, const char *stringToRun, bool run, bool printErrors, bool dontPushErrors, bool noReturns ) = 0;
-			virtual void DELETE_ME1( const char *, int ) = 0;
 			virtual size_t GetDataString( int index, const char **str ) = 0;
 			virtual void ErrorFromLua( const char *fmt, ... ) = 0;
 			virtual void GetCurrentLocation( ) = 0;
 			virtual void MsgColour( const Color &col, const char *fmt, ... ) = 0;
-			virtual void SetState( lua_State *state ) = 0;
-			virtual void DELETE_ME2( ) = 0;
 			virtual void GetCurrentFile( std::string &outStr ) = 0;
 			virtual void CompileString( Bootil::Buffer &dumper, const std::string &stringToCompile ) = 0;
-			virtual void ThreadLock( ) = 0;
-			virtual void ThreadUnlock( ) = 0;
 			virtual bool CallFunctionProtected( int, int, bool ) = 0;
 			virtual void Require( const char *name ) = 0;
 			virtual const char *GetActualTypeName( int type ) = 0;
-			virtual void SetupInfiniteLoopProtection( ) = 0;
 			virtual void PreCreateTable( int arrelems, int nonarrelems );
 			virtual void PushPooledString( int index );
 			virtual const char *GetPooledString( int index );
+			virtual void *AddThreadedCall( IThreadedCall * ) = 0; // returns something?
 		};
 	}
 }
