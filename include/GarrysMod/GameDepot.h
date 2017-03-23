@@ -33,6 +33,7 @@ public:
 	virtual void SetMount( uint32_t, bool ) = 0;
 	virtual const std::list<IGameDepotSystem::Information> &GetList( ) const = 0;
 	virtual void MountAsMapFix( uint32_t ) = 0;
+	virtual void MountCurrentGame( const std::string & ) = 0;
 };
 
 }
