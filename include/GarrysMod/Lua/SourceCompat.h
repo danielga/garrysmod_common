@@ -30,11 +30,11 @@
     struct Color
     {
         Color( )
-            : r( 0.f )
-            , g( 0.f )
-            , b( 0.f )
-            , a( 0.f )
-        { }
+            : r( 0 )
+            , g( 0 )
+            , b( 0 )
+            , a( 0 )
+        {}
 
         unsigned char r, g, b, a;
     };
