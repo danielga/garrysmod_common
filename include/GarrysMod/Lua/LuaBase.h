@@ -2,6 +2,7 @@
 #define GARRYSMOD_LUA_LUABASE_H
 
 #include <stddef.h>
+#include <stdint.h>
 
 #include "Types.h"
 #include "UserData.h"
