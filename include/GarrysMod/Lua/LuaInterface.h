@@ -1,6 +1,7 @@
 #pragma once
 
 #include "LuaBase.h"
+#include "SourceCompat.h"
 #include <string>
 
 namespace Bootil
@@ -8,7 +9,6 @@ namespace Bootil
 	class Buffer;
 }
 
-class Color;
 struct lua_Debug;
 
 namespace GarrysMod
@@ -64,7 +64,7 @@ namespace GarrysMod
 			virtual void Error( const char *err ) = 0;
 			virtual const char *GetStringOrError( int index ) = 0;
 			virtual bool RunLuaModule( const char *name ) = 0;
-			virtual bool FindAndRunScript( const char *filename, bool run, bool showErrors, const char * ) = 0;
+			virtual bool FindAndRunScript( const char *filename, bool run, bool showErrors, const char *, bool ) = 0;
 			virtual void SetPathID( const char *pathID ) = 0;
 			virtual const char *GetPathID( ) = 0;
 			virtual void ErrorNoHalt( const char *fmt, ... ) = 0;
@@ -73,7 +73,7 @@ namespace GarrysMod
 			virtual void PopPath( ) = 0;
 			virtual const char *GetPath( ) = 0;
 			virtual int GetColor( int index ) = 0;
-			virtual void PushColor( int r, int g, int b, int a ) = 0;
+			virtual void PushColor( Color color ) = 0;
 			virtual int GetStack( int level, lua_Debug *dbg ) = 0;
 			virtual int GetInfo( const char *what, lua_Debug *dbg ) = 0;
 			virtual const char *GetLocal( lua_Debug *dbg, int n ) = 0;
@@ -81,7 +81,7 @@ namespace GarrysMod
 			virtual bool RunStringEx( const char *filename, const char *path, const char *stringToRun, bool run, bool printErrors, bool dontPushErrors, bool noReturns ) = 0;
 			virtual size_t GetDataString( int index, const char **str ) = 0;
 			virtual void ErrorFromLua( const char *fmt, ... ) = 0;
-			virtual void GetCurrentLocation( ) = 0;
+			virtual void *GetCurrentLocation( ) = 0;
 			virtual void MsgColour( const Color &col, const char *fmt, ... ) = 0;
 			virtual void GetCurrentFile( std::string &outStr ) = 0;
 			virtual void CompileString( Bootil::Buffer &dumper, const std::string &stringToCompile ) = 0;
@@ -91,7 +91,7 @@ namespace GarrysMod
 			virtual void PreCreateTable( int arrelems, int nonarrelems );
 			virtual void PushPooledString( int index );
 			virtual const char *GetPooledString( int index );
-			virtual void *AddThreadedCall( IThreadedCall * ) = 0; // returns something?
+			virtual void *AddThreadedCall( IThreadedCall * ) = 0;
 		};
 	}
 }

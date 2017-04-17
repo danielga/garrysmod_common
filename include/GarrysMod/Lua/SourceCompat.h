@@ -3,6 +3,7 @@
 
 #ifdef GMOD_USE_SOURCESDK
     #include "mathlib/vector.h"
+    #include "Color.h"
 #else
     struct Vector
     {
@@ -24,6 +25,18 @@
         {}
 
         float x, y, z;
+    };
+
+    struct Color
+    {
+        Color( )
+            : r( 0.f )
+            , g( 0.f )
+            , b( 0.f )
+            , a( 0.f )
+        { }
+
+        unsigned char r, g, b, a;
     };
 #endif
 
