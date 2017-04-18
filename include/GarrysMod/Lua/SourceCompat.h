@@ -27,8 +27,9 @@
         float x, y, z;
     };
 
-    struct Color
+    class Color
     {
+    public:
         Color( )
             : r( 0 )
             , g( 0 )
