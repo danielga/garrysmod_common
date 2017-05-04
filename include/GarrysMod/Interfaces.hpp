@@ -23,7 +23,7 @@ public:
 	{
 		std::string filename = name;
 		if( filename.find( '.' ) == filename.npos )
-			filename = helpers::GetBinaryFileName( name, libprefix, srvsuffix, extraprefix );
+			filename = Helpers::GetBinaryFileName( name, libprefix, srvsuffix, extraprefix );
 
 		module = Sys_LoadModule( filename.c_str( ), noload ? SYS_NOLOAD : SYS_NOFLAGS );
 		if( module != nullptr )

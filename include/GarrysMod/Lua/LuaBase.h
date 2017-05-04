@@ -22,8 +22,6 @@ namespace GarrysMod
         class ILuaBase
         {
             public:
-				lua_State *state;
-
                 // You shouldn't need to use this struct
                 // Instead, use the UserType functions
                 struct UserData
@@ -262,22 +260,30 @@ namespace GarrysMod
                     return reinterpret_cast<T*>( ud->data );
                 }
 
-				// Creates a new UserData of type iType with an instance of T
-				// If your class is complex/has complex members which handle memory,
-				// you might need a __gc method to clean these, as Lua won't handle them
-				template <typename T>
-				T* NewUserType( int iType )
-				{
-					UserData* ud = NewUserdata( sizeof( UserData ) + sizeof( T ) );
-					if( ud == NULL )
-						return NULL;
+                // Creates a new UserData of type iType with an instance of T
+                // If your class is complex/has complex members which handle memory,
+                // you might need a __gc method to clean these, as Lua won't handle them
+                template <typename T>
+                T* NewUserType( int iType )
+                {
+                    UserData* ud = NewUserdata( sizeof( UserData ) + sizeof( T ) );
+                    if( ud == NULL )
+                        return NULL;
 
-					T* data = reinterpret_cast<T*>( reinterpret_cast<uintptr_t>( ud ) + sizeof( UserData ) );
-					ud->data = new( data ) T;
-					ud->type = iType;
+                    T* data = reinterpret_cast<T*>( reinterpret_cast<uintptr_t>( ud ) + sizeof( UserData ) );
+                    ud->data = new( data ) T;
+                    ud->type = iType;
 
-					return data;
-				}
+                    return data;
+                }
+
+                inline lua_State *GetLuaState( ) const
+                {
+                    return state;
+                }
+
+            private:
+                lua_State *state;
         };
 
         // For use with ILuaBase::PushSpecial
@@ -288,14 +294,14 @@ namespace GarrysMod
             SPECIAL_REG,        // Registry table
         };
 
-		// Use these when calling ILuaBase::GetField or ILuaBase::SetField for example,
-		// instead of pushing the specified table
-		enum
-		{
-			INDEX_GLOBAL = -10002,  // Global table
-			INDEX_ENVIRONMENT,      // Environment table
-			INDEX_REGISTRY,         // Registry table
-		};
+        // Use these when calling ILuaBase::GetField or ILuaBase::SetField for example,
+        // instead of pushing the specified table
+        enum
+        {
+            INDEX_GLOBAL = -10002,  // Global table
+            INDEX_ENVIRONMENT,      // Environment table
+            INDEX_REGISTRY,         // Registry table
+        };
     }
 }
 
