@@ -226,7 +226,10 @@ function IncludeSDKMathlib(directory)
 		kind("StaticLib")
 		warnings("Default")
 		defines("MATHLIB_LIB")
-		includedirs(directory .. "/public/mathlib")
+		includedirs({
+			directory .. "/public/mathlib",
+			directory .. "/public/tier0",
+		})
 		vpaths({["Source files/*"] = directory .. "/mathlib/*.cpp"})
 		IncludeSDKCommonInternal(directory)
 		files({
@@ -280,7 +283,11 @@ function IncludeSDKRaytrace(directory)
 	project("raytrace")
 		kind("StaticLib")
 		warnings("Default")
-		includedirs(directory .. "/utils/common")
+		includedirs({
+			directory .. "/utils/common",
+			directory .. "/public/tier0",
+			directory .. "/public/tier1",
+		})
 		vpaths({["Source files/*"] = directory .. "/raytrace/*.cpp"})
 		IncludeSDKCommonInternal(directory)
 		files({
