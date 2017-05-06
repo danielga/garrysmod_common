@@ -197,8 +197,11 @@ function IncludeSDKTier2(directory)
 
 	includedirs(directory .. "/public/tier2")
 
-	filter("system:windows or macosx")
+	filter("system:windows")
 		links("tier2")
+
+	filter("system:macosx")
+		linkoptions(path.getabsolute(directory) .. "/lib/public/osx32/tier2.a")
 
 	filter("system:linux")
 		linkoptions(path.getabsolute(directory) .. "/lib/public/linux32/tier2.a")
@@ -213,8 +216,11 @@ function IncludeSDKTier3(directory)
 
 	includedirs(directory .. "/public/tier3")
 
-	filter("system:windows or macosx")
+	filter("system:windows")
 		links("tier3")
+
+	filter("system:macosx")
+		linkoptions(path.getabsolute(directory) .. "/lib/public/osx32/tier3.a")
 
 	filter("system:linux")
 		linkoptions(path.getabsolute(directory) .. "/lib/public/linux32/tier3.a")
