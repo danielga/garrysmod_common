@@ -195,6 +195,8 @@ function IncludeSDKTier2(directory)
 
 	directory = GetSDKPath(directory)
 
+	includedirs(directory .. "/public/tier2")
+
 	filter("system:windows or macosx")
 		links("tier2")
 
@@ -202,14 +204,14 @@ function IncludeSDKTier2(directory)
 		linkoptions(path.getabsolute(directory) .. "/lib/public/linux32/tier2.a")
 
 	filter({})
-
-	includedirs(directory .. "/public/tier2")
 end
 
 function IncludeSDKTier3(directory)
 	IncludePackage("sdktier3")
 
 	directory = GetSDKPath(directory)
+
+	includedirs(directory .. "/public/tier3")
 
 	filter("system:windows or macosx")
 		links("tier3")
@@ -218,8 +220,6 @@ function IncludeSDKTier3(directory)
 		linkoptions(path.getabsolute(directory) .. "/lib/public/linux32/tier3.a")
 
 	filter({})
-
-	includedirs(directory .. "/public/tier3")
 end
 
 function IncludeSDKMathlib(directory)
