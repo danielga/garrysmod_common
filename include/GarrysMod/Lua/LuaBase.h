@@ -67,7 +67,7 @@ namespace GarrysMod
                 // Sets the metatable for the value at iStackPos to the value at the top of the stack
                 // Pops the value off of the top of the stack
                 virtual void        SetMetaTable( int iStackPos ) = 0;
-                
+
                 // Pushes the metatable of the value at iStackPos on to the top of the stack
                 // Upon failure, returns false and does not push anything
                 virtual bool        GetMetaTable( int i ) = 0;
@@ -92,7 +92,7 @@ namespace GarrysMod
                 // Moves the value at the top of the stack in to iStackPos
                 // Any elements above iStackPos are shifted upwards
                 virtual void        Insert( int iStackPos ) = 0;
-                
+
                 // Removes the value at iStackPos from the stack
                 // Any elements above iStackPos are shifted downwards
                 virtual void        Remove( int iStackPos ) = 0;
@@ -212,14 +212,14 @@ namespace GarrysMod
                 // If these functions error, any local C values will not have their destructors called!
                 virtual const char* CheckString( int iStackPos = -1 ) = 0;
                 virtual double      CheckNumber( int iStackPos = -1 ) = 0;
-                
+
                 // Returns the length of the object at iStackPos
                 // Works for: strings, tables, userdata
                 virtual int         ObjLen( int iStackPos = -1 ) = 0;
 
                 // Returns the angle at iStackPos
                 virtual const QAngle& GetAngle( int iStackPos = -1 ) = 0;
-                
+
                 // Returns the vector at iStackPos
                 virtual const Vector& GetVector( int iStackPos = -1 ) = 0;
 
@@ -243,7 +243,7 @@ namespace GarrysMod
 
                 // Created a new UserData of type iType that references the given data
                 virtual void        PushUserType( void* data, int iType ) = 0;
-                
+
                 // Sets the data pointer of the UserType at iStackPos
                 // You can use this to invalidate a UserType by passing NULL
                 virtual void        SetUserType( int iStackPos, void* data ) = 0;
@@ -266,7 +266,7 @@ namespace GarrysMod
                 template <typename T>
                 T* NewUserType( int iType )
                 {
-                    UserData* ud = NewUserdata( sizeof( UserData ) + sizeof( T ) );
+                    UserData* ud = reinterpret_cast<UserData*>( NewUserdata( sizeof( UserData ) + sizeof( T ) ) );
                     if( ud == NULL )
                         return NULL;
 

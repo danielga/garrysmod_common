@@ -23,8 +23,7 @@ function IncludeLuaShared()
 		})
 
 	filter("system:macosx")
-		libdirs(_GARRYSMOD_COMMON_DIRECTORY .. "/lib/macosx")
-		links("lua_shared")
+		linkoptions(_GARRYSMOD_COMMON_DIRECTORY .. "/lib/macosx/lua_shared.dylib")
 
 	filter({})
 end
