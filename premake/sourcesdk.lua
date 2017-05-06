@@ -54,7 +54,7 @@ local function IncludeSDKCommonInternal(directory)
 
 	filter("system:macosx")
 		defines({"COMPILER_GCC", "POSIX", "_POSIX", "OSX", "GNUC", "NO_MALLOC_OVERRIDE"})
-		libdirs(directory .. "/lib/public/osx32")
+		libdirs(path.getabsolute(directory) .. "/lib/public/osx32")
 
 	filter({})
 end
@@ -63,6 +63,7 @@ function IncludeSDKCommon(directory)
 	IncludePackage("sdkcommon")
 	IncludeSDKCommonInternal(GetSDKPath(directory))
 	defines("GMOD_USE_SOURCESDK")
+	warnings("Default")
 end
 
 function IncludeSDKTier0(directory)
@@ -172,6 +173,7 @@ function IncludeSDKTier1(directory)
 			files(directory .. "/tier1/processor_detect.cpp")
 
 		filter("system:linux")
+			disablewarnings("unused-result")
 			defines({"_DLL_EXT=so", "COMPILER_GCC", "POSIX", "_POSIX", "LINUX", "_LINUX", "GNUC", "NO_MALLOC_OVERRIDE"})
 			files({
 				directory .. "/tier1/processor_detect_linux.cpp",
@@ -201,7 +203,7 @@ function IncludeSDKTier2(directory)
 		links("tier2")
 
 	filter("system:macosx")
-		linkoptions("-l:tier2.a")
+		linkoptions(path.getabsolute(directory) .. "/lib/public/osx32/tier2.a")
 
 	filter("system:linux")
 		linkoptions(path.getabsolute(directory) .. "/lib/public/linux32/tier2.a")
@@ -220,7 +222,7 @@ function IncludeSDKTier3(directory)
 		links("tier3")
 
 	filter("system:macosx")
-		linkoptions("-l:tier3.a")
+		linkoptions(path.getabsolute(directory) .. "/lib/public/osx32/tier3.a")
 
 	filter("system:linux")
 		linkoptions(path.getabsolute(directory) .. "/lib/public/linux32/tier3.a")
@@ -279,6 +281,7 @@ function IncludeSDKMathlib(directory)
 			defines("WIN32")
 
 		filter("system:linux")
+			disablewarnings("ignored-attributes")
 			defines({"COMPILER_GCC", "POSIX", "_POSIX", "LINUX", "_LINUX", "GNUC", "NO_MALLOC_OVERRIDE"})
 
 		filter("system:macosx")
