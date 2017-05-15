@@ -31,10 +31,8 @@ function IncludeDisassembler(full)
 
 	filter({})
 
-	if full then
-		defines("DISTORM_STATIC")
-	else
-		defines({"DISTORM_STATIC", "DISTORM_LIGHT"})
+	if not full then
+		defines("DISTORM_LIGHT")
 	end
 
 	includedirs(directory .. "/include")
