@@ -108,7 +108,7 @@ function IncludeSDKTier1(directory)
 	filter("system:linux")
 		local library = _project.serverside and "libvstdlib_srv.so" or "libvstdlib.so"
 		prelinkcommands("ln -f " .. path.getabsolute(directory) .. "/lib/public/linux32/libvstdlib.so " .. path.getabsolute(_workspace.directory) .. "/bin/" .. library)
-		linkoptions("bin/" .. library)
+		linkoptions({"-Wl,--no-as-needed", "bin/" .. library, "-Wl,--as-needed"})
 
 	filter("system:macosx")
 		links({"vstdlib", "iconv"})
