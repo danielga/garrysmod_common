@@ -6,15 +6,13 @@ newoption({
 
 local function GetSDKPath(directory)
 	directory = directory or _OPTIONS["sourcesdk"] or os.getenv("SOURCE_SDK") or DEFAULT_SOURCESDK_DIRECTORY
-	if directory == nil then
-		error("you didn't supply a path to your SourceSDK copy")
-	end
+
+	assert(type(directory) == "string", "Source SDK path is not a string!")
 
 	directory = CleanPath(directory)
+	
 	local dir = path.getabsolute(directory)
-	if not os.isdir(dir) then
-		error(dir .. " doesn't exist (SourceSDK)")
-	end
+	assert(os.isdir(dir), "'" .. dir .. "' doesn't exist (Source SDK)")
 
 	return directory
 end

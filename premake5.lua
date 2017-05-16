@@ -1,6 +1,4 @@
-if _ACTION == nil then
-	error("no action (vs20**, gmake or xcode for example) provided")
-end
+assert(_ACTION ~= nil, "no action (vs20**, gmake or xcode for example) provided!")
 
 include("config.lua")
 include("premake/lua_shared.lua")
@@ -31,30 +29,31 @@ end
 _GARRYSMOD_COMMON_DIRECTORY = CleanPath(_SCRIPT_DIR)
 
 function CreateWorkspace(config)
-	if type(config) ~= "table" then
-		error("supplied argument is not a table")
-	end
+	assert(type(config) == "table", "supplied argument is not a table!")
 
 	local name = config.name
-	if name == nil then
-		error("you didn't supply a name for your workspace")
-	end
+	assert(type(name) == "string", "'name' is not a string!")
 
 	local directory = config.path or _OPTIONS["workspace"] or DEFAULT_WORKSPACE_DIRECTORY
-	if directory == nil then
-		error("you didn't supply a path for your workspace directory")
-	end
+	assert(type(directory) == "string", "workspace path is not a string!")
 
 	directory = CleanPath(directory)
 
-	local allowdebug = config.allow_debug
-	if allowdebug == nil then
-		allowdebug = true
+	local allow_debug = config.allow_debug
+	if allow_debug == nil then
+		allow_debug = true
+	else
+		assert(type(allow_debug) == "boolean", "'allow_debug' is not a boolean!")
+		print("WARNING: The 'allow_debug' option has been deprecated in favor of 'abi_compatible' (same functionality, better name, takes precedence over 'allow_debug')")
+		abi_compatible = not allow_debug
 	end
 
 	local abi_compatible = config.abi_compatible
 	if abi_compatible == nil then
 		abi_compatible = false
+	else
+		assert(type(abi_compatible) == "boolean", "'abi_compatible' is not a boolean!")
+		allow_debug = not abi_compatible
 	end
 
 	if abi_compatible then
@@ -68,9 +67,7 @@ function CreateWorkspace(config)
 	end
 
 	local _workspace = workspace(name)
-	if _workspace.directory ~= nil then
-		error("a workspace with this name ('" .. name .. "') already exists")
-	end
+	assert(_workspace.directory == nil, "a workspace with the name '" .. name .. "' already exists!")
 
 	_workspace.directory = directory
 
@@ -81,7 +78,7 @@ function CreateWorkspace(config)
 		characterset("MBCS")
 		platforms("x86")
 
-		if allowdebug then
+		if allow_debug then
 			configurations({"Release", "Debug"})
 		else
 			configurations("Release")
@@ -121,32 +118,27 @@ newoption({
 })
 
 function CreateProject(config)
-	if type(config) ~= "table" then
-		error("supplied argument is not a table")
-	end
+	assert(type(config) == "table", "supplied argument is not a table!")
 
 	local is_server = config.serverside
-	if is_server == nil then
-		error("you didn't specify if the project is for a serverside module or not")
-	end
+	assert(type(is_server) == "boolean", "'serverside' option is not a boolean!")
 
 	local sourcepath = config.source_path or _OPTIONS["source"] or DEFAULT_SOURCE_DIRECTORY
-	if sourcepath == nil then
-		error("you didn't supply a path to your source directory")
-	end
+	assert(type(sourcepath) == "string", "source code path is not a string!")
 
 	local manual_files = config.manual_files
 	if manual_files == nil then
 		manual_files = false
+	else
+		assert(type(manual_files) == "boolean", "'manual_files' is not a boolean!")
 	end
 
 	local _workspace = workspace()
 
 	local name = (is_server and "gmsv_" or "gmcl_") .. _workspace.name
 	local _project = project(name)
-	if _project.directory ~= nil then
-		error("a project with this name ('" .. name .. "') already exists")
-	end
+
+	assert(_project.directory == nil, "a project with the name '" .. name .. "' already exists!")
 
 	_project.directory = CleanPath(sourcepath)
 	_project.serverside = is_server
@@ -209,9 +201,6 @@ function HasIncludedPackage(name)
 end
 
 function IncludePackage(name)
-	if HasIncludedPackage(name) then
-		error("this package ('" .. name .. "') was already included")
-	end
-
+	assert(not HasIncludedPackage(name), "a project with the name '" .. name .. "' already exists!")
 	project().packages[name] = true
 end
