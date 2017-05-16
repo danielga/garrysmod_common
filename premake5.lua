@@ -2,69 +2,6 @@ if _ACTION == nil then
 	error("no action (vs20**, gmake or xcode for example) provided")
 end
 
--- START OF NEW FLAGS BLOCK (C11, GNU11, GNU++11, GNU++14)
-
-table.insert(premake.field._list.flags.allowed, "C11")
-table.insert(premake.field._list.flags.allowed, "GNU11")
-table.insert(premake.field._list.flags.allowed, "GNU++11")
-table.insert(premake.field._list.flags.allowed, "GNU++14")
-premake.field._list.flags.allowed["c11"] = "C11"
-premake.field._list.flags.allowed["gnu11"] = "GNU11"
-premake.field._list.flags.allowed["gnu++11"] = "GNU++11"
-premake.field._list.flags.allowed["gnu++14"] = "GNU++14"
-
-table.insert(premake.field._loweredList.flags.allowed, "C11")
-table.insert(premake.field._loweredList.flags.allowed, "GNU11")
-table.insert(premake.field._loweredList.flags.allowed, "GNU++11")
-table.insert(premake.field._loweredList.flags.allowed, "GNU++14")
-premake.field._loweredList.flags.allowed["c11"] = "C11"
-premake.field._loweredList.flags.allowed["gnu11"] = "GNU11"
-premake.field._loweredList.flags.allowed["gnu++11"] = "GNU++11"
-premake.field._loweredList.flags.allowed["gnu++14"] = "GNU++14"
-
-table.insert(premake.fields.flags.allowed, "C11")
-table.insert(premake.fields.flags.allowed, "GNU11")
-table.insert(premake.fields.flags.allowed, "GNU++11")
-table.insert(premake.fields.flags.allowed, "GNU++14")
-premake.fields.flags.allowed["c11"] = "C11"
-premake.fields.flags.allowed["gnu11"] = "GNU11"
-premake.fields.flags.allowed["gnu++11"] = "GNU++11"
-premake.fields.flags.allowed["gnu++14"] = "GNU++14"
-
-if premake.tools.clang.cflags and premake.tools.clang.cflags.flags then
-	premake.tools.clang.cflags.flags["C11"] = "-std=c11"
-end
-
-if premake.tools.clang.cflags and premake.tools.clang.cflags.flags then
-	premake.tools.clang.cflags.flags["GNU11"] = "-std=gnu11"
-end
-
-if premake.tools.clang.cxxflags and premake.tools.clang.cxxflags.flags then
-	premake.tools.clang.cxxflags.flags["GNU++11"] = "-std=gnu++11"
-end
-
-if premake.tools.clang.cxxflags and premake.tools.clang.cxxflags.flags then
-	premake.tools.clang.cxxflags.flags["GNU++14"] = "-std=gnu++14"
-end
-
-if premake.tools.gcc.cflags and premake.tools.gcc.cflags.flags then
-	premake.tools.gcc.cflags.flags["C11"] = "-std=c11"
-end
-
-if premake.tools.gcc.cflags and premake.tools.gcc.cflags.flags then
-	premake.tools.gcc.cflags.flags["GNU11"] = "-std=gnu11"
-end
-
-if premake.tools.gcc.cxxflags and premake.tools.gcc.cxxflags.flags then
-	premake.tools.gcc.cxxflags.flags["GNU++11"] = "-std=gnu++11"
-end
-
-if premake.tools.gcc.cxxflags and premake.tools.gcc.cxxflags.flags then
-	premake.tools.gcc.cxxflags.flags["GNU++14"] = "-std=gnu++14"
-end
-
--- END OF NEW FLAGS BLOCK (C11, GNU11, GNU++11, GNU++14)
-
 include("config.lua")
 include("premake/lua_shared.lua")
 include("premake/detouring.lua")
@@ -115,6 +52,21 @@ function CreateWorkspace(config)
 		allowdebug = true
 	end
 
+	local abi_compatible = config.abi_compatible
+	if abi_compatible == nil then
+		abi_compatible = false
+	end
+
+	if abi_compatible then
+		if os.istarget("windows") and _ACTION ~= "vs2010" then
+			error("The only supported compilation platform for this project on Windows is Visual Studio 2010.")
+		elseif os.istarget("linux") then
+			print("WARNING: The only supported compilation platforms (tested) for this project on Linux are GCC/G++ 4.8 or 4.9. However, any version between 4.4 and 4.9 *MIGHT* work.")
+		elseif os.istarget("macosx") then
+			print("WARNING: The only supported compilation platform (tested) for this project on Mac OSX is Xcode 4.1 (GCC/G++ compiler). However, any Xcode version *MIGHT* work as long as the Mac OSX 10.5 SDK is used (-mmacosx-version-min=10.5).")
+		end
+	end
+
 	local _workspace = workspace(name)
 	if _workspace.directory ~= nil then
 		error("a workspace with this name ('" .. name .. "') already exists")
@@ -153,6 +105,12 @@ function CreateWorkspace(config)
 		filter("system:linux")
 			linkoptions({"-static-libgcc", "-static-libstdc++"})
 
+		if abi_compatible then
+			filter("system:macosx")
+				buildoptions("-mmacosx-version-min=10.5")
+				linkoptions("-mmacosx-version-min=10.5")
+		end
+
 		filter({})
 end
 
@@ -172,14 +130,14 @@ function CreateProject(config)
 		error("you didn't specify if the project is for a serverside module or not")
 	end
 
-	local manual_files = config.manual_files
-	if manual_files == nil then
-		manual_files = false
-	end
-
 	local sourcepath = config.source_path or _OPTIONS["source"] or DEFAULT_SOURCE_DIRECTORY
 	if sourcepath == nil then
 		error("you didn't supply a path to your source directory")
+	end
+
+	local manual_files = config.manual_files
+	if manual_files == nil then
+		manual_files = false
 	end
 
 	local _workspace = workspace()

@@ -116,7 +116,7 @@ function IncludeSDKTier1(directory)
 	project("tier1")
 		kind("StaticLib")
 		warnings("Default")
-		flags("GNU++11")
+		language("GNU++11")
 		defines({"TIER1_STATIC_LIB", "_CRT_SECURE_NO_WARNINGS"})
 		includedirs({
 			directory .. "/public/tier0",
