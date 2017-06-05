@@ -144,7 +144,7 @@ function CreateProject(config)
 	_project.serverside = is_server
 
 		kind("SharedLib")
-		language("C++11")
+		language("C++")
 		defines({
 			"GMMODULE",
 			string.upper(string.gsub(_workspace.name, "%.", "_")) .. (_project.serverside and "_SERVER" or "_CLIENT"),
