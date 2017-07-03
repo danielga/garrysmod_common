@@ -167,6 +167,10 @@ function CreateProject(config)
 			})
 		end
 
+		if _workspace.abi_compatible then
+			files(_GARRYSMOD_COMMON_DIRECTORY .. "/ABICompatibility.cpp")
+		end
+
 		vpaths({
 			["Header files/*"] = {
 				_project.directory .. "/**.h",
