@@ -10,6 +10,7 @@ namespace Bootil
 }
 
 struct lua_Debug;
+class CCommand;
 
 namespace GarrysMod
 {
@@ -44,7 +45,7 @@ namespace GarrysMod
 			virtual ILuaObject *GetReturn( int index ) = 0;
 			virtual bool IsServer( ) = 0;
 			virtual bool IsClient( ) = 0;
-			virtual bool IsDedicatedServer( ) = 0;
+			virtual bool IsMenu( ) = 0;
 			virtual void DestroyObject( ILuaObject *obj ) = 0;
 			virtual ILuaObject *CreateObject( ) = 0;
 			virtual void SetMember( ILuaObject *table, ILuaObject *key, ILuaObject *value ) = 0;
@@ -53,7 +54,7 @@ namespace GarrysMod
 			virtual void SetMember( ILuaObject *table, float key, ILuaObject *value ) = 0;
 			virtual void SetMember( ILuaObject *table, const char *key ) = 0;
 			virtual void SetMember( ILuaObject *table, const char *key, ILuaObject *value ) = 0;
-			virtual void SetIsServer( bool isServer ) = 0;
+			virtual void SetType( unsigned char ) = 0;
 			virtual void PushLong( long num ) = 0;
 			virtual int GetFlags( int index ) = 0;
 			virtual bool FindOnObjectsMetaTable( int objIndex, int keyIndex ) = 0;
@@ -92,6 +93,8 @@ namespace GarrysMod
 			virtual void PushPooledString( int index );
 			virtual const char *GetPooledString( int index );
 			virtual void *AddThreadedCall( IThreadedCall * ) = 0;
+			virtual void *CreateConVar( const char *, const char *, const char *, int ) = 0;
+			virtual void *CreateConCommand( const char *, const char *, int, void ( * )( const CCommand & ), int ( * )( const char *, char ( * )[128] ) ) = 0;
 		};
 	}
 }
