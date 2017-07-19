@@ -39,35 +39,21 @@ function CreateWorkspace(config)
 
 	directory = CleanPath(directory)
 
-	local allow_debug = config.allow_debug
-	if allow_debug == nil then
-		allow_debug = true
-	else
-		assert(type(allow_debug) == "boolean", "'allow_debug' is not a boolean!")
-		print("WARNING: The 'allow_debug' option has been deprecated in favor of 'abi_compatible' (same functionality, better name, takes precedence over 'allow_debug')")
-		abi_compatible = not allow_debug
-	end
-
-	local abi_compatible = config.abi_compatible
-	if abi_compatible == nil then
-		abi_compatible = false
-	else
-		assert(type(abi_compatible) == "boolean", "'abi_compatible' is not a boolean!")
-		allow_debug = not abi_compatible
-	end
-
-	if abi_compatible then
-		if os.istarget("windows") and _ACTION ~= "vs2017" then
-			error("The only supported compilation platform for this project on Windows is Visual Studio 2017.")
-		elseif os.istarget("linux") then
-			print("WARNING: The only supported compilation platforms (tested) for this project on Linux are GCC/G++ 4.8 or 4.9. However, any version between 4.4 and 4.9 *MIGHT* work.")
-		elseif os.istarget("macosx") then
-			print("WARNING: The only supported compilation platform (tested) for this project on Mac OSX is Xcode 4.1 (GCC/G++ compiler). However, any Xcode version *MIGHT* work as long as the Mac OSX 10.5 SDK is used (-mmacosx-version-min=10.5).")
-		end
-	end
-
 	local _workspace = workspace(name)
 	assert(_workspace.directory == nil, "a workspace with the name '" .. name .. "' already exists!")
+
+	local abi_compatible
+	if config.allow_debug ~= nil then
+		assert(type(config.allow_debug) == "boolean", "'allow_debug' is not a boolean!")
+		print("WARNING: The 'allow_debug' option has been deprecated in favor of 'abi_compatible' (same functionality, better name, takes precedence over 'allow_debug', allows setting per project where the workspace setting takes precedence if set to true)")
+		abi_compatible = not config.allow_debug
+	end
+
+	if config.abi_compatible ~= nil then
+		abi_compatible = config.abi_compatible
+		assert(type(abi_compatible) == "boolean", "'abi_compatible' is not a boolean!")
+		_workspace.abi_compatible = abi_compatible
+	end
 
 	_workspace.directory = directory
 
@@ -78,38 +64,28 @@ function CreateWorkspace(config)
 		flags({"NoPCH", "StaticRuntime"})
 		characterset("MBCS")
 		platforms("x86")
+		architecture("x32")
 
-		if allow_debug then
-			configurations({"Release", "Debug"})
-		else
+		if abi_compatible then
 			configurations("Release")
+		else
+			configurations({"Release", "Debug"})
 		end
-
-		filter("platforms:x86")
-			architecture("x32")
 
 		filter("configurations:Release")
 			optimize("On")
 			vectorextensions("SSE2")
+			defines("NDEBUG")
 			objdir(_workspace.directory .. "/intermediate")
 			targetdir(_workspace.directory .. "/release")
 
-		filter("configurations:Debug")
-			symbols("On")
-			defines({"DEBUG", "_DEBUG"})
-			objdir(_workspace.directory .. "/intermediate")
-			targetdir(_workspace.directory .. "/debug")
-
-		filter("system:linux")
-			linkoptions({"-static-libgcc", "-static-libstdc++"})
-
-		if abi_compatible then
-			filter("system:macosx")
-				buildoptions("-mmacosx-version-min=10.5")
-				linkoptions("-mmacosx-version-min=10.5")
+		if not abi_compatible then
+			filter("configurations:Debug")
+				symbols("On")
+				defines({"DEBUG", "_DEBUG"})
+				objdir(_workspace.directory .. "/intermediate")
+				targetdir(_workspace.directory .. "/debug")
 		end
-
-		filter({})
 end
 
 newoption({
@@ -136,13 +112,41 @@ function CreateProject(config)
 
 	local _workspace = workspace()
 
+	local abi_compatible = _workspace.abi_compatible
+	if not abi_compatible then
+		if config.abi_compatible ~= nil then
+			abi_compatible = config.abi_compatible
+			assert(type(abi_compatible) == "boolean", "'abi_compatible' is not a boolean!")
+		else
+			abi_compatible = false
+		end
+	end
+
 	local name = (is_server and "gmsv_" or "gmcl_") .. _workspace.name
+
+	if abi_compatible then
+		if os.istarget("windows") and _ACTION ~= "vs2017" then
+			error("The only supported compilation platform for this project (" .. name .. ") on Windows is Visual Studio 2017.")
+		elseif os.istarget("linux") then
+			print("WARNING: The only supported compilation platforms (tested) for this project (" .. name .. ") on Linux are GCC/G++ 4.8 or 4.9. However, any version between 4.4 and 4.9 *MIGHT* work.")
+		elseif os.istarget("macosx") then
+			print("WARNING: The only supported compilation platform (tested) for this project (" .. name .. ") on Mac OSX is Xcode 4.1 (GCC/G++ compiler). However, any Xcode version *MIGHT* work as long as the Mac OSX 10.5 SDK is used (-mmacosx-version-min=10.5).")
+		end
+	end
+
 	local _project = project(name)
 
 	assert(_project.directory == nil, "a project with the name '" .. name .. "' already exists!")
 
 	_project.directory = CleanPath(sourcepath)
 	_project.serverside = is_server
+
+		if abi_compatible then
+			removeconfigurations("Debug")
+			configurations("Release")
+		else
+			configurations({"Release", "Debug"})
+		end
 
 		kind("SharedLib")
 		language("C++")
@@ -167,10 +171,6 @@ function CreateProject(config)
 			})
 		end
 
-		if _workspace.abi_compatible then
-			files(_GARRYSMOD_COMMON_DIRECTORY .. "/ABICompatibility.cpp")
-		end
-
 		vpaths({
 			["Header files/*"] = {
 				_project.directory .. "/**.h",
@@ -184,6 +184,11 @@ function CreateProject(config)
 			}
 		})
 
+		if abi_compatible then
+			files(_GARRYSMOD_COMMON_DIRECTORY .. "/ABICompatibility.cpp")
+			vpaths({["Source files/garrysmod_common"] = _GARRYSMOD_COMMON_DIRECTORY .. "/ABICompatibility.cpp"})
+		end
+
 		targetprefix("")
 		targetextension(".dll")
 
@@ -195,6 +200,14 @@ function CreateProject(config)
 
 		filter("system:macosx")
 			targetsuffix("_osx")
+
+			if abi_compatible then
+				buildoptions("-mmacosx-version-min=10.5")
+				linkoptions("-mmacosx-version-min=10.5")
+			end
+
+		filter("system:linux")
+			linkoptions({"-static-libgcc", "-static-libstdc++"})
 
 		filter({})
 end

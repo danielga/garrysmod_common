@@ -48,7 +48,7 @@ local function IncludeSDKCommonInternal(directory)
 
 	filter("system:linux")
 		defines({"COMPILER_GCC", "POSIX", "_POSIX", "LINUX", "_LINUX", "GNUC", "NO_MALLOC_OVERRIDE"})
-		prelinkcommands("mkdir -p " .. path.getabsolute(_workspace.directory) .. "/bin")
+		libdirs(path.getabsolute(directory) .. "/lib/public/linux32")
 
 	filter("system:macosx")
 		defines({"COMPILER_GCC", "POSIX", "_POSIX", "OSX", "GNUC", "NO_MALLOC_OVERRIDE"})
@@ -74,19 +74,7 @@ function IncludeSDKTier0(directory)
 
 	includedirs(directory .. "/public/tier0")
 
-	filter("system:windows or macosx")
-		links("tier0")
-
-	filter("system:linux")
-		local library = _project.serverside and "libtier0_srv.so" or "libtier0.so"
-		prelinkcommands("ln -f " .. path.getabsolute(directory) .. "/lib/public/linux32/libtier0.so " .. path.getabsolute(_workspace.directory) .. "/bin/" .. library)
-		-- The flag --no-as-needed forces tier0 to be linked.
-		-- This was added because certain modules (gm_luaerror for example)
-		-- were having these binaries dropped when linking with SourceSDK.
-		-- Hopefully only tier0 will need these.
-		linkoptions({"-Wl,--no-as-needed", "bin/" .. library, "-Wl,--as-needed"})
-
-	filter({})
+	links("tier0")
 end
 
 function IncludeSDKTier1(directory)
@@ -98,18 +86,13 @@ function IncludeSDKTier1(directory)
 	directory = GetSDKPath(directory)
 
 	includedirs(directory .. "/public/tier1")
-	links("tier1")
+	links({"tier1", "vstdlib"})
 
 	filter("system:windows")
-		links({"vstdlib", "ws2_32", "rpcrt4"})
-
-	filter("system:linux")
-		local library = _project.serverside and "libvstdlib_srv.so" or "libvstdlib.so"
-		prelinkcommands("ln -f " .. path.getabsolute(directory) .. "/lib/public/linux32/libvstdlib.so " .. path.getabsolute(_workspace.directory) .. "/bin/" .. library)
-		linkoptions({"-Wl,--no-as-needed", "bin/" .. library, "-Wl,--as-needed"})
+		links({"ws2_32", "rpcrt4"})
 
 	filter("system:macosx")
-		links({"vstdlib", "iconv"})
+		links("iconv")
 
 	project("tier1")
 		kind("StaticLib")
@@ -168,25 +151,53 @@ function IncludeSDKTier1(directory)
 		})
 
 		filter("system:windows")
-			defines({"_DLL_EXT=dll", "WIN32"})
+			defines({"_DLL_EXT=.dll", "WIN32"})
 			files(directory .. "/tier1/processor_detect.cpp")
 
 		filter("system:linux")
 			disablewarnings("unused-result")
-			defines({"_DLL_EXT=so", "COMPILER_GCC", "POSIX", "_POSIX", "LINUX", "_LINUX", "GNUC", "NO_MALLOC_OVERRIDE"})
+			defines({"_DLL_EXT=.so", "COMPILER_GCC", "POSIX", "_POSIX", "LINUX", "_LINUX", "GNUC", "NO_MALLOC_OVERRIDE"})
 			files({
 				directory .. "/tier1/processor_detect_linux.cpp",
 				directory .. "/tier1/qsort_s.cpp",
 				directory .. "/tier1/pathmatch.cpp"
+			})
+			linkoptions({
+				"-Xlinker --wrap=fopen",
+				"-Xlinker --wrap=freopen",
+				"-Xlinker --wrap=open",
+				"-Xlinker --wrap=creat",
+				"-Xlinker --wrap=access",
+				"-Xlinker --wrap=__xstat",
+				"-Xlinker --wrap=stat",
+				"-Xlinker --wrap=lstat",
+				"-Xlinker --wrap=fopen64",
+				"-Xlinker --wrap=open64",
+				"-Xlinker --wrap=opendir",
+				"-Xlinker --wrap=__lxstat",
+				"-Xlinker --wrap=chmod",
+				"-Xlinker --wrap=chown",
+				"-Xlinker --wrap=lchown",
+				"-Xlinker --wrap=symlink",
+				"-Xlinker --wrap=link",
+				"-Xlinker --wrap=__lxstat64",
+				"-Xlinker --wrap=mknod",
+				"-Xlinker --wrap=utimes",
+				"-Xlinker --wrap=unlink",
+				"-Xlinker --wrap=rename",
+				"-Xlinker --wrap=utime",
+				"-Xlinker --wrap=__xstat64",
+				"-Xlinker --wrap=mount",
+				"-Xlinker --wrap=mkfifo",
+				"-Xlinker --wrap=mkdir",
+				"-Xlinker --wrap=rmdir",
+				"-Xlinker --wrap=scandir",
+				"-Xlinker --wrap=realpath"
 			})
 
 		filter("system:macosx")
-			defines({"_DLL_EXT=dylib", "COMPILER_GCC", "POSIX", "_POSIX", "OSX", "GNUC", "NO_MALLOC_OVERRIDE"})
-			files({
-				directory .. "/tier1/processor_detect_linux.cpp",
-				directory .. "/tier1/qsort_s.cpp",
-				directory .. "/tier1/pathmatch.cpp"
-			})
+			defines({"_DLL_EXT=.dylib", "COMPILER_GCC", "POSIX", "_POSIX", "OSX", "GNUC", "NO_MALLOC_OVERRIDE"})
+			files(directory .. "/tier1/processor_detect_linux.cpp")
 
 	project(_project.name)
 end
@@ -335,12 +346,5 @@ function IncludeSteamAPI(directory)
 
 	includedirs(directory .. "/public/steam")
 
-	filter("system:windows or macosx")
-		links("steam_api")
-
-	filter("system:linux")
-		prelinkcommands("ln -f " .. path.getabsolute(directory) .. "/lib/public/linux32/libsteam_api.so " .. path.getabsolute(_workspace.directory) .. "/bin/libsteam_api.so")
-		linkoptions("bin/libsteam_api.so")
-
-	filter({})
+	links("steam_api")
 end

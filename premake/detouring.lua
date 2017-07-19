@@ -6,12 +6,9 @@ function IncludeDetouring()
 	filter({})
 
 	includedirs(directory)
-	files({
-		directory .. "/*.hpp",
-		directory .. "/*.cpp"
-	})
+	files({directory .. "/*.h", directory .. "/*.cpp"})
 	vpaths({
-		["Header files/*"] = directory .. "/*.hpp",
-		["Source files/*"] = directory .. "/*.cpp"
+		["Header files/garrysmod_common/detouring"] = directory .. "/*.h",
+		["Source files/garrysmod_common/detouring"] = directory .. "/*.cpp"
 	})
 end

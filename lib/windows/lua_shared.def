@@ -3,7 +3,7 @@ CreateInterface
 GMOD_LoadBinaryModule
 cvar
 luaJIT_setmode
-luaJIT_version_2_0_3
+luaJIT_version_2_0_4
 luaL_addlstring
 luaL_addstring
 luaL_addvalue
