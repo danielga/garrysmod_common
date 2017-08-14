@@ -89,10 +89,11 @@ namespace GarrysMod
 			virtual bool CallFunctionProtected( int, int, bool ) = 0;
 			virtual void Require( const char *name ) = 0;
 			virtual const char *GetActualTypeName( int type ) = 0;
-			virtual void PreCreateTable( int arrelems, int nonarrelems );
-			virtual void PushPooledString( int index );
-			virtual const char *GetPooledString( int index );
+			virtual void PreCreateTable( int arrelems, int nonarrelems ) = 0;
+			virtual void PushPooledString( int index ) = 0;
+			virtual const char *GetPooledString( int index ) = 0;
 			virtual void *AddThreadedCall( IThreadedCall * ) = 0;
+			virtual void AppendStackTrace( char *, unsigned long ) = 0;
 			virtual void *CreateConVar( const char *, const char *, const char *, int ) = 0;
 			virtual void *CreateConCommand( const char *, const char *, int, void ( * )( const CCommand & ), int ( * )( const char *, char ( * )[128] ) ) = 0;
 		};
