@@ -13,9 +13,8 @@
 
 #endif
 
-struct lua_State;
-
-static void *GetSymbol( const char *name )
+template<typename FunctionType>
+static FunctionType GetSymbol( const char *name )
 {
 
 #if defined _WIN32
@@ -23,7 +22,7 @@ static void *GetSymbol( const char *name )
 	HMODULE binary = nullptr;
 	if( GetModuleHandleEx( 0, "garrysmod/bin/lua_shared.dll", &binary ) && binary != nullptr )
 	{
-		void *symbol_pointer = GetProcAddress( reinterpret_cast<HMODULE>( binary ), name );
+		FunctionType symbol_pointer = reinterpret_cast<FunctionType>( GetProcAddress( reinterpret_cast<HMODULE>( binary ), name ) );
 		FreeModule( binary );
 		return symbol_pointer;
 	}
@@ -44,7 +43,7 @@ static void *GetSymbol( const char *name )
 
 	if( binary != nullptr)
 	{
-		void *symbol_pointer = dlsym( binary, name );
+		FunctionType symbol_pointer = reinterpret_cast<FunctionType>( dlsym( binary, name ) );
 		dlclose( binary );
 		return symbol_pointer;
 	}
@@ -54,26 +53,33 @@ static void *GetSymbol( const char *name )
 	return nullptr;
 }
 
-template<typename Name, void *Target, typename Return, typename ...Args> 
-static Return Loader( Args... args )
+template<typename Name, typename FunctionType>
+struct Loader;
+
+template<typename Name, typename Return, typename ...Args>
+struct Loader<Name, Return( Args... )>
 {
 	typedef Return ( *FunctionType )( Args... );
 
-	FunctionType original = static_cast<FunctionType>( GetSymbol( Name::data( ) ) );
-	if( original != nullptr )
+	template<FunctionType *Target>
+	static Return Function( Args... args )
 	{
-		*static_cast<void **>( Target ) = original;
-		return original( std::forward<Args>( args )... );
-	}
+		FunctionType original = GetSymbol<FunctionType>( Name::data( ) );
+		if( original != nullptr )
+		{
+			*Target = original;
+			return original( std::forward<Args>( args )... );
+		}
 
-	throw std::bad_function_call( );
-}
+		throw std::bad_function_call( );
+	}
+};
 
 static const char *lua_pushfstring_loader( lua_State *L, const char *fmt, ... )
 {
 	typedef const char *( *lua_pushfstring_type )( lua_State *L, const char *fmt, ... );
 
-	lua_pushfstring_type original = static_cast<lua_pushfstring_type>( GetSymbol( "lua_pushfstring" ) );
+	lua_pushfstring_type original = GetSymbol<lua_pushfstring_type>( "lua_pushfstring" );
 	if( original != nullptr )
 	{
 		lua_pushfstring = original;
@@ -92,7 +98,7 @@ static int luaL_error_loader( lua_State *L, const char *fmt, ... )
 {
 	typedef int ( *luaL_error_type )( lua_State *L, const char *fmt, ... );
 
-	luaL_error_type original = static_cast<luaL_error_type>( GetSymbol( "luaL_error" ) );
+	luaL_error_type original = GetSymbol<luaL_error_type>( "luaL_error" );
 	if( original != nullptr )
 	{
 		luaL_error = original;
@@ -109,11 +115,11 @@ static int luaL_error_loader( lua_State *L, const char *fmt, ... )
 
 extern "C"
 {
-	void ( *lua_getfenv )( lua_State *, int ) = Loader<typestring_is( "lua_getfenv" ), &lua_getfenv>;
-	int ( *lua_setfenv )( lua_State *, int ) = Loader<typestring_is( "lua_setfenv" ), &lua_setfenv>;
-	const char *( *lua_pushvfstring )( lua_State *, const char *, va_list ) = Loader<typestring_is( "lua_pushvfstring" ), &lua_pushvfstring>;
-	int ( *luaL_typerror )( lua_State *, int, const char * ) = Loader<typestring_is( "luaL_typerror" ), &luaL_typerror>;
-	int ( *lua_error )( lua_State * ) = Loader<typestring_is( "lua_error" ), &lua_error>;
+	void ( *lua_getfenv )( lua_State *, int ) = Loader<typestring_is( "lua_getfenv" ), void ( lua_State *, int )>::Function<&lua_getfenv>;
+	int ( *lua_setfenv )( lua_State *, int ) = Loader<typestring_is( "lua_setfenv" ), int ( lua_State *, int )>::Function<&lua_setfenv>;
+	const char *( *lua_pushvfstring )( lua_State *, const char *, va_list ) = Loader<typestring_is( "lua_pushvfstring" ), const char *( lua_State *, const char *, va_list )>::Function<&lua_pushvfstring>;
+	int ( *luaL_typerror )( lua_State *, int, const char * ) = Loader<typestring_is( "luaL_typerror" ), int ( lua_State *, int, const char * )>::Function<&luaL_typerror>;
+	int ( *lua_error )( lua_State * ) = Loader<typestring_is( "lua_error" ), int ( lua_State * )>::Function<&lua_error>;
 
 	const char *( *lua_pushfstring )( lua_State *, const char *, ... ) = lua_pushfstring_loader;
 	int ( *luaL_error )( lua_State *, const char *, ... ) = luaL_error_loader;
