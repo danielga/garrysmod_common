@@ -185,8 +185,8 @@ function CreateProject(config)
 		})
 
 		if abi_compatible then
-			files(_GARRYSMOD_COMMON_DIRECTORY .. "/ABICompatibility.cpp")
-			vpaths({["Source files/garrysmod_common"] = _GARRYSMOD_COMMON_DIRECTORY .. "/ABICompatibility.cpp"})
+			files(_GARRYSMOD_COMMON_DIRECTORY .. "/source/ABICompatibility.cpp")
+			vpaths({["Source files/garrysmod_common"] = _GARRYSMOD_COMMON_DIRECTORY .. "/source/ABICompatibility.cpp"})
 		end
 
 		targetprefix("")

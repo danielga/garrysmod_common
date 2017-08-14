@@ -8,6 +8,8 @@
 #include "UserData.h"
 #include "SourceCompat.h"
 
+#include <lua.hpp>
+
 struct lua_State;
 
 namespace GarrysMod
@@ -284,6 +286,49 @@ namespace GarrysMod
                 inline lua_State *GetState( ) const
                 {
                     return state;
+                }
+
+                inline void GetFEnv( int iStackPos )
+                {
+                    lua_getfenv( state, iStackPos );
+                }
+
+                inline int SetFEnv( int iStackPos )
+                {
+                    return lua_setfenv( state, iStackPos );
+                }
+
+                inline const char *PushFormattedString( const char *fmt, va_list args )
+                {
+                    return lua_pushvfstring( state, fmt, args );
+                }
+
+                inline const char *PushFormattedString( const char *fmt, ... )
+                {
+                    va_list args;
+                    va_start( args, fmt );
+                    const char *res = PushFormattedString( fmt, args );
+                    va_end( args );
+                    return res;
+                }
+
+                inline int Error( )
+                {
+                    return lua_error( state );
+                }
+
+                inline int FormattedError( const char *fmt, ... )
+                {
+                    va_list args;
+                    va_start( args, fmt );
+                    PushFormattedString( fmt, args );
+                    va_end( args );
+                    return Error( );
+                }
+
+                inline int TypeError( int iStackPos, const char *tname )
+                {
+                    return luaL_typerror( state, iStackPos, tname );
                 }
 
             private:
