@@ -74,7 +74,13 @@ function IncludeSDKTier0(directory)
 
 	includedirs(directory .. "/public/tier0")
 
-	links("tier0")
+	filter("system:windows or macosx")
+		links("tier0")
+
+	filter("system:linux")
+		links(_project.serverside and "tier0_srv" or "tier0")
+
+	filter({})
 end
 
 function IncludeSDKTier1(directory)
@@ -86,13 +92,16 @@ function IncludeSDKTier1(directory)
 	directory = GetSDKPath(directory)
 
 	includedirs(directory .. "/public/tier1")
-	links({"tier1", "vstdlib"})
+	links("tier1")
 
 	filter("system:windows")
-		links({"ws2_32", "rpcrt4"})
+		links({"vstdlib", "ws2_32", "rpcrt4"})
+
+    filter("system:linux")
+		links(_project.serverside and "vstdlib_srv" or "vstdlib")
 
 	filter("system:macosx")
-		links("iconv")
+		links({"vstdlib", "iconv"})
 
 	project("tier1")
 		kind("StaticLib")
