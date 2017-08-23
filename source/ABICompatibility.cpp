@@ -1,4 +1,4 @@
-#if defined _WIN32 && _MSC_VER != 1910
+#if defined _WIN32 && _MSC_VER < 1910
 
 #error The only supported compilation platform for this project on Windows is Visual Studio 2017 (for ABI compatibility reasons).
 
