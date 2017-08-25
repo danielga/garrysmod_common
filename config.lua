@@ -8,3 +8,6 @@ DEFAULT_SOURCE_DIRECTORY = "../source"
 
 -- Default path for the SourceSDK files (root of the source code)
 DEFAULT_SOURCESDK_DIRECTORY = nil
+
+-- Default path for the GarrysMod/garrysmod/lua/bin directory (where the compiled files will be copied to)
+DEFAULT_GARRYSMOD_LUA_BIN_DIRECTORY = nil

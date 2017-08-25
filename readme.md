@@ -73,6 +73,10 @@ IncludeSDKRaytrace([directory]) -- premake option: --sourcesdk=directory - env v
 IncludeSteamAPI([directory]) -- premake option: --sourcesdk=directory - env var: SOURCE_SDK
 ```
 
+You can also request the project to auto-install the compiled files to a directory selected by you or automatically found on your system. Use one of the following:
+* Append the `--autoinstall` flag to your command to either use the GARRYSMOD_LUA_BIN env var, automatic path finder or the DEFAULT_GARRYSMOD_LUA_BIN_DIRECTORY config (which you have to define yourself in config.lua).
+* Append the `--autoinstall=path` config to your command to use the `path` you want.
+
 ## Relevant URLs
 
 https://github.com/ValveSoftware/source-sdk-2013
