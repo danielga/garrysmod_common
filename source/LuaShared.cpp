@@ -86,7 +86,7 @@ static const char *lua_pushfstring_loader( lua_State *L, const char *fmt, ... )
 
 		va_list vargs;
 		va_start( vargs, fmt );
-		const char *res = original( L, fmt, vargs );
+		const char *res = lua_pushvfstring( L, fmt, vargs );
 		va_end( vargs );
 		return res;
 	}
