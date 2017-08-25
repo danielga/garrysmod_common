@@ -96,22 +96,22 @@ newoption({
 
 newoption({
 	trigger = "autoinstall",
-	description = "Automatically installs the module to GarrysMod/garrysmod/bin",
+	description = "Automatically installs the module to GarrysMod/garrysmod/bin (works as a flag and a receiver for a path)"
 })
 
-function GetSteamLibraryDirs()
+local function GetSteamLibraryDirectories()
 	local dir
 
-	if os.get() == "windows" then
+	if os.istarget("windows") then
 		if os.getWindowsRegistry("HKCU:\\Software\\Valve\\Steam\\SteamPath") then
-			dir = os.getWindowsRegistry("HKCU:\\Software\\Valve\\Steam\\SteamPath").."/SteamApps/"
+			dir = os.getWindowsRegistry("HKCU:\\Software\\Valve\\Steam\\SteamPath") .. "/SteamApps/"
 		else
 			local p = io.popen("wmic logicaldisk get caption")
 
 			for line in p:read("*a"):gmatch("%S+") do
 				if line ~= "Caption" then
-					local steamDir1 = string.format("%s\\Program Files (x86)\\Steam\\SteamApps\\",line)
-					local steamDir2 = string.format("%s\\Program Files\\Steam\\SteamApps\\",line)
+					local steamDir1 = string.format("%s\\Program Files (x86)\\Steam\\SteamApps\\", line)
+					local steamDir2 = string.format("%s\\Program Files\\Steam\\SteamApps\\", line)
 
 					if os.isdir(steamDir1) then
 						dir = steamDir1
@@ -123,25 +123,25 @@ function GetSteamLibraryDirs()
 
 			p:close()
 		end
-	elseif os.get() == "linux" then
-		dir = path.join(os.getenv("HOME") or "~",".local/share/Steam/SteamApps/")
-	elseif os.get() == "macosx" then
-		dir = path.join(os.getenv("HOME") or "~","Library/Application Support/Steam/SteamApps/")
+	elseif os.istarget("linux") then
+		dir = path.join(os.getenv("HOME") or "~", ".local/share/Steam/SteamApps/")
+	elseif os.istarget("macosx") then
+		dir = path.join(os.getenv("HOME") or "~", "Library/Application Support/Steam/SteamApps/")
 	end
 
 	if dir then
 		local dirs = {dir}
 
-		if os.isfile(dir.."libraryfolders.vdf") then
-			local f = io.open(dir.."libraryfolders.vdf","r")
+		if os.isfile(dir .. "libraryfolders.vdf") then
+			local f = io.open(dir .. "libraryfolders.vdf","r")
 
-			for id,libdir in f:read("*a"):gmatch("\n%s*\"(%d+)\"%s*\"(.-)\"") do
+			for _, libdir in f:read("*a"):gmatch("\n%s*\"(%d+)\"%s*\"(.-)\"") do
 				if os.isdir(libdir) then
 					dirs[#dirs + 1] = libdir:gsub("\\\\","\\")
 
 					local pathSep = dirs[#dirs]:match("[/\\]")
-					if dirs[#dirs]:sub(-1,-1) ~= pathSep then
-						dirs[#dirs] = dirs[#dirs]..pathSep
+					if dirs[#dirs]:sub(-1, -1) ~= pathSep then
+						dirs[#dirs] = dirs[#dirs] .. pathSep
 					end
 				end
 			end
@@ -150,35 +150,36 @@ function GetSteamLibraryDirs()
 		end
 
 		return dirs
-	else
-		return {}
 	end
+
+	return {}
 end
 
-function FindGarrysModDir()
-	local dirs = GetSteamLibraryDirs()
+local function FindGarrysModDirectory()
+	local dirs = GetSteamLibraryDirectories()
 
-	for i,dir in ipairs(dirs) do
-		if os.isdir(dir.."common/GarrysMod/") then
-			return dir.."common/GarrysMod/"
-		elseif os.isdir(dir.."common/garrysmod/") then
-			return dir.."common/garrysmod/"
+	for _, dir in ipairs(dirs) do
+		if os.isdir(dir .. "common/GarrysMod/") then
+			return dir .. "common/GarrysMod/"
+		elseif os.isdir(dir .. "common/garrysmod/") then
+			return dir .. "common/garrysmod/"
 		end
 	end
 
-	return false
+	return
 end
 
-function FindGarrysModLuaBinDir()
-	local dir = FindGarrysModDir()
-
-	if not dir then return false end
-
-	if not os.isdir(dir.."garrysmod/lua/bin") then
-		os.mkdir(dir.."garrysmod/lua/bin")
+local function FindGarrysModLuaBinDirectory()
+	local dir = FindGarrysModDirectory()
+	if not dir then
+		return
 	end
 
-	return dir.."garrysmod/lua/bin/"
+	if not os.isdir(dir .. "garrysmod/lua/bin") then
+		os.mkdir(dir .. "garrysmod/lua/bin")
+	end
+
+	return dir .. "garrysmod/lua/bin/"
 end
 
 function CreateProject(config)
@@ -297,15 +298,14 @@ function CreateProject(config)
 			linkoptions({"-static-libgcc", "-static-libstdc++"})
 
 		if _OPTIONS["autoinstall"] then
-			local binDir = FindGarrysModLuaBinDir() or os.getenv("GARRYSMOD_LUA_BIN_DIR")
-
-			if not binDir then error("Could not find Garry's Mod install directory! (You can set the GARRYSMOD_LUA_BIN_DIR env var manually)") end
+			local binDir = _OPTIONS["autoinstall"] ~= "" and _OPTIONS["autoinstall"] or os.getenv("GARRYSMOD_LUA_BIN") or FindGarrysModLuaBinDirectory() or DEFAULT_GARRYSMOD_LUA_BIN_DIRECTORY
+			assert(type(binDir) == "string", "The path to GarrysMod/garrysmod/lua/bin is not a string!")
 
 			filter("system:windows")
-				postbuildcommands {"{COPY} %{cfg.buildtarget.abspath} \""..binDir.."\""}
+				postbuildcommands({"{COPY} %{cfg.buildtarget.abspath} \"" .. binDir .. "\""})
 
 			filter("system:not windows")
-				postbuildcommands {"{COPY} %{cfg.buildtarget.abspath} \""..binDir.."%{cfg.buildtarget.name}\""}
+				postbuildcommands({"{COPY} %{cfg.buildtarget.abspath} \"" .. binDir .. "%{cfg.buildtarget.name}\""})
 		end
 
 		filter({})
