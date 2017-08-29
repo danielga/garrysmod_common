@@ -105,7 +105,7 @@ static int luaL_error_loader( lua_State *L, const char *fmt, ... )
 
 		va_list vargs;
 		va_start( vargs, fmt );
-		const char *res = lua_pushvfstring( L, fmt, vargs );
+		lua_pushvfstring( L, fmt, vargs );
 		va_end( vargs );
 		return lua_error( L );
 	}
