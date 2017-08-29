@@ -3,20 +3,27 @@ function IncludeScanning()
 
 	local directory = _GARRYSMOD_COMMON_DIRECTORY .. "/scanning"
 
-	filter({})
+	local _project = project()
 
 	includedirs(directory)
-	files({directory .. "/*.hpp", directory .. "/*.cpp"})
-	vpaths({
-		["Header files/garrysmod_common/scanning"] = directory .. "/*.hpp",
-		["Source files/garrysmod_common/scanning"] = directory .. "/*.cpp"
-	})
+	links("scanning")
 
-	filter("system:linux or macosx")
-		links("dl")
+	project("scanning")
+		kind("StaticLib")
+		language("C++")
+		cppdialect("C++11")
+		includedirs(directory)
+		files({directory .. "/*.hpp", directory .. "/*.cpp"})
+		vpaths({
+			["Header files/*"] = directory .. "/*.hpp",
+			["Source files/*"] = directory .. "/*.cpp"
+		})
 
-	filter("system:macosx")
-		links("CoreServices.framework")
+		filter("system:linux or macosx")
+			links("dl")
 
-	filter({})
+		filter("system:macosx")
+			links("CoreServices.framework")
+
+	project(_project.name)
 end
