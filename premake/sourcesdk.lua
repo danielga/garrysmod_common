@@ -88,6 +88,7 @@ function IncludeSDKTier1(directory)
 
 	local _project = project()
 	local _workspace = _project.workspace
+	local _project_directory = _GARRYSMOD_COMMON_DIRECTORY .. "/projects/" .. os.target() .. "/" .. _ACTION
 
 	directory = GetSDKPath(directory)
 
@@ -108,6 +109,7 @@ function IncludeSDKTier1(directory)
 		warnings("Default")
 		language("C++")
 		cppdialect("GNU++11")
+		location(_GARRYSMOD_COMMON_DIRECTORY .. "/projects/" .. os.target() .. "/" .. _ACTION)
 		defines({"TIER1_STATIC_LIB", "_CRT_SECURE_NO_WARNINGS"})
 		includedirs({
 			directory .. "/public/tier0",
@@ -158,6 +160,16 @@ function IncludeSDKTier1(directory)
 			directory .. "/tier1/snappy-stubs-internal.cpp",
 			directory .. "/utils/lzma/C/LzmaDec.c"
 		})
+
+		filter("configurations:Release")
+			objdir(_project_directory .. "/intermediate")
+			targetdir(_project_directory .. "/release")
+
+		if not _workspace.abi_compatible then
+			filter("configurations:Debug")
+				objdir(_project_directory .. "/intermediate")
+				targetdir(_project_directory .. "/debug")
+		end
 
 		filter("system:windows")
 			defines({"_DLL_EXT=.dll", "WIN32"})
@@ -253,6 +265,8 @@ function IncludeSDKMathlib(directory)
 	IncludePackage("sdkmathlib")
 
 	local _project = project()
+	local _workspace = _project.workspace
+	local _project_directory = _GARRYSMOD_COMMON_DIRECTORY .. "/projects/" .. os.target() .. "/" .. _ACTION
 
 	directory = GetSDKPath(directory)
 
@@ -262,6 +276,7 @@ function IncludeSDKMathlib(directory)
 	project("mathlib")
 		kind("StaticLib")
 		warnings("Default")
+		location(_GARRYSMOD_COMMON_DIRECTORY .. "/projects/" .. os.target() .. "/" .. _ACTION)
 		defines("MATHLIB_LIB")
 		includedirs({
 			directory .. "/public/mathlib",
@@ -293,6 +308,16 @@ function IncludeSDKMathlib(directory)
 			directory .. "/mathlib/almostequal.cpp"
 		})
 
+		filter("configurations:Release")
+			objdir(_project_directory .. "/intermediate")
+			targetdir(_project_directory .. "/release")
+
+		if not _workspace.abi_compatible then
+			filter("configurations:Debug")
+				objdir(_project_directory .. "/intermediate")
+				targetdir(_project_directory .. "/debug")
+		end
+
 		filter("system:windows or linux")
 			files(directory .. "/mathlib/3dnow.cpp")
 
@@ -313,6 +338,8 @@ function IncludeSDKRaytrace(directory)
 	IncludePackage("sdkraytrace")
 
 	local _project = project()
+	local _workspace = _project.workspace
+	local _project_directory = _GARRYSMOD_COMMON_DIRECTORY .. "/projects/" .. os.target() .. "/" .. _ACTION
 
 	directory = GetSDKPath(directory)
 
@@ -321,6 +348,7 @@ function IncludeSDKRaytrace(directory)
 	project("raytrace")
 		kind("StaticLib")
 		warnings("Default")
+		location(_GARRYSMOD_COMMON_DIRECTORY .. "/projects/" .. os.target() .. "/" .. _ACTION)
 		includedirs({
 			directory .. "/utils/common",
 			directory .. "/public/tier0",
@@ -333,6 +361,16 @@ function IncludeSDKRaytrace(directory)
 			directory .. "/raytrace/trace2.cpp",
 			directory .. "/raytrace/trace3.cpp"
 		})
+
+		filter("configurations:Release")
+			objdir(_project_directory .. "/intermediate")
+			targetdir(_project_directory .. "/release")
+
+		if not _workspace.abi_compatible then
+			filter("configurations:Debug")
+				objdir(_project_directory .. "/intermediate")
+				targetdir(_project_directory .. "/debug")
+		end
 
 		filter("system:windows")
 			defines("WIN32")

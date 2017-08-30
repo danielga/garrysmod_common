@@ -1,11 +1,6 @@
 assert(_ACTION ~= nil, "no action (vs20**, gmake or xcode for example) provided!")
 
 include("config.lua")
-include("premake/lua_shared.lua")
-include("premake/detouring.lua")
-include("premake/scanning.lua")
-include("premake/sourcesdk.lua")
-include("premake/pkg_config.lua")
 
 newoption({
 	trigger = "workspace",
@@ -27,6 +22,12 @@ function CleanPath(p)
 end
 
 _GARRYSMOD_COMMON_DIRECTORY = CleanPath(_SCRIPT_DIR)
+
+includeexternal("premake/lua_shared.lua")
+includeexternal("premake/detouring.lua")
+includeexternal("premake/scanning.lua")
+includeexternal("premake/sourcesdk.lua")
+includeexternal("premake/pkg_config.lua")
 
 function CreateWorkspace(config)
 	assert(type(config) == "table", "supplied argument is not a table!")
