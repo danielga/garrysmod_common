@@ -1,13 +1,15 @@
 function IncludeScanning()
 	IncludePackage("scanning")
 
-	local directory = _GARRYSMOD_COMMON_DIRECTORY .. "/scanning"
+	local directory = _GARRYSMOD_COMMON_DIRECTORY .. "/include/scanning"
 
 	local _project = project()
 	local _workspace = _project.workspace
 	local _project_directory = _GARRYSMOD_COMMON_DIRECTORY .. "/projects/" .. os.target() .. "/" .. _ACTION
 
+	-- This first include directory is deprecated and might be removed in the future.
 	includedirs(directory)
+	includedirs(_GARRYSMOD_COMMON_DIRECTORY .. "/include")
 	links("scanning")
 
 	project("scanning")
