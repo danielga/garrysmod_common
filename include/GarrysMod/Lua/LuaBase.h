@@ -3,14 +3,22 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include <stdarg.h>
 
 #include "Types.h"
 #include "UserData.h"
 #include "SourceCompat.h"
 
-#include <lua.hpp>
-
 struct lua_State;
+
+extern "C"
+{
+    extern void ( *lua_getfenv )( lua_State *L, int idx );
+    extern int ( *lua_setfenv )( lua_State *L, int idx );
+    extern const char *( *lua_pushvfstring )( lua_State *L, const char *fmt, va_list argp );
+    extern int ( *lua_error )( lua_State *L );
+    extern int ( *luaL_typerror )( lua_State *L, int narg, const char *tname );
+}
 
 namespace GarrysMod
 {
