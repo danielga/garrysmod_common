@@ -18,9 +18,12 @@ function IncludeDetouring()
 		location(_project_directory)
 		includedirs(directory)
 		files({
-			directory .. "/**.hpp",
-			directory .. "/**.h",
+			directory .. "/*.hpp",
+			directory .. "/*.h",
+			directory .. "/*.cpp",
+			directory .. "/hde/include/*.h",
 			directory .. "/hde/src/hde.c",
+			directory .. "/minhook/include/*.h",
 			directory .. "/minhook/src/*.h",
 			directory .. "/minhook/src/*.c"
 		})
@@ -34,6 +37,7 @@ function IncludeDetouring()
 				directory .. "/minhook/include/*.h",
 				directory .. "/minhook/src/*.h"
 			},
+			["Source files"] = directory .. "/*.cpp",
 			["Source files/hde"] = directory .. "/hde/src/hde.c",
 			["Source files/minhook"] = directory .. "/minhook/src/*.c"
 		})
