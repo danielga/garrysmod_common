@@ -14,7 +14,8 @@ function IncludeDetouring()
 
 	project("detouring")
 		kind("StaticLib")
-		language("C")
+		language("C++")
+		cppdialect("C++11")
 		location(_project_directory)
 		includedirs(directory)
 		files({
@@ -41,6 +42,9 @@ function IncludeDetouring()
 			["Source files/hde"] = directory .. "/hde/src/hde.c",
 			["Source files/minhook"] = directory .. "/minhook/src/*.c"
 		})
+
+		filter("files:**.c")
+			language("C")
 
 		filter("configurations:Release")
 			objdir(_project_directory .. "/intermediate")
