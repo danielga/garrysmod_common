@@ -12,6 +12,9 @@ function IncludeScanning()
 	includedirs(_GARRYSMOD_COMMON_DIRECTORY .. "/include")
 	links("scanning")
 
+	filter("system:macosx")
+		links("CoreServices.framework")
+
 	project("scanning")
 		kind("StaticLib")
 		language("C++")
@@ -37,8 +40,11 @@ function IncludeScanning()
 		filter("system:linux or macosx")
 			links("dl")
 
-		filter("system:macosx")
-			links("CoreServices.framework")
+		if _workspace.abi_compatible then
+			filter("system:macosx")
+				buildoptions("-mmacosx-version-min=10.5")
+				linkoptions("-mmacosx-version-min=10.5")
+		end
 
 	project(_project.name)
 end
