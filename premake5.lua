@@ -59,7 +59,7 @@ function CreateWorkspace(config)
 	_workspace.directory = directory
 
 		language("C++")
-		cppdialect("C++11")
+		cppdialect("GNU++11")
 		location(_workspace.directory)
 		warnings("Extra")
 		flags({"NoPCH", "StaticRuntime"})
