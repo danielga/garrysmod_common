@@ -14,7 +14,7 @@
 
 #else
 
-#error Unknown compiler. Probably not supported by Garry's Mod.
+#error "Unknown compiler. Probably not supported by Garry's Mod."
 
 #endif
 
@@ -42,7 +42,7 @@
 
 #else
 
-#error Unknown platform. Probably not supported by Garry's Mod.
+#error "Unknown platform. Probably not supported by Garry's Mod."
 
 #endif
 
@@ -56,6 +56,6 @@
 
 #else
 
-#error Unknown architecture. Probably not supported by Garry's Mod.
+#error "Unknown architecture. Probably not supported by Garry's Mod."
 
 #endif
