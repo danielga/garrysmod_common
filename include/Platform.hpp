@@ -18,6 +18,24 @@
 
 #endif
 
+#ifdef COMPILER_VC
+
+#define DEPRECATED \
+	__declspec( deprecated( "deprecated, avoid using this" ) )
+
+#define DEPRECATED_WITH_SUBSTITUTE( substitute ) \
+	__declspec( deprecated( "deprecated, use " #substitute " instead" ) )
+
+#else
+
+#define DEPRECATED \
+	__attribute__( ( deprecated( "avoid using this" ) ) )
+
+#define DEPRECATED_WITH_SUBSTITUTE( substitute ) \
+	__attribute__( ( deprecated( "use " #substitute " instead" ) ) )
+
+#endif
+
 #if defined _WIN32
 
 #define SYSTEM_WINDOWS 1

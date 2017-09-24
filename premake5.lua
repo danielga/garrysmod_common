@@ -87,6 +87,9 @@ function CreateWorkspace(config)
 				objdir(_workspace.directory .. "/intermediate")
 				targetdir(_workspace.directory .. "/debug")
 		end
+
+		filter("system:windows")
+			defines({"_CRT_NONSTDC_NO_WARNINGS", "_CRT_SECURE_NO_WARNINGS"})
 end
 
 newoption({

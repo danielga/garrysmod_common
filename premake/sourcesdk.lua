@@ -61,7 +61,6 @@ function IncludeSDKCommon(directory)
 	IncludePackage("sdkcommon")
 	IncludeSDKCommonInternal(GetSDKPath(directory))
 	defines("GMOD_USE_SOURCESDK")
-	warnings("Default")
 end
 
 function IncludeSDKTier0(directory)

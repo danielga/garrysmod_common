@@ -2,12 +2,13 @@
 #include <cstdarg>
 #include <lua.hpp>
 #include "typestring.hh"
+#include <Platform.hpp>
 
-#if defined _WIN32
+#if defined SYSTEM_WINDOWS
 
 #include <Windows.h>
 
-#elif defined __linux || defined __APPLE__
+#elif defined SYSTEM_POSIX
 
 #include <dlfcn.h>
 
@@ -17,7 +18,7 @@ template<typename FunctionType>
 static FunctionType GetSymbol( const char *name )
 {
 
-#if defined _WIN32
+#if defined SYSTEM_WINDOWS
 
 	HMODULE binary = nullptr;
 	if( GetModuleHandleEx( 0, "garrysmod/bin/lua_shared.dll", &binary ) && binary != nullptr )
@@ -27,9 +28,9 @@ static FunctionType GetSymbol( const char *name )
 		return symbol_pointer;
 	}
 
-#elif defined __linux || defined __APPLE__
+#elif defined SYSTEM_POSIX
 
-#if defined __APPLE__
+#if defined SYSTEM_MACOSX
 
 	void *binary = dlopen( "garrysmod/bin/lua_shared.dylib", RTLD_LAZY | RTLD_NOLOAD );
 
