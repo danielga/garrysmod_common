@@ -76,6 +76,17 @@ struct lua_State
 
     #define LUA_FUNCTION_STATIC_DECLARE( FUNC ) \
         static int FUNC( lua_State *L ) GMOD_NOEXCEPT
+
+    #define LUA_FUNCTION_IMPLEMENT( FUNC ) \
+        static int FUNC##__Imp( GarrysMod::Lua::ILuaBase* LUA ) GMOD_NOEXCEPT
+
+    #define LUA_FUNCTION_WRAP( FUNC )                   \
+        LUA_FUNCTION_STATIC_DECLARE( FUNC )             \
+        {                                               \
+            GarrysMod::Lua::ILuaBase* LUA = L->luabase; \
+            LUA->SetState(L);                           \
+            return FUNC##__Imp( LUA );                  \
+        }
 #endif
 
 #endif
