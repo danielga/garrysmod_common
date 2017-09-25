@@ -63,7 +63,8 @@ local function IncludeSDKCommonInternal(directory)
 			"unused-private-field",
 			"overloaded-virtual",
 			"unknown-pragmas",
-			"unused-variable"
+			"unused-variable",
+			"unknown-warning-option"
 		})
 		defines({"COMPILER_GCC", "POSIX", "_POSIX", "OSX", "GNUC", "NO_MALLOC_OVERRIDE"})
 		libdirs(path.getabsolute(directory) .. "/lib/public/osx32")

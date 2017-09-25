@@ -53,5 +53,5 @@ cd "$CI_PROJECT_DIR/projects/$PROJECT_OS/gmake"
 
 make
 
-cp "$CI_PROJECT_DIR/projects/$PROJECT_OS/gmake/release/gm{sv,cl}_${MODULE_NAME}_$TARGET_OS.dll" "$CI_PROJECT_DIR"
+cp "$CI_PROJECT_DIR/projects/$PROJECT_OS/gmake/release/"gm{sv,cl}_${MODULE_NAME}_$TARGET_OS.dll "$CI_PROJECT_DIR"
 cd "$CI_PROJECT_DIR"

@@ -90,6 +90,8 @@ function CreateWorkspace(config)
 
 		filter("system:windows")
 			defines({"_CRT_NONSTDC_NO_WARNINGS", "_CRT_SECURE_NO_WARNINGS"})
+
+		filter({})
 end
 
 newoption({
@@ -289,6 +291,7 @@ function CreateProject(config)
 
 		filter("system:linux")
 			targetsuffix("_linux")
+			linkoptions({"-static-libgcc", "-static-libstdc++"})
 
 		filter("system:macosx")
 			targetsuffix("_osx")
@@ -297,9 +300,6 @@ function CreateProject(config)
 				buildoptions("-mmacosx-version-min=10.5")
 				linkoptions("-mmacosx-version-min=10.5")
 			end
-
-		filter("system:linux")
-			linkoptions({"-static-libgcc", "-static-libstdc++"})
 
 		if _OPTIONS["autoinstall"] then
 			local binDir = _OPTIONS["autoinstall"] ~= "" and _OPTIONS["autoinstall"] or os.getenv("GARRYSMOD_LUA_BIN") or FindGarrysModLuaBinDirectory() or DEFAULT_GARRYSMOD_LUA_BIN_DIRECTORY
