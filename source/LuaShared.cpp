@@ -12,6 +12,12 @@
 
 #include <dlfcn.h>
 
+#ifdef SYSTEM_MACOSX_BAD
+
+#include <stdexcept>
+
+#endif
+
 #endif
 
 template<typename FunctionType>
@@ -69,10 +75,29 @@ struct Loader<Name, Return( Args... )>
 		if( original != nullptr )
 		{
 			*Target = original;
+
+#ifndef SYSTEM_MACOSX_BAD
+
 			return original( std::forward<Args>( args )... );
+
+#else
+
+			return original( args... );
+
+#endif
+
 		}
 
+#ifndef SYSTEM_MACOSX_BAD
+
 		throw std::bad_function_call( );
+
+#else
+
+		throw std::runtime_error( "unable to find function" );
+
+#endif
+
 	}
 };
 
@@ -92,7 +117,16 @@ static const char *lua_pushfstring_loader( lua_State *L, const char *fmt, ... )
 		return res;
 	}
 
+#ifndef SYSTEM_MACOSX_BAD
+	
 	throw std::bad_function_call( );
+	
+#else
+	
+	throw std::runtime_error( "unable to find function" );
+	
+#endif
+
 }
 
 static int luaL_error_loader( lua_State *L, const char *fmt, ... )
@@ -111,7 +145,16 @@ static int luaL_error_loader( lua_State *L, const char *fmt, ... )
 		return lua_error( L );
 	}
 
+#ifndef SYSTEM_MACOSX_BAD
+	
 	throw std::bad_function_call( );
+	
+#else
+	
+	throw std::runtime_error( "unable to find function" );
+	
+#endif
+
 }
 
 extern "C"

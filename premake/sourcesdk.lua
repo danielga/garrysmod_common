@@ -51,6 +51,7 @@ local function IncludeSDKCommonInternal(directory)
 		libdirs(path.getabsolute(directory) .. "/lib/public/linux32")
 
 	filter("system:macosx")
+		disablewarnings({"unused-local-typedef", "unused-parameter", "unused-private-field", "overloaded-virtual", "unknown-pragmas", "unused-variable"})
 		defines({"COMPILER_GCC", "POSIX", "_POSIX", "OSX", "GNUC", "NO_MALLOC_OVERRIDE"})
 		libdirs(path.getabsolute(directory) .. "/lib/public/osx32")
 
