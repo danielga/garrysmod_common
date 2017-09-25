@@ -73,5 +73,5 @@ cd "$env:CI_PROJECT_DIR/projects/windows/vs2017"
 
 msbuild serversecure.sln /p:Configuration=Release
 
-cp "$env:CI_PROJECT_DIR/projects/windows/vs2017/release/gmsv_serversecure_win32.dll" "$env:CI_PROJECT_DIR"
+cp "$env:CI_PROJECT_DIR/projects/windows/vs2017/release/gm*_${env:MODULE_NAME}_win32.dll" "$env:CI_PROJECT_DIR"
 cd "$env:CI_PROJECT_DIR"

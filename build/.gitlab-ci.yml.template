@@ -7,7 +7,7 @@ cache:
   paths:
     - "$DEPENDENCIES/*"
     - "$CI_PROJECT_DIR/projects/*"
-gmsv_serversecure_win32:
+job_win32:
   stage: build
   tags:
     - windows
@@ -20,7 +20,7 @@ gmsv_serversecure_win32:
     paths:
       - "gmsv_${MODULE_NAME}_win32.dll"
       - "gmcl_${MODULE_NAME}_win32.dll"
-gmsv_serversecure_linux:
+job_linux:
   stage: build
   tags:
     - linux
@@ -37,7 +37,7 @@ gmsv_serversecure_linux:
     paths:
       - "gmsv_${MODULE_NAME}_linux.dll"
       - "gmcl_${MODULE_NAME}_linux.dll"
-gmsv_serversecure_macosx:
+job_macosx:
   stage: build
   tags:
     - macosx
