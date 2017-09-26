@@ -67,11 +67,11 @@ if( !( ( Get-Item "$env:PREMAKE5" -ErrorAction SilentlyContinue ) -is [System.IO
 	cp "$env:DEPENDENCIES/premake-core/bin/release/premake5.exe" "$env:DEPENDENCIES/windows/premake-core"
 }
 
-cd "$env:CI_PROJECT_DIR/projects"
+cd "$env:REPOSITORY_DIR/projects"
 & "$env:PREMAKE5" vs2017
-cd "$env:CI_PROJECT_DIR/projects/windows/vs2017"
+cd "$env:REPOSITORY_DIR/projects/windows/vs2017"
 
 msbuild "$env:MODULE_NAME.sln" /p:Configuration=Release
 
-cp "$env:CI_PROJECT_DIR/projects/windows/vs2017/release/gm*_${env:MODULE_NAME}_win32.dll" "$env:CI_PROJECT_DIR"
-cd "$env:CI_PROJECT_DIR"
+cp "$env:REPOSITORY_DIR/projects/windows/vs2017/release/gm*_${env:MODULE_NAME}_win32.dll" "$env:REPOSITORY_DIR"
+cd "$env:REPOSITORY_DIR"

@@ -47,11 +47,11 @@ if [ ! -f "$PREMAKE5" ]; then
 	cp "$DEPENDENCIES/premake-core/bin/release/premake5" "$DEPENDENCIES/$PROJECT_OS/premake-core";
 fi
 
-cd "$CI_PROJECT_DIR/projects"
+cd "$REPOSITORY_DIR/projects"
 "$PREMAKE5" gmake
-cd "$CI_PROJECT_DIR/projects/$PROJECT_OS/gmake"
+cd "$REPOSITORY_DIR/projects/$PROJECT_OS/gmake"
 
 make
 
-cp "$CI_PROJECT_DIR/projects/$PROJECT_OS/gmake/release/"gm*_${MODULE_NAME}_$TARGET_OS.dll "$CI_PROJECT_DIR"
-cd "$CI_PROJECT_DIR"
+cp "$REPOSITORY_DIR/projects/$PROJECT_OS/gmake/release/"gm*_${MODULE_NAME}_$TARGET_OS.dll "$REPOSITORY_DIR"
+cd "$REPOSITORY_DIR"
