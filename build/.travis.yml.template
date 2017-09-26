@@ -6,8 +6,8 @@ os:
 osx_image: xcode7.3
 cache:
   directories:
-    - "$HOME/dependencies"
-    - "$HOME/projects"
+    - "$TRAVIS_BUILD_DIR/dependencies"
+    - "$TRAVIS_BUILD_DIR/projects"
 addons:
   apt:
     sources:
@@ -20,11 +20,11 @@ addons:
       - g++-4.9-multilib
 install:
   - export MODULE_NAME="module name here"
-  - export DEPENDENCIES="$HOME/dependencies"
+  - export DEPENDENCIES="$TRAVIS_BUILD_DIR/dependencies"
   - export GARRYSMOD_COMMON="$DEPENDENCIES/garrysmod_common"
   - export SOURCE_SDK="$DEPENDENCIES/sourcesdk-minimal"
   - export TARGET_OS=$TRAVIS_OS_NAME
-  - export CI_PROJECT_DIR=$HOME
+  - export REPOSITORY_DIR=$TRAVIS_BUILD_DIR
   - if [ $TRAVIS_OS_NAME = "osx" ]; then
       export PREMAKE5="$DEPENDENCIES/macosx/premake-core/premake5";
       export PROJECT_OS=macosx;
@@ -36,7 +36,7 @@ install:
       export CXX=g++-4.9;
       export CC=gcc-4.9;
     fi
-script: "$GARRYSMOD_COMMON/build/ci.sh"
+script: "$TRAVIS_BUILD_DIR/ci.sh"
 deploy:
   provider: releases
   skip_cleanup: true
