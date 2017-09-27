@@ -291,26 +291,31 @@ namespace GarrysMod
                     return data;
                 }
 
+                // Gets the internal lua_State
                 inline lua_State *GetState( ) const
                 {
                     return state;
                 }
 
+                // Gets the environment table of the value at the given index
                 inline void GetFEnv( int iStackPos )
                 {
                     lua_getfenv( state, iStackPos );
                 }
 
+                // Sets the environment table of the value at the given index
                 inline int SetFEnv( int iStackPos )
                 {
                     return lua_setfenv( state, iStackPos );
                 }
 
+                // Pushes a formatted string onto the stack
                 inline const char *PushFormattedString( const char *fmt, va_list args )
                 {
                     return lua_pushvfstring( state, fmt, args );
                 }
 
+                // Pushes a formatted string onto the stack
                 inline const char *PushFormattedString( const char *fmt, ... )
                 {
                     va_list args;
@@ -320,11 +325,13 @@ namespace GarrysMod
                     return res;
                 }
 
+                // Throws an error (uses the value at the top of the stack)
                 inline int Error( )
                 {
                     return lua_error( state );
                 }
 
+                // Throws an error (pushes a formatted string onto the stack and uses it)
                 inline int FormattedError( const char *fmt, ... )
                 {
                     va_list args;
@@ -334,6 +341,7 @@ namespace GarrysMod
                     return Error( );
                 }
 
+                // Throws an error related to type differences
                 inline int TypeError( int iStackPos, const char *tname )
                 {
                     return luaL_typerror( state, iStackPos, tname );
