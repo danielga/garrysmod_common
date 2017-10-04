@@ -143,8 +143,8 @@ local function GetSteamLibraryDirectories()
 
 			for _, libdir in f:read("*a"):gmatch("\n%s*\"(%d+)\"%s*\"(.-)\"") do
 				if os.isdir(libdir) then
-					if os.isdir(libdir.."\\steamapps") then
-						libdir = libdir.."\\steamapps"
+					if os.isdir(libdir .. "\\steamapps") then
+						libdir = libdir .. "\\steamapps"
 					end
 
 					dirs[#dirs + 1] = libdir:gsub("\\\\","\\")
