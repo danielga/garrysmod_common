@@ -89,7 +89,11 @@ function CreateWorkspace(config)
 		end
 
 		filter("system:windows")
-			defines({"_CRT_NONSTDC_NO_WARNINGS", "_CRT_SECURE_NO_WARNINGS"})
+			defines({
+				"_CRT_NONSTDC_NO_WARNINGS",
+				"_CRT_SECURE_NO_WARNINGS",
+				"STRICT"
+			})
 
 		filter({})
 end
