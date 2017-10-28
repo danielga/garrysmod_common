@@ -4,14 +4,12 @@ A repository of common bits for compilation projects based on Garry's Mod.
 
 The include folder has all the required headers for building modules for Garry's Mod (LuaJIT and Garry's Mod headers) with C++.
 
-The lib folder provides files for linking on each platform supported by Garry's Mod.
-
 There's common code for premake on the premake folder for faster development. Include this folder or premake5.lua (including this folder runs the premake5.lua file by default).
 As you can see by the filename, you need premake5.
 
 ## Warning
 
-Do not use internal classes/structures (like the GameDepot::System class or the IGamemodeSystem::Information structure) unless you compile with **Visual Studio 2010 SP1** on **release** mode for Windows. On Linux, use **GCC** between **4.4** and **4.9**. For Mac OSX, any **Xcode (using the GCC compiler)** version *MIGHT* work as long as the **Mac OSX 10.5 SDK** is used.
+Do not use internal classes/structures (like the GameDepot::System class or the IGamemodeSystem::Information structure) unless you compile with **Visual Studio 2017** on **release** mode for Windows. On Linux, use **GCC** between **4.4** and **4.9**. For Mac OSX, any **Xcode (using the GCC compiler)** version *MIGHT* work as long as the **Mac OSX 10.5 SDK** is used.
 
 ## Usage
 
@@ -72,6 +70,10 @@ IncludeSDKMathlib([directory]) -- premake option: --sourcesdk=directory - env va
 IncludeSDKRaytrace([directory]) -- premake option: --sourcesdk=directory - env var: SOURCE_SDK
 IncludeSteamAPI([directory]) -- premake option: --sourcesdk=directory - env var: SOURCE_SDK
 ```
+
+You can also request the project to auto-install the compiled files to a directory selected by you or automatically found on your system. Use one of the following:
+* Append the `--autoinstall` flag to your command to either use the GARRYSMOD_LUA_BIN env var, automatic path finder or the DEFAULT_GARRYSMOD_LUA_BIN_DIRECTORY config (which you have to define yourself in config.lua).
+* Append the `--autoinstall=path` config to your command to use the `path` you want.
 
 ## Relevant URLs
 

@@ -22,7 +22,7 @@ static int32_t LuaErrorTraceback( lua_State *state )
 	if( lua->IsType( 1, GarrysMod::Lua::Type::STRING ) )
 		stream << lua->GetString( 1 );
 
-	lua_Debug dbg = { 0 };
+	lua_Debug dbg;
 	for(
 		int32_t lvl = 1;
 		lua->GetStack( lvl, &dbg ) == 1;

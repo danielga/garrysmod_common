@@ -1,0 +1,57 @@
+variables:
+  MODULE_NAME: "module name here"
+  DEPENDENCIES: "$CI_PROJECT_DIR/dependencies"
+  GARRYSMOD_COMMON: "$CI_PROJECT_DIR/dependencies/garrysmod_common"
+  SOURCE_SDK: "$CI_PROJECT_DIR/dependencies/sourcesdk-minimal"
+  REPOSITORY_DIR: "$CI_PROJECT_DIR"
+cache:
+  paths:
+    - "$DEPENDENCIES/*"
+    - "$CI_PROJECT_DIR/projects/*"
+job_win32:
+  stage: build
+  tags:
+    - windows
+  only:
+    - tags
+  variables:
+    PREMAKE5: "$CI_PROJECT_DIR/dependencies/windows/premake-core/premake5.exe"
+  script: "& \"$CI_PROJECT_DIR/ci.ps1\""
+  artifacts:
+    paths:
+      - "gmsv_${MODULE_NAME}_win32.dll"
+      - "gmcl_${MODULE_NAME}_win32.dll"
+job_linux:
+  stage: build
+  tags:
+    - linux
+  only:
+    - tags
+  variables:
+    PROJECT_OS: "linux"
+    TARGET_OS: "linux"
+    PREMAKE5: "$CI_PROJECT_DIR/dependencies/linux/premake-core/premake5"
+    CXX: "g++-4.9"
+    CC: "gcc-4.9"
+  script: "$CI_PROJECT_DIR/ci.sh"
+  artifacts:
+    paths:
+      - "gmsv_${MODULE_NAME}_linux.dll"
+      - "gmcl_${MODULE_NAME}_linux.dll"
+job_macosx:
+  stage: build
+  tags:
+    - macosx
+  only:
+    - tags
+  variables:
+    PROJECT_OS: "macosx"
+    TARGET_OS: "osx"
+    PREMAKE5: "$CI_PROJECT_DIR/dependencies/macosx/premake-core/premake5"
+    CXX: "g++"
+    CC: "gcc"
+  script: "$CI_PROJECT_DIR/ci.sh"
+  artifacts:
+    paths:
+      - "gmsv_${MODULE_NAME}_osx.dll"
+      - "gmcl_${MODULE_NAME}_osx.dll"

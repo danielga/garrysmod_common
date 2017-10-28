@@ -1,4 +1,4 @@
-if os.is("windows") then
+if os.istarget("windows") then
 	function pkg_config() end
 
 	return

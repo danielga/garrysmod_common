@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <Platform.hpp>
 
 namespace Helpers
 {
@@ -13,17 +14,17 @@ inline std::string GetBinaryFileName(
 )
 {
 
-#if defined _WIN32
+#if defined SYSTEM_WINDOWS
 
 	(void)libprefix;
 	(void)srvsuffix;
 	return extraprefix + name + ".dll";
 
-#elif defined __linux
+#elif defined SYSTEM_LINUX
 
 	return extraprefix + ( libprefix ? "lib" : "" ) + name + ( srvsuffix ? "_srv.so" : ".so" );
 
-#elif defined __APPLE__
+#elif defined SYSTEM_MACOSX
 
 	(void)libprefix;
 	(void)srvsuffix;

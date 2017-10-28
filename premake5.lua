@@ -1,76 +1,6 @@
-if _ACTION == nil then
-	error("no action (vs20**, gmake or xcode for example) provided")
-end
-
--- START OF NEW FLAGS BLOCK (C11, GNU11, GNU++11, GNU++14)
-
-table.insert(premake.field._list.flags.allowed, "C11")
-table.insert(premake.field._list.flags.allowed, "GNU11")
-table.insert(premake.field._list.flags.allowed, "GNU++11")
-table.insert(premake.field._list.flags.allowed, "GNU++14")
-premake.field._list.flags.allowed["c11"] = "C11"
-premake.field._list.flags.allowed["gnu11"] = "GNU11"
-premake.field._list.flags.allowed["gnu++11"] = "GNU++11"
-premake.field._list.flags.allowed["gnu++14"] = "GNU++14"
-
-table.insert(premake.field._loweredList.flags.allowed, "C11")
-table.insert(premake.field._loweredList.flags.allowed, "GNU11")
-table.insert(premake.field._loweredList.flags.allowed, "GNU++11")
-table.insert(premake.field._loweredList.flags.allowed, "GNU++14")
-premake.field._loweredList.flags.allowed["c11"] = "C11"
-premake.field._loweredList.flags.allowed["gnu11"] = "GNU11"
-premake.field._loweredList.flags.allowed["gnu++11"] = "GNU++11"
-premake.field._loweredList.flags.allowed["gnu++14"] = "GNU++14"
-
-table.insert(premake.fields.flags.allowed, "C11")
-table.insert(premake.fields.flags.allowed, "GNU11")
-table.insert(premake.fields.flags.allowed, "GNU++11")
-table.insert(premake.fields.flags.allowed, "GNU++14")
-premake.fields.flags.allowed["c11"] = "C11"
-premake.fields.flags.allowed["gnu11"] = "GNU11"
-premake.fields.flags.allowed["gnu++11"] = "GNU++11"
-premake.fields.flags.allowed["gnu++14"] = "GNU++14"
-
-if premake.tools.clang.cflags and premake.tools.clang.cflags.flags then
-	premake.tools.clang.cflags.flags["C11"] = "-std=c11"
-end
-
-if premake.tools.clang.cflags and premake.tools.clang.cflags.flags then
-	premake.tools.clang.cflags.flags["GNU11"] = "-std=gnu11"
-end
-
-if premake.tools.clang.cxxflags and premake.tools.clang.cxxflags.flags then
-	premake.tools.clang.cxxflags.flags["GNU++11"] = "-std=gnu++11"
-end
-
-if premake.tools.clang.cxxflags and premake.tools.clang.cxxflags.flags then
-	premake.tools.clang.cxxflags.flags["GNU++14"] = "-std=gnu++14"
-end
-
-if premake.tools.gcc.cflags and premake.tools.gcc.cflags.flags then
-	premake.tools.gcc.cflags.flags["C11"] = "-std=c11"
-end
-
-if premake.tools.gcc.cflags and premake.tools.gcc.cflags.flags then
-	premake.tools.gcc.cflags.flags["GNU11"] = "-std=gnu11"
-end
-
-if premake.tools.gcc.cxxflags and premake.tools.gcc.cxxflags.flags then
-	premake.tools.gcc.cxxflags.flags["GNU++11"] = "-std=gnu++11"
-end
-
-if premake.tools.gcc.cxxflags and premake.tools.gcc.cxxflags.flags then
-	premake.tools.gcc.cxxflags.flags["GNU++14"] = "-std=gnu++14"
-end
-
--- END OF NEW FLAGS BLOCK (C11, GNU11, GNU++11, GNU++14)
+assert(_ACTION ~= nil, "no action (vs20**, gmake or xcode for example) provided!")
 
 include("config.lua")
-include("premake/lua_shared.lua")
-include("premake/detouring.lua")
-include("premake/scanning.lua")
-include("premake/sourcesdk.lua")
-include("premake/pkg_config.lua")
 
 newoption({
 	trigger = "workspace",
@@ -93,65 +23,77 @@ end
 
 _GARRYSMOD_COMMON_DIRECTORY = CleanPath(_SCRIPT_DIR)
 
+includeexternal("premake/lua_shared.lua")
+includeexternal("premake/detouring.lua")
+includeexternal("premake/scanning.lua")
+includeexternal("premake/sourcesdk.lua")
+includeexternal("premake/pkg_config.lua")
+
 function CreateWorkspace(config)
-	if type(config) ~= "table" then
-		error("supplied argument is not a table")
-	end
+	assert(type(config) == "table", "supplied argument is not a table!")
 
 	local name = config.name
-	if name == nil then
-		error("you didn't supply a name for your workspace")
-	end
+	assert(type(name) == "string", "'name' is not a string!")
 
 	local directory = config.path or _OPTIONS["workspace"] or DEFAULT_WORKSPACE_DIRECTORY
-	if directory == nil then
-		error("you didn't supply a path for your workspace directory")
-	end
+	assert(type(directory) == "string", "workspace path is not a string!")
 
 	directory = CleanPath(directory)
 
-	local allowdebug = config.allow_debug
-	if allowdebug == nil then
-		allowdebug = true
+	local _workspace = workspace(name)
+	assert(_workspace.directory == nil, "a workspace with the name '" .. name .. "' already exists!")
+
+	local abi_compatible
+	if config.allow_debug ~= nil then
+		assert(type(config.allow_debug) == "boolean", "'allow_debug' is not a boolean!")
+		print("WARNING: The 'allow_debug' option has been deprecated in favor of 'abi_compatible' (same functionality, better name, takes precedence over 'allow_debug', allows setting per project where the workspace setting takes precedence if set to true)")
+		abi_compatible = not config.allow_debug
 	end
 
-	local _workspace = workspace(name)
-	if _workspace.directory ~= nil then
-		error("a workspace with this name ('" .. name .. "') already exists")
+	if config.abi_compatible ~= nil then
+		abi_compatible = config.abi_compatible
+		assert(type(abi_compatible) == "boolean", "'abi_compatible' is not a boolean!")
+		_workspace.abi_compatible = abi_compatible
 	end
 
 	_workspace.directory = directory
 
 		language("C++")
+		cppdialect("GNU++11")
 		location(_workspace.directory)
 		warnings("Extra")
 		flags({"NoPCH", "StaticRuntime"})
 		characterset("MBCS")
 		platforms("x86")
+		architecture("x32")
 
-		if allowdebug then
-			configurations({"Release", "Debug"})
-		else
+		if abi_compatible then
 			configurations("Release")
+		else
+			configurations({"Release", "Debug"})
 		end
-
-		filter("platforms:x86")
-			architecture("x32")
 
 		filter("configurations:Release")
 			optimize("On")
 			vectorextensions("SSE2")
+			defines("NDEBUG")
 			objdir(_workspace.directory .. "/intermediate")
 			targetdir(_workspace.directory .. "/release")
 
-		filter("configurations:Debug")
-			symbols("On")
-			defines({"DEBUG", "_DEBUG"})
-			objdir(_workspace.directory .. "/intermediate")
-			targetdir(_workspace.directory .. "/debug")
+		if not abi_compatible then
+			filter("configurations:Debug")
+				symbols("On")
+				defines({"DEBUG", "_DEBUG"})
+				objdir(_workspace.directory .. "/intermediate")
+				targetdir(_workspace.directory .. "/debug")
+		end
 
-		filter("system:linux")
-			linkoptions({"-static-libgcc", "-static-libstdc++"})
+		filter("system:windows")
+			defines({
+				"_CRT_NONSTDC_NO_WARNINGS",
+				"_CRT_SECURE_NO_WARNINGS",
+				"STRICT"
+			})
 
 		filter({})
 end
@@ -162,39 +104,154 @@ newoption({
 	value = "path to source directory"
 })
 
-function CreateProject(config)
-	if type(config) ~= "table" then
-		error("supplied argument is not a table")
+newoption({
+	trigger = "autoinstall",
+	description = "Automatically installs the module to GarrysMod/garrysmod/bin (works as a flag and a receiver for a path)"
+})
+
+local function GetSteamLibraryDirectories()
+	local dir
+
+	if os.istarget("windows") then
+		if os.getWindowsRegistry("HKCU:\\Software\\Valve\\Steam\\SteamPath") then
+			dir = os.getWindowsRegistry("HKCU:\\Software\\Valve\\Steam\\SteamPath") .. "/SteamApps/"
+		else
+			local p = io.popen("wmic logicaldisk get caption")
+
+			for line in p:read("*a"):gmatch("%S+") do
+				if line ~= "Caption" then
+					local steamDir1 = string.format("%s\\Program Files (x86)\\Steam\\SteamApps\\", line)
+					local steamDir2 = string.format("%s\\Program Files\\Steam\\SteamApps\\", line)
+
+					if os.isdir(steamDir1) then
+						dir = steamDir1
+					elseif os.isdir(steamDir2) then
+						dir = steamDir2
+					end
+				end
+			end
+
+			p:close()
+		end
+	elseif os.istarget("linux") then
+		dir = path.join(os.getenv("HOME") or "~", ".local/share/Steam/SteamApps/")
+	elseif os.istarget("macosx") then
+		dir = path.join(os.getenv("HOME") or "~", "Library/Application Support/Steam/SteamApps/")
 	end
 
-	local is_server = config.serverside
-	if is_server == nil then
-		error("you didn't specify if the project is for a serverside module or not")
+	if dir then
+		local dirs = {dir}
+
+		if os.isfile(dir .. "libraryfolders.vdf") then
+			local f = io.open(dir .. "libraryfolders.vdf","r")
+
+			for _, libdir in f:read("*a"):gmatch("\n%s*\"(%d+)\"%s*\"(.-)\"") do
+				if os.isdir(libdir) then
+					if os.isdir(libdir .. "\\steamapps") then
+						libdir = libdir .. "\\steamapps"
+					end
+
+					dirs[#dirs + 1] = libdir:gsub("\\\\","\\")
+
+					local pathSep = dirs[#dirs]:match("[/\\]")
+					if dirs[#dirs]:sub(-1, -1) ~= pathSep then
+						dirs[#dirs] = dirs[#dirs] .. pathSep
+					end
+				end
+			end
+
+			f:close()
+		end
+
+		return dirs
 	end
+
+	return {}
+end
+
+local function FindGarrysModDirectory()
+	local dirs = GetSteamLibraryDirectories()
+
+	for _, dir in ipairs(dirs) do
+		if os.isdir(dir .. "common/GarrysMod/") then
+			return dir .. "common/GarrysMod/"
+		elseif os.isdir(dir .. "common/garrysmod/") then
+			return dir .. "common/garrysmod/"
+		end
+	end
+
+	return
+end
+
+local function FindGarrysModLuaBinDirectory()
+	local dir = FindGarrysModDirectory()
+	if not dir then
+		return
+	end
+
+	if not os.isdir(dir .. "garrysmod/lua/bin") then
+		os.mkdir(dir .. "garrysmod/lua/bin")
+	end
+
+	return dir .. "garrysmod/lua/bin/"
+end
+
+function CreateProject(config)
+	assert(type(config) == "table", "supplied argument is not a table!")
+
+	local is_server = config.serverside
+	assert(type(is_server) == "boolean", "'serverside' option is not a boolean!")
+
+	local sourcepath = config.source_path or _OPTIONS["source"] or DEFAULT_SOURCE_DIRECTORY
+	assert(type(sourcepath) == "string", "source code path is not a string!")
 
 	local manual_files = config.manual_files
 	if manual_files == nil then
 		manual_files = false
-	end
-
-	local sourcepath = config.source_path or _OPTIONS["source"] or DEFAULT_SOURCE_DIRECTORY
-	if sourcepath == nil then
-		error("you didn't supply a path to your source directory")
+	else
+		assert(type(manual_files) == "boolean", "'manual_files' is not a boolean!")
 	end
 
 	local _workspace = workspace()
 
-	local name = (is_server and "gmsv_" or "gmcl_") .. _workspace.name
-	local _project = project(name)
-	if _project.directory ~= nil then
-		error("a project with this name ('" .. name .. "') already exists")
+	local abi_compatible = _workspace.abi_compatible
+	if not abi_compatible then
+		if config.abi_compatible ~= nil then
+			abi_compatible = config.abi_compatible
+			assert(type(abi_compatible) == "boolean", "'abi_compatible' is not a boolean!")
+		else
+			abi_compatible = false
+		end
 	end
+
+	local name = (is_server and "gmsv_" or "gmcl_") .. _workspace.name
+
+	if abi_compatible then
+		if os.istarget("windows") and _ACTION ~= "vs2017" then
+			error("The only supported compilation platform for this project (" .. name .. ") on Windows is Visual Studio 2017.")
+		elseif os.istarget("linux") then
+			print("WARNING: The only supported compilation platforms (tested) for this project (" .. name .. ") on Linux are GCC/G++ 4.8 or 4.9. However, any version between 4.4 and 4.9 *MIGHT* work.")
+		elseif os.istarget("macosx") then
+			print("WARNING: The only supported compilation platform (tested) for this project (" .. name .. ") on Mac OSX is Xcode 4.1 (GCC/G++ compiler). However, any Xcode version *MIGHT* work as long as the Mac OSX 10.5 SDK is used (-mmacosx-version-min=10.5).")
+		end
+	end
+
+	local _project = project(name)
+
+	assert(_project.directory == nil, "a project with the name '" .. name .. "' already exists!")
 
 	_project.directory = CleanPath(sourcepath)
 	_project.serverside = is_server
 
+		if abi_compatible then
+			removeconfigurations("Debug")
+			configurations("Release")
+		else
+			configurations({"Release", "Debug"})
+		end
+
 		kind("SharedLib")
-		language("C++11")
+		language("C++")
 		defines({
 			"GMMODULE",
 			string.upper(string.gsub(_workspace.name, "%.", "_")) .. (_project.serverside and "_SERVER" or "_CLIENT"),
@@ -229,6 +286,11 @@ function CreateProject(config)
 			}
 		})
 
+		if abi_compatible then
+			files(_GARRYSMOD_COMMON_DIRECTORY .. "/source/ABICompatibility.cpp")
+			vpaths({["Source files/garrysmod_common"] = _GARRYSMOD_COMMON_DIRECTORY .. "/source/ABICompatibility.cpp"})
+		end
+
 		targetprefix("")
 		targetextension(".dll")
 
@@ -237,9 +299,26 @@ function CreateProject(config)
 
 		filter("system:linux")
 			targetsuffix("_linux")
+			linkoptions({"-static-libgcc", "-static-libstdc++"})
 
 		filter("system:macosx")
 			targetsuffix("_osx")
+
+			if abi_compatible then
+				buildoptions("-mmacosx-version-min=10.5")
+				linkoptions("-mmacosx-version-min=10.5")
+			end
+
+		if _OPTIONS["autoinstall"] then
+			local binDir = _OPTIONS["autoinstall"] ~= "" and _OPTIONS["autoinstall"] or os.getenv("GARRYSMOD_LUA_BIN") or FindGarrysModLuaBinDirectory() or DEFAULT_GARRYSMOD_LUA_BIN_DIRECTORY
+			assert(type(binDir) == "string", "The path to GarrysMod/garrysmod/lua/bin is not a string!")
+
+			filter("system:windows")
+				postbuildcommands({"{COPY} %{cfg.buildtarget.abspath} \"" .. binDir .. "\""})
+
+			filter("system:not windows")
+				postbuildcommands({"{COPY} %{cfg.buildtarget.abspath} \"" .. binDir .. "%{cfg.buildtarget.name}\""})
+		end
 
 		filter({})
 end
@@ -251,9 +330,6 @@ function HasIncludedPackage(name)
 end
 
 function IncludePackage(name)
-	if HasIncludedPackage(name) then
-		error("this package ('" .. name .. "') was already included")
-	end
-
+	assert(not HasIncludedPackage(name), "a project with the name '" .. name .. "' already exists!")
 	project().packages[name] = true
 end

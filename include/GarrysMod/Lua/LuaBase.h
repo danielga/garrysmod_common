@@ -3,12 +3,22 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include <stdarg.h>
 
 #include "Types.h"
 #include "UserData.h"
 #include "SourceCompat.h"
 
 struct lua_State;
+
+extern "C"
+{
+    extern void ( *lua_getfenv )( lua_State *L, int idx );
+    extern int ( *lua_setfenv )( lua_State *L, int idx );
+    extern const char *( *lua_pushvfstring )( lua_State *L, const char *fmt, va_list argp );
+    extern int ( *lua_error )( lua_State *L );
+    extern int ( *luaL_typerror )( lua_State *L, int narg, const char *tname );
+}
 
 namespace GarrysMod
 {
@@ -48,7 +58,7 @@ namespace GarrysMod
                 // table = value at iStackPos
                 // key   = strName
                 virtual void        GetField( int iStackPos, const char* strName ) = 0;
-
+                
                 // Sets table[key] to the value at the top of the stack
                 // table = value at iStackPos
                 // key   = strName
@@ -67,7 +77,7 @@ namespace GarrysMod
                 // Sets the metatable for the value at iStackPos to the value at the top of the stack
                 // Pops the value off of the top of the stack
                 virtual void        SetMetaTable( int iStackPos ) = 0;
-                
+
                 // Pushes the metatable of the value at iStackPos on to the top of the stack
                 // Upon failure, returns false and does not push anything
                 virtual bool        GetMetaTable( int i ) = 0;
@@ -92,7 +102,7 @@ namespace GarrysMod
                 // Moves the value at the top of the stack in to iStackPos
                 // Any elements above iStackPos are shifted upwards
                 virtual void        Insert( int iStackPos ) = 0;
-                
+
                 // Removes the value at iStackPos from the stack
                 // Any elements above iStackPos are shifted downwards
                 virtual void        Remove( int iStackPos ) = 0;
@@ -154,7 +164,11 @@ namespace GarrysMod
                 virtual CFunc       GetCFunction( int iStackPos = -1 ) = 0;
 
                 // You should probably be using the UserType functions instead of this
+#ifdef GMOD_ALLOW_DEPRECATED
+                virtual void*       GetUserdata( int iStackPos = -1 ) = 0;
+#else
                 virtual UserData*   GetUserdata( int iStackPos = -1 ) = 0;
+#endif
 
                 // Pushes a nil value on to the stack
                 virtual void        PushNil() = 0;
@@ -212,14 +226,14 @@ namespace GarrysMod
                 // If these functions error, any local C values will not have their destructors called!
                 virtual const char* CheckString( int iStackPos = -1 ) = 0;
                 virtual double      CheckNumber( int iStackPos = -1 ) = 0;
-                
+
                 // Returns the length of the object at iStackPos
                 // Works for: strings, tables, userdata
                 virtual int         ObjLen( int iStackPos = -1 ) = 0;
 
                 // Returns the angle at iStackPos
                 virtual const QAngle& GetAngle( int iStackPos = -1 ) = 0;
-                
+
                 // Returns the vector at iStackPos
                 virtual const Vector& GetVector( int iStackPos = -1 ) = 0;
 
@@ -243,7 +257,7 @@ namespace GarrysMod
 
                 // Created a new UserData of type iType that references the given data
                 virtual void        PushUserType( void* data, int iType ) = 0;
-                
+
                 // Sets the data pointer of the UserType at iStackPos
                 // You can use this to invalidate a UserType by passing NULL
                 virtual void        SetUserType( int iStackPos, void* data ) = 0;
@@ -252,12 +266,12 @@ namespace GarrysMod
                 template <class T>
                 T* GetUserType( int iStackPos, int iType )
                 {
-                    UserData* ud = GetUserdata( iStackPos );
+                    UserData* ud = static_cast<UserData*>( GetUserdata( iStackPos ) );
 
                     if ( ud == NULL || ud->data == NULL || ud->type != iType )
                         return NULL;
 
-                    return reinterpret_cast<T*>( ud->data );
+                    return static_cast<T*>( ud->data );
                 }
 
                 // Creates a new UserData of type iType with an instance of T
@@ -266,20 +280,71 @@ namespace GarrysMod
                 template <typename T>
                 T* NewUserType( int iType )
                 {
-                    UserData* ud = NewUserdata( sizeof( UserData ) + sizeof( T ) );
+                    UserData* ud = static_cast<UserData*>( NewUserdata( sizeof( UserData ) + sizeof( T ) ) );
                     if( ud == NULL )
                         return NULL;
 
                     T* data = reinterpret_cast<T*>( reinterpret_cast<uintptr_t>( ud ) + sizeof( UserData ) );
                     ud->data = new( data ) T;
-                    ud->type = iType;
+                    ud->type = static_cast<unsigned char>( iType );
 
                     return data;
                 }
 
-                inline lua_State *GetLuaState( ) const
+                // Gets the internal lua_State
+                inline lua_State *GetState( ) const
                 {
                     return state;
+                }
+
+                // Gets the environment table of the value at the given index
+                inline void GetFEnv( int iStackPos )
+                {
+                    lua_getfenv( state, iStackPos );
+                }
+
+                // Sets the environment table of the value at the given index
+                inline int SetFEnv( int iStackPos )
+                {
+                    return lua_setfenv( state, iStackPos );
+                }
+
+                // Pushes a formatted string onto the stack
+                inline const char *PushFormattedString( const char *fmt, va_list args )
+                {
+                    return lua_pushvfstring( state, fmt, args );
+                }
+
+                // Pushes a formatted string onto the stack
+                inline const char *PushFormattedString( const char *fmt, ... )
+                {
+                    va_list args;
+                    va_start( args, fmt );
+                    const char *res = PushFormattedString( fmt, args );
+                    va_end( args );
+                    return res;
+                }
+
+                // Throws an error (uses the value at the top of the stack)
+                inline int Error( )
+                {
+                    return lua_error( state );
+                }
+
+                // Throws an error (pushes a formatted string onto the stack and uses it)
+                inline int FormattedError( const char *fmt, ... )
+                {
+                    va_list args;
+                    va_start( args, fmt );
+                    PushFormattedString( fmt, args );
+                    va_end( args );
+                    return Error( );
+                }
+
+                // Throws an error related to type differences
+                inline int TypeError( int iStackPos, const char *tname )
+                {
+                    return luaL_typerror( state, iStackPos, tname );
                 }
 
             private:

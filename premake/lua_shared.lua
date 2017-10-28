@@ -3,28 +3,48 @@ function IncludeLuaShared()
 
 	local _project = project()
 	local _workspace = _project.workspace
+	local _project_directory = _GARRYSMOD_COMMON_DIRECTORY .. "/projects/" .. os.target() .. "/" .. _ACTION
 
 	includedirs(_GARRYSMOD_COMMON_DIRECTORY .. "/include")
+	links("lua_shared")
 
-	filter("system:windows")
-		libdirs(_GARRYSMOD_COMMON_DIRECTORY .. "/lib/windows")
-		links("lua_shared")
-
-	filter("system:linux")
-		local library = _project.serverside and "lua_shared_srv.so" or "lua_shared.so"
-		prelinkcommands({
-			"mkdir -p " .. path.getabsolute(_workspace.directory) .. "/garrysmod/bin",
-			"ln -f " .. _GARRYSMOD_COMMON_DIRECTORY .. "/lib/linux/" .. library .. " " .. path.getabsolute(_workspace.directory) .. "/garrysmod/bin/" .. library
+	project("lua_shared")
+		kind("StaticLib")
+		language("C++")
+		cppdialect("C++11")
+		location(_GARRYSMOD_COMMON_DIRECTORY .. "/projects/" .. os.target() .. "/" .. _ACTION)
+		includedirs(_GARRYSMOD_COMMON_DIRECTORY .. "/include")
+		files({
+			_GARRYSMOD_COMMON_DIRECTORY .. "/include/**.h",
+			_GARRYSMOD_COMMON_DIRECTORY .. "/include/**.hpp",
+			_GARRYSMOD_COMMON_DIRECTORY .. "/source/LuaShared.cpp"
 		})
-		linkoptions({
-			"-Wl,--no-as-needed",
-			"garrysmod/bin/" .. library,
-			"-Wl,--as-needed"
+		vpaths({
+			["Header files/*"] = {
+				_GARRYSMOD_COMMON_DIRECTORY .. "/include/**.h",
+				_GARRYSMOD_COMMON_DIRECTORY .. "/include/**.hpp"
+			},
+			["Source files/*"] = _GARRYSMOD_COMMON_DIRECTORY .. "/source/LuaShared.cpp"
 		})
 
-	filter("system:macosx")
-		libdirs(_GARRYSMOD_COMMON_DIRECTORY .. "/lib/macosx")
-		links("lua_shared")
+		filter("configurations:Release")
+			objdir(_project_directory .. "/intermediate")
+			targetdir(_project_directory .. "/release")
 
-	filter({})
+		if not _workspace.abi_compatible then
+			filter("configurations:Debug")
+				objdir(_project_directory .. "/intermediate")
+				targetdir(_project_directory .. "/debug")
+		end
+
+		filter("system:linux or macosx")
+			links("dl")
+
+		if _workspace.abi_compatible then
+			filter("system:macosx")
+				buildoptions("-mmacosx-version-min=10.5")
+				linkoptions("-mmacosx-version-min=10.5")
+		end
+
+	project(_project.name)
 end

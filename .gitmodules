@@ -1,6 +1,6 @@
 [submodule "detouring"]
-	path = detouring
+	path = include/detouring
 	url = https://github.com/danielga/detouring.git
 [submodule "scanning"]
-	path = scanning
+	path = include/scanning
 	url = https://github.com/danielga/scanning.git
