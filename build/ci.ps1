@@ -73,5 +73,4 @@ cd "$env:REPOSITORY_DIR/projects/windows/vs2017"
 
 msbuild "$env:MODULE_NAME.sln" /p:Configuration=Release
 
-cp "$env:REPOSITORY_DIR/projects/windows/vs2017/release/gm*_${env:MODULE_NAME}_win32.dll" "$env:REPOSITORY_DIR"
 cd "$env:REPOSITORY_DIR"

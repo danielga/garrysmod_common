@@ -53,5 +53,4 @@ cd "$REPOSITORY_DIR/projects/$PROJECT_OS/gmake"
 
 make
 
-cp "$REPOSITORY_DIR/projects/$PROJECT_OS/gmake/release/"gm*_${MODULE_NAME}_$TARGET_OS.dll "$REPOSITORY_DIR"
 cd "$REPOSITORY_DIR"

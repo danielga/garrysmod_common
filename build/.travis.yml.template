@@ -4,6 +4,7 @@ os:
   - linux
   - osx
 osx_image: xcode7.3
+if: tag IS present
 cache:
   directories:
     - "$TRAVIS_BUILD_DIR/dependencies"
@@ -41,8 +42,8 @@ deploy:
   provider: releases
   skip_cleanup: true
   file:
-  	- "gmsv_${MODULE_NAME}_$TARGET_OS.dll"
-  	- "gmcl_${MODULE_NAME}_$TARGET_OS.dll"
+  	- "$TRAVIS_BUILD_DIR/projects/$PROJECT_OS/gmake/release/gmsv_${MODULE_NAME}_$TARGET_OS.dll"
+  	- "$TRAVIS_BUILD_DIR/projects/$PROJECT_OS/gmake/release/gmcl_${MODULE_NAME}_$TARGET_OS.dll"
   on:
     tags: true
   api_key:

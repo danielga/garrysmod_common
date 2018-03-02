@@ -305,8 +305,8 @@ function CreateProject(config)
 			targetsuffix("_osx")
 
 			if abi_compatible then
-				buildoptions("-mmacosx-version-min=10.5")
-				linkoptions("-mmacosx-version-min=10.5")
+				buildoptions("-mmacosx-version-min=10.7")
+				linkoptions("-mmacosx-version-min=10.7")
 			end
 
 		if _OPTIONS["autoinstall"] then

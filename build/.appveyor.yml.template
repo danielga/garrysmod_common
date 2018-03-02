@@ -1,0 +1,31 @@
+version: '{build}'
+skip_non_tags: true
+image: Visual Studio 2017
+clone_depth: 5
+init:
+- ps: git config --global core.autocrlf true
+environment:
+  MODULE_NAME: module name here
+  REPOSITORY_DIR: $(APPVEYOR_BUILD_FOLDER)
+  DEPENDENCIES: $(APPVEYOR_BUILD_FOLDER)/dependencies
+  GARRYSMOD_COMMON: $(APPVEYOR_BUILD_FOLDER)/dependencies/garrysmod_common
+  SOURCE_SDK: $(APPVEYOR_BUILD_FOLDER)/dependencies/sourcesdk-minimal
+  PREMAKE5: $(APPVEYOR_BUILD_FOLDER)/dependencies/windows/premake-core/premake5.exe
+cache:
+- $(APPVEYOR_BUILD_FOLDER)/dependencies/
+- $(APPVEYOR_BUILD_FOLDER)/projects/
+build_script:
+- ps: '& "$env:REPOSITORY_DIR/ci.ps1"'
+test: off
+artifacts:
+- path: projects/windows/vs2017/release/gmsv_$(MODULE_NAME)_win32.dll
+  name: gmsv_$(MODULE_NAME)_win32.dll
+- path: projects/windows/vs2017/release/gmcl_$(MODULE_NAME)_win32.dll
+  name: gmcl_$(MODULE_NAME)_win32.dll
+deploy:
+- provider: GitHub
+  tag: $(APPVEYOR_REPO_TAG_NAME)
+  auth_token:
+    secure: encrypted api key for appveyor here (https://ci.appveyor.com/tools/encrypt)
+  artifact: projects/windows/vs2017/release/gmsv_$(MODULE_NAME)_win32.dll,projects/windows/vs2017/release/gmcl_$(MODULE_NAME)_win32.dll
+  force_update: true

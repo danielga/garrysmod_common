@@ -19,8 +19,8 @@ job_win32:
   script: "& \"$CI_PROJECT_DIR/ci.ps1\""
   artifacts:
     paths:
-      - "gmsv_${MODULE_NAME}_win32.dll"
-      - "gmcl_${MODULE_NAME}_win32.dll"
+      - "$CI_PROJECT_DIR/projects/windows/vs2017/release/gmsv_${MODULE_NAME}_win32.dll"
+      - "$CI_PROJECT_DIR/projects/windows/vs2017/release/gmcl_${MODULE_NAME}_win32.dll"
 job_linux:
   stage: build
   tags:
@@ -31,13 +31,13 @@ job_linux:
     PROJECT_OS: "linux"
     TARGET_OS: "linux"
     PREMAKE5: "$CI_PROJECT_DIR/dependencies/linux/premake-core/premake5"
-    CXX: "g++-4.9"
-    CC: "gcc-4.9"
+    CXX: "g++-4.8"
+    CC: "gcc-4.8"
   script: "$CI_PROJECT_DIR/ci.sh"
   artifacts:
     paths:
-      - "gmsv_${MODULE_NAME}_linux.dll"
-      - "gmcl_${MODULE_NAME}_linux.dll"
+      - "$CI_PROJECT_DIR/projects/linux/gmake/release/gmsv_${MODULE_NAME}_linux.dll"
+      - "$CI_PROJECT_DIR/projects/linux/gmake/release/gmcl_${MODULE_NAME}_linux.dll"
 job_macosx:
   stage: build
   tags:
@@ -53,5 +53,5 @@ job_macosx:
   script: "$CI_PROJECT_DIR/ci.sh"
   artifacts:
     paths:
-      - "gmsv_${MODULE_NAME}_osx.dll"
-      - "gmcl_${MODULE_NAME}_osx.dll"
+      - "$CI_PROJECT_DIR/projects/macosx/gmake/release/gmsv_${MODULE_NAME}_osx.dll"
+      - "$CI_PROJECT_DIR/projects/macosx/vs2017/release/gmcl_${MODULE_NAME}_osx.dll"
