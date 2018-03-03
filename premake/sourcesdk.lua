@@ -52,7 +52,7 @@ local function IncludeSDKCommonInternal(directory)
 			"unused-parameter",
 			"strict-aliasing",
 			"unknown-pragmas",
-			"no-invalid-offsetof"
+			"invalid-offsetof"
 		})
 		defines({"COMPILER_GCC", "POSIX", "_POSIX", "LINUX", "_LINUX", "GNUC", "NO_MALLOC_OVERRIDE"})
 		libdirs(path.getabsolute(directory) .. "/lib/public/linux32")
@@ -66,7 +66,7 @@ local function IncludeSDKCommonInternal(directory)
 			"unknown-pragmas",
 			"unused-variable",
 			"unknown-warning-option",
-			"no-invalid-offsetof"
+			"invalid-offsetof"
 		})
 		defines({"COMPILER_GCC", "POSIX", "_POSIX", "OSX", "GNUC", "NO_MALLOC_OVERRIDE"})
 		libdirs(path.getabsolute(directory) .. "/lib/public/osx32")
