@@ -12,9 +12,9 @@
 
 #include <AvailabilityMacros.h>
 
-#if MAC_OS_X_VERSION_MIN_REQUIRED != 1050
+#if MAC_OS_X_VERSION_MIN_REQUIRED != 1070
 
-#error The only supported compilation platform for this project on Mac OS X is GCC with Mac OS X 10.5 SDK (for ABI compatibility reasons).
+#error The only supported compilation platform for this project on Mac OS X is GCC with Mac OS X 10.7 SDK (for ABI compatibility reasons).
 
 #endif
 

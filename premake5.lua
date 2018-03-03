@@ -233,7 +233,7 @@ function CreateProject(config)
 		elseif os.istarget("linux") then
 			print("WARNING: The only supported compilation platforms (tested) for this project (" .. name .. ") on Linux are GCC/G++ 4.8 or 4.9. However, any version between 4.4 and 4.9 *MIGHT* work.")
 		elseif os.istarget("macosx") then
-			print("WARNING: The only supported compilation platform (tested) for this project (" .. name .. ") on Mac OSX is Xcode 4.1 (GCC/G++ compiler). However, any Xcode version *MIGHT* work as long as the Mac OSX 10.5 SDK is used (-mmacosx-version-min=10.5).")
+			print("WARNING: The only supported compilation platform (tested) for this project (" .. name .. ") on Mac OSX is Xcode 4.1 (GCC/G++ compiler). However, any Xcode version *MIGHT* work as long as the Mac OSX 10.7 SDK is used (-mmacosx-version-min=10.7).")
 		end
 	end
 
