@@ -51,7 +51,8 @@ local function IncludeSDKCommonInternal(directory)
 			"unused-local-typedefs",
 			"unused-parameter",
 			"strict-aliasing",
-			"unknown-pragmas"
+			"unknown-pragmas",
+			"no-invalid-offsetof"
 		})
 		defines({"COMPILER_GCC", "POSIX", "_POSIX", "LINUX", "_LINUX", "GNUC", "NO_MALLOC_OVERRIDE"})
 		libdirs(path.getabsolute(directory) .. "/lib/public/linux32")
@@ -64,7 +65,8 @@ local function IncludeSDKCommonInternal(directory)
 			"overloaded-virtual",
 			"unknown-pragmas",
 			"unused-variable",
-			"unknown-warning-option"
+			"unknown-warning-option",
+			"no-invalid-offsetof"
 		})
 		defines({"COMPILER_GCC", "POSIX", "_POSIX", "OSX", "GNUC", "NO_MALLOC_OVERRIDE"})
 		libdirs(path.getabsolute(directory) .. "/lib/public/osx32")
