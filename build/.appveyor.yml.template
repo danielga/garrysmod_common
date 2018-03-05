@@ -1,31 +1,44 @@
 version: '{build}'
 skip_non_tags: true
 image: Visual Studio 2017
-clone_depth: 5
+clone_depth: 1
 init:
-- ps: git config --global core.autocrlf true
+- cmd: git config --global core.autocrlf true
 environment:
   MODULE_NAME: module name here
   REPOSITORY_DIR: $(APPVEYOR_BUILD_FOLDER)
   DEPENDENCIES: $(APPVEYOR_BUILD_FOLDER)/dependencies
   GARRYSMOD_COMMON: $(APPVEYOR_BUILD_FOLDER)/dependencies/garrysmod_common
   SOURCE_SDK: $(APPVEYOR_BUILD_FOLDER)/dependencies/sourcesdk-minimal
+  PREMAKE5_EXECUTABLE: premake5.exe
   PREMAKE5: $(APPVEYOR_BUILD_FOLDER)/dependencies/windows/premake-core/premake5.exe
+  BUILD_SCRIPT: $(APPVEYOR_BUILD_FOLDER)/dependencies/garrysmod_common/build/ci.ps1
+  GARRYSMOD_COMMON_REPOSITORY: https://github.com/danielga/garrysmod_common.git
+  PROJECT_OS: windows
+  TARGET_OS: win32
+  COMPILER_PLATFORM: vs2017
+install:
+- cmd: >-
+    if not exist "%DEPENDENCIES%/" mkdir "%DEPENDENCIES%"
+
+    if exist "%GARRYSMOD_COMMON%/premake5.lua" (echo "garrysmod_common directory is good, pulling any latest changes" & git -C "%GARRYSMOD_COMMON%" pull & git -C "%GARRYSMOD_COMMON%" submodule update --init --recursive)
+
+    if not exist "%GARRYSMOD_COMMON%/premake5.lua" (echo "garrysmod_common directory is empty, doing git clone of the remote repo" & git clone --recursive "%GARRYSMOD_COMMON_REPOSITORY%" "%GARRYSMOD_COMMON%")
 cache:
 - $(APPVEYOR_BUILD_FOLDER)/dependencies/
 - $(APPVEYOR_BUILD_FOLDER)/projects/
 build_script:
-- ps: '& "$env:REPOSITORY_DIR/ci.ps1"'
+- cmd: '"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars32.bat" && powershell -File "%BUILD_SCRIPT%"'
 test: off
 artifacts:
-- path: projects/windows/vs2017/release/gmsv_$(MODULE_NAME)_win32.dll
-  name: gmsv_$(MODULE_NAME)_win32.dll
-- path: projects/windows/vs2017/release/gmcl_$(MODULE_NAME)_win32.dll
-  name: gmcl_$(MODULE_NAME)_win32.dll
+- path: projects/$(PROJECT_OS)/$(COMPILER_PLATFORM)/release/gmsv_$(MODULE_NAME)_$(TARGET_OS).dll
+  name: gmsv_$(MODULE_NAME)_$(TARGET_OS).dll
+- path: projects/$(PROJECT_OS)/$(COMPILER_PLATFORM)/release/gmcl_$(MODULE_NAME)_$(TARGET_OS).dll
+  name: gmcl_$(MODULE_NAME)_$(TARGET_OS).dll
 deploy:
 - provider: GitHub
   tag: $(APPVEYOR_REPO_TAG_NAME)
   auth_token:
     secure: encrypted api key for appveyor here (https://ci.appveyor.com/tools/encrypt)
-  artifact: projects/windows/vs2017/release/gmsv_$(MODULE_NAME)_win32.dll,projects/windows/vs2017/release/gmcl_$(MODULE_NAME)_win32.dll
+  artifact: projects/$(PROJECT_OS)/$(COMPILER_PLATFORM)/release/gmsv_$(MODULE_NAME)_$(TARGET_OS).dll,projects/$(PROJECT_OS)/$(COMPILER_PLATFORM)/release/gmcl_$(MODULE_NAME)_$(TARGET_OS).dll
   force_update: true

@@ -1,56 +1,66 @@
 #!/bin/bash
 
-mkdir -p "$DEPENDENCIES"
-cd "$DEPENDENCIES"
+if [ ! -z ${SOURCE_SDK+x} ]; then
+	if [ ! -f "$SOURCE_SDK/LICENSE" ]; then
+		echo "sourcesdk-minimal local repository is empty, doing git clone of the remote repo";
+		git clone "https://github.com/danielga/sourcesdk-minimal.git" "$SOURCE_SDK";
+	else
+		LOCAL=$(git -C "$SOURCE_SDK" rev-parse @);
+		REMOTE=$(git -C "$SOURCE_SDK" rev-parse @{u});
+		BASE=$(git -C "$SOURCE_SDK" merge-base @ @{u});
 
-if [ ! -f "$GARRYSMOD_COMMON/premake5.lua" ]; then
-	echo "garrysmod_common directory is empty, doing git clone of the remote repo";
-	git clone --recursive https://github.com/danielga/garrysmod_common.git;
-else
-	echo "garrysmod_common directory is good, pulling any latest changes";
-	cd "$GARRYSMOD_COMMON";
-	git pull;
-	git submodule update --init --recursive;
+		if [ $LOCAL = $REMOTE ]; then
+			echo "sourcesdk-minimal local repository is good and needs no updates";
+		elif [ $LOCAL = $BASE ]; then
+			echo "sourcesdk-minimal local repository is good but needs updates";
+			git -C "$SOURCE_SDK" pull;
+		else
+			echo "sourcesdk-minimal local repository is bad, cloning again";
+			rm -rf "$SOURCE_SDK";
+			git clone "https://github.com/danielga/sourcesdk-minimal.git" "$SOURCE_SDK";
+		fi
+	fi
 fi
 
-cd "$DEPENDENCIES"
-
-if [ ! -f "$SOURCE_SDK/LICENSE" ]; then
-	echo "sourcesdk-minimal directory is empty, doing git clone of the remote repo";
-	git clone https://github.com/danielga/sourcesdk-minimal.git;
-else
-	echo "sourcesdk-minimal directory is good, pulling any latest changes";
-	cd "$SOURCE_SDK";
-	git pull;
-fi
-
-cd "$DEPENDENCIES"
-
+BUILD_PREMAKE5=false;
 if [ ! -f "$DEPENDENCIES/premake-core/premake5.lua" ]; then
-	echo "premake-core directory is empty, doing git clone of the remote repo";
-	git clone --recursive https://github.com/premake/premake-core.git;
+	echo "premake-core local repository is empty, doing git clone of the remote repo";
+	git clone "https://github.com/premake/premake-core.git" "$DEPENDENCIES/premake-core";
+	BUILD_PREMAKE5=true;
 else
-	echo "premake-core directory is good, pulling any latest changes";
-	cd "$DEPENDENCIES/premake-core";
-	git pull;
-	git submodule update --init --recursive;
+	LOCAL=$(git -C "$DEPENDENCIES/premake-core" rev-parse @);
+	REMOTE=$(git -C "$DEPENDENCIES/premake-core" rev-parse @{u});
+	BASE=$(git -C "$DEPENDENCIES/premake-core" merge-base @ @{u});
+
+	if [ $LOCAL = $REMOTE ]; then
+		echo "premake-core local repository is good and needs no updates";
+	elif [ $LOCAL = $BASE ]; then
+		echo "premake-core local repository is good but needs updates";
+		git -C "$DEPENDENCIES/premake-core" pull;
+		BUILD_PREMAKE5=true;
+	else
+		echo "premake-core local repository is bad, cloning again";
+		rm -rf "$DEPENDENCIES/premake-core";
+		git clone "https://github.com/premake/premake-core.git" "$DEPENDENCIES/premake-core";
+		BUILD_PREMAKE5=true;
+	fi
 fi
 
 mkdir -p "$DEPENDENCIES/$PROJECT_OS"
 
-if [ ! -f "$PREMAKE5" ]; then
-	echo "premake-core directory is empty, bootstrapping";
-	cd "$DEPENDENCIES/premake-core";
+if [ "$BUILD_PREMAKE5" = true ] ; then
+	echo "premake-core needs building, bootstrapping";
+	pushd "$DEPENDENCIES/premake-core";
 	make -f Bootstrap.mak "$TARGET_OS";
-	cd "$DEPENDENCIES";
+	popd
 	mkdir -p "$DEPENDENCIES/$PROJECT_OS/premake-core";
-	cp "$DEPENDENCIES/premake-core/bin/release/premake5" "$DEPENDENCIES/$PROJECT_OS/premake-core";
+	cp "$DEPENDENCIES/premake-core/bin/release/$PREMAKE5_EXECUTABLE" "$PREMAKE5";
 fi
 
-cd "$REPOSITORY_DIR/projects"
-"$PREMAKE5" gmake
-cd "$REPOSITORY_DIR/projects/$PROJECT_OS/gmake"
+pushd "$REPOSITORY_DIR/projects"
+"$PREMAKE5" "$COMPILER_PLATFORM"
+popd
 
+pushd "$REPOSITORY_DIR/projects/$PROJECT_OS/$COMPILER_PLATFORM"
 make
-
-cd "$REPOSITORY_DIR"
+popd

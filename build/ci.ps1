@@ -1,76 +1,64 @@
-mkdir "$env:DEPENDENCIES" -ErrorAction SilentlyContinue
-cd "$env:DEPENDENCIES"
+if( "$env:SOURCE_SDK" ) {
+	if( !( ( Get-Item "$env:SOURCE_SDK/LICENSE" -ErrorAction SilentlyContinue ) -is [System.IO.FileInfo] ) ) {
+		Write-Output "sourcesdk-minimal local repository is empty, doing git clone of the remote repo"
+		git clone "https://github.com/danielga/sourcesdk-minimal.git" "$env:SOURCE_SDK"
+	} else {
+		$LOCAL = git -C "$env:SOURCE_SDK" rev-parse "@"
+		$REMOTE = git -C "$env:SOURCE_SDK" rev-parse "@{u}"
+		$BASE = git -C "$env:SOURCE_SDK" merge-base "@" "@{u}"
 
-if( !( ( Get-Item "$env:GARRYSMOD_COMMON/premake5.lua" -ErrorAction SilentlyContinue ) -is [System.IO.FileInfo] ) )
-{
-	echo "garrysmod_common directory is empty, doing git clone of the remote repo"
-	git clone --recursive https://github.com/danielga/garrysmod_common.git
-}
-else
-{
-	echo "garrysmod_common directory is good, pulling any latest changes"
-	cd "$env:GARRYSMOD_COMMON"
-	git pull
-	git submodule update --init --recursive
-}
-
-cd "$env:DEPENDENCIES"
-
-if( !( ( Get-Item "$env:SOURCE_SDK/LICENSE" -ErrorAction SilentlyContinue ) -is [System.IO.FileInfo] ) )
-{
-	echo "sourcesdk-minimal directory is empty, doing git clone of the remote repo"
-	git clone https://github.com/danielga/sourcesdk-minimal.git
-}
-else
-{
-	echo "sourcesdk-minimal directory is good, pulling any latest changes"
-	cd "$env:SOURCE_SDK"
-	git pull
-}
-
-cd "$env:DEPENDENCIES"
-
-if( !( ( Get-Item "$env:DEPENDENCIES/premake-core/premake5.lua" -ErrorAction SilentlyContinue ) -is [System.IO.FileInfo] ) )
-{
-	echo "premake-core directory is empty, doing git clone of the remote repo"
-	git clone --recursive https://github.com/premake/premake-core.git
-}
-else
-{
-	echo "premake-core directory is good, pulling any latest changes"
-	cd "$env:DEPENDENCIES/premake-core"
-	git pull
-	git submodule update --init --recursive
-}
-
-mkdir "$env:DEPENDENCIES/windows" -ErrorAction SilentlyContinue
-
-pushd "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\Tools"
-cmd /c "VsDevCmd.bat&set" |
-foreach {
-	if( $_ -match "=" )
-	{
-		$v = $_.split( "=" )
-		Set-Item -force -path "ENV:\$($v[0])" -value "$($v[1])"
+		if( $LOCAL -eq $REMOTE ) {
+			Write-Output "sourcesdk-minimal local repository is good and needs no updates"
+		} elseif( $LOCAL -eq $BASE ) {
+			Write-Output "sourcesdk-minimal local repository is good but needs updates"
+			git -C "$env:SOURCE_SDK" pull
+		} else {
+			Write-Output "sourcesdk-minimal local repository is bad, cloning again"
+			Remove-Item -Force -Recurse "$env:SOURCE_SDK"
+			git clone "https://github.com/danielga/sourcesdk-minimal.git" "$env:SOURCE_SDK"
+		}
 	}
 }
-popd
-Write-Host "`nVisual Studio 2017 command prompt variables set." -ForegroundColor Yellow
 
-if( !( ( Get-Item "$env:PREMAKE5" -ErrorAction SilentlyContinue ) -is [System.IO.FileInfo] ) )
-{
-	echo "premake-core directory is empty, bootstrapping"
-	cd "$env:DEPENDENCIES/premake-core"
-	nmake -f Bootstrap.mak windows
-	cd "$env:DEPENDENCIES"
-	mkdir "$env:DEPENDENCIES/windows/premake-core" -ErrorAction SilentlyContinue
-	cp "$env:DEPENDENCIES/premake-core/bin/release/premake5.exe" "$env:DEPENDENCIES/windows/premake-core"
+$BUILD_PREMAKE5 = $FALSE
+if( !( ( Get-Item "$env:DEPENDENCIES/premake-core/premake5.lua" -ErrorAction SilentlyContinue ) -is [System.IO.FileInfo] ) ) {
+	Write-Output "premake-core local repository is empty, doing git clone of the remote repo"
+	git clone "https://github.com/premake/premake-core.git" "$env:DEPENDENCIES/premake-core"
+	$BUILD_PREMAKE5 = $TRUE
+} else {
+	$LOCAL = git -C "$env:DEPENDENCIES/premake-core" rev-parse "@"
+	$REMOTE = git -C "$env:DEPENDENCIES/premake-core" rev-parse "@{u}"
+	$BASE = git -C "$env:DEPENDENCIES/premake-core" merge-base "@" "@{u}"
+
+	if( $LOCAL -eq $REMOTE ) {
+		Write-Output "premake-core local repository is good and needs no updates"
+	} elseif( $LOCAL -eq $BASE ) {
+		Write-Output "premake-core local repository is good but needs updates"
+		git -C "$env:DEPENDENCIES/premake-core" pull
+		$BUILD_PREMAKE5 = $TRUE
+	} else {
+		Write-Output "premake-core local repository is bad, cloning again"
+		Remove-Item -Force -Recurse "$env:DEPENDENCIES/premake-core"
+		git clone "https://github.com/premake/premake-core.git" "$env:DEPENDENCIES/premake-core"
+		$BUILD_PREMAKE5 = $TRUE
+	}
 }
 
-cd "$env:REPOSITORY_DIR/projects"
-& "$env:PREMAKE5" vs2017
-cd "$env:REPOSITORY_DIR/projects/windows/vs2017"
+New-Item "$env:DEPENDENCIES/$env:PROJECT_OS" -ItemType Directory -ErrorAction SilentlyContinue
 
-msbuild "$env:MODULE_NAME.sln" /p:Configuration=Release
+if( $BUILD_PREMAKE5 ) {
+	Write-Output "premake-core needs building, bootstrapping"
+	Push-Location "$env:DEPENDENCIES/premake-core"
+	nmake -f Bootstrap.mak "$env:PROJECT_OS"
+	Pop-Location
+	New-Item "$env:DEPENDENCIES/$env:PROJECT_OS/premake-core" -ItemType Directory -ErrorAction SilentlyContinue
+	Copy-Item "$env:DEPENDENCIES/premake-core/bin/release/$env:PREMAKE5_EXECUTABLE" "$env:PREMAKE5"
+}
 
-cd "$env:REPOSITORY_DIR"
+Push-Location "$env:REPOSITORY_DIR/projects"
+& "$env:PREMAKE5" "$env:COMPILER_PLATFORM"
+Pop-Location
+
+Push-Location "$REPOSITORY_DIR/projects/$PROJECT_OS/$COMPILER_PLATFORM"
+msbuild "$env:MODULE_NAME.sln" /p:Configuration=Release /p:Platform=Win32 /m
+Pop-Location

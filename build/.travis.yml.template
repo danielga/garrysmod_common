@@ -3,7 +3,8 @@ compiler: gcc
 os:
   - linux
   - osx
-osx_image: xcode7.3
+osx_image: xcode9.2
+dist: trusty
 if: tag IS present
 cache:
   directories:
@@ -11,39 +12,50 @@ cache:
     - "$TRAVIS_BUILD_DIR/projects"
 addons:
   apt:
-    sources:
-      - ubuntu-toolchain-r-test
     packages:
       - linux-libc-dev:i386
-      - gcc-4.9
-      - gcc-4.9-multilib
-      - g++-4.9
-      - g++-4.9-multilib
+      - gcc-4.8
+      - gcc-4.8-multilib
+      - g++-4.8
+      - g++-4.8-multilib
 install:
   - export MODULE_NAME="module name here"
+  - export REPOSITORY_DIR="$TRAVIS_BUILD_DIR"
   - export DEPENDENCIES="$TRAVIS_BUILD_DIR/dependencies"
   - export GARRYSMOD_COMMON="$DEPENDENCIES/garrysmod_common"
   - export SOURCE_SDK="$DEPENDENCIES/sourcesdk-minimal"
-  - export TARGET_OS=$TRAVIS_OS_NAME
-  - export REPOSITORY_DIR=$TRAVIS_BUILD_DIR
+  - export TARGET_OS="$TRAVIS_OS_NAME"
+  - export COMPILER_PLATFORM="gmake";
+  - export BUILD_SCRIPT="$GARRYSMOD_COMMON/build/ci.sh"
+  - export GARRYSMOD_COMMON_REPOSITORY="https://github.com/danielga/garrysmod_common.git"
+  - export PREMAKE5_EXECUTABLE=premake5
   - if [ $TRAVIS_OS_NAME = "osx" ]; then
       export PREMAKE5="$DEPENDENCIES/macosx/premake-core/premake5";
-      export PROJECT_OS=macosx;
-      export CXX=g++;
-      export CC=gcc;
+      export PROJECT_OS="macosx";
+      export CXX="g++";
+      export CC="gcc";
     elif [ $TRAVIS_OS_NAME = "linux" ]; then
       export PREMAKE5="$DEPENDENCIES/linux/premake-core/premake5";
-      export PROJECT_OS=linux;
-      export CXX=g++-4.9;
-      export CC=gcc-4.9;
+      export PROJECT_OS="linux";
+      export CXX="g++-4.8";
+      export CC="gcc-4.8";
     fi
-script: "$TRAVIS_BUILD_DIR/ci.sh"
+  - mkdir -p "$DEPENDENCIES"
+  - if [ ! -f "$GARRYSMOD_COMMON/premake5.lua" ]; then
+      echo "garrysmod_common directory is empty, doing git clone of the remote repo";
+      git clone --recursive "$GARRYSMOD_COMMON_REPOSITORY" "$GARRYSMOD_COMMON";
+    else
+      echo "garrysmod_common directory is good, pulling any latest changes";
+      git -C "$GARRYSMOD_COMMON" pull;
+      git -C "$GARRYSMOD_COMMON" submodule update --init --recursive;
+    fi
+script: "$BUILD_SCRIPT"
 deploy:
   provider: releases
   skip_cleanup: true
   file:
-  	- "$TRAVIS_BUILD_DIR/projects/$PROJECT_OS/gmake/release/gmsv_${MODULE_NAME}_$TARGET_OS.dll"
-  	- "$TRAVIS_BUILD_DIR/projects/$PROJECT_OS/gmake/release/gmcl_${MODULE_NAME}_$TARGET_OS.dll"
+  	- "${TRAVIS_BUILD_DIR}/projects/${PROJECT_OS}/${COMPILER_PLATFORM}/release/gmsv_${MODULE_NAME}_${TARGET_OS}.dll"
+  	- "${TRAVIS_BUILD_DIR}/projects/${PROJECT_OS}/${COMPILER_PLATFORM}/release/gmcl_${MODULE_NAME}_${TARGET_OS}.dll"
   on:
     tags: true
   api_key:

@@ -1,57 +1,87 @@
+# This CI script is deprecated because GitLab CI runners are not as well defined as AppVeyor or Travis CI.
+# If you want to make your own GitLab CI script, by all means, use this as a base, but I won't support it.
+
 variables:
   MODULE_NAME: "module name here"
   DEPENDENCIES: "$CI_PROJECT_DIR/dependencies"
   GARRYSMOD_COMMON: "$CI_PROJECT_DIR/dependencies/garrysmod_common"
   SOURCE_SDK: "$CI_PROJECT_DIR/dependencies/sourcesdk-minimal"
   REPOSITORY_DIR: "$CI_PROJECT_DIR"
+  GARRYSMOD_COMMON_REPOSITORY: "https://github.com/danielga/garrysmod_common.git"
 cache:
   paths:
     - "$DEPENDENCIES/*"
     - "$CI_PROJECT_DIR/projects/*"
+stage: build
+only:
+  - tags
+script: "$BUILD_SCRIPT"
+artifacts:
+  paths:
+    - "${CI_PROJECT_DIR}/projects/${PROJECT_OS}/${COMPILER_PLATFORM}/release/gmsv_${MODULE_NAME}_${TARGET_OS}.dll"
+    - "${CI_PROJECT_DIR}/projects/${PROJECT_OS}/${COMPILER_PLATFORM}/release/gmcl_${MODULE_NAME}_${TARGET_OS}.dll"
 job_win32:
-  stage: build
   tags:
     - windows
-  only:
-    - tags
   variables:
+    BUILD_SCRIPT: "$CI_PROJECT_DIR/dependencies/garrysmod_common/build/ci.ps1"
+    PROJECT_OS: "windows"
+    TARGET_OS: "win32"
+    COMPILER_PLATFORM: "vs2017"
+    PREMAKE5_EXECUTABLE: "premake5.exe"
     PREMAKE5: "$CI_PROJECT_DIR/dependencies/windows/premake-core/premake5.exe"
-  script: "& \"$CI_PROJECT_DIR/ci.ps1\""
-  artifacts:
-    paths:
-      - "$CI_PROJECT_DIR/projects/windows/vs2017/release/gmsv_${MODULE_NAME}_win32.dll"
-      - "$CI_PROJECT_DIR/projects/windows/vs2017/release/gmcl_${MODULE_NAME}_win32.dll"
+  before_script:
+    - mkdir "%DEPENDENCIES%"
+    - if not exist "%GARRYSMOD_COMMON%/premake5.lua" (
+        echo "garrysmod_common directory is empty, doing git clone of the remote repo"
+        git clone --recursive "%GARRYSMOD_COMMON_REPOSITORY%" "%GARRYSMOD_COMMON%"
+      ) else (
+        echo "garrysmod_common directory is good, pulling any latest changes"
+        git -C "%GARRYSMOD_COMMON%" pull
+        git -C "%GARRYSMOD_COMMON%" submodule update --init --recursive
+      )
+  script: "\"C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Auxiliary/Build/vcvars32.bat\" && powershell -File \"%BUILD_SCRIPT%\""
 job_linux:
-  stage: build
   tags:
     - linux
-  only:
-    - tags
   variables:
+    BUILD_SCRIPT: "$CI_PROJECT_DIR/dependencies/garrysmod_common/build/ci.sh"
     PROJECT_OS: "linux"
     TARGET_OS: "linux"
+    COMPILER_PLATFORM: "gmake"
+    PREMAKE5_EXECUTABLE: "premake5"
     PREMAKE5: "$CI_PROJECT_DIR/dependencies/linux/premake-core/premake5"
     CXX: "g++-4.8"
     CC: "gcc-4.8"
-  script: "$CI_PROJECT_DIR/ci.sh"
-  artifacts:
-    paths:
-      - "$CI_PROJECT_DIR/projects/linux/gmake/release/gmsv_${MODULE_NAME}_linux.dll"
-      - "$CI_PROJECT_DIR/projects/linux/gmake/release/gmcl_${MODULE_NAME}_linux.dll"
+  before_script:
+    - mkdir -p "$DEPENDENCIES"
+    - if [ ! -f "$GARRYSMOD_COMMON/premake5.lua" ]; then
+        echo "garrysmod_common directory is empty, doing git clone of the remote repo";
+        git clone --recursive "$GARRYSMOD_COMMON_REPOSITORY" "$GARRYSMOD_COMMON";
+      else
+        echo "garrysmod_common directory is good, pulling any latest changes";
+        git -C "$GARRYSMOD_COMMON" pull;
+        git -C "$GARRYSMOD_COMMON" submodule update --init --recursive;
+      fi
 job_macosx:
-  stage: build
   tags:
     - macosx
-  only:
-    - tags
   variables:
+    BUILD_SCRIPT: "$CI_PROJECT_DIR/dependencies/garrysmod_common/build/ci.sh"
     PROJECT_OS: "macosx"
     TARGET_OS: "osx"
+    COMPILER_PLATFORM: "gmake"
+    PREMAKE5_EXECUTABLE: "premake5"
     PREMAKE5: "$CI_PROJECT_DIR/dependencies/macosx/premake-core/premake5"
     CXX: "g++"
     CC: "gcc"
-  script: "$CI_PROJECT_DIR/ci.sh"
-  artifacts:
-    paths:
-      - "$CI_PROJECT_DIR/projects/macosx/gmake/release/gmsv_${MODULE_NAME}_osx.dll"
-      - "$CI_PROJECT_DIR/projects/macosx/vs2017/release/gmcl_${MODULE_NAME}_osx.dll"
+  before_script:
+    - mkdir -p "$DEPENDENCIES"
+    - if [ ! -f "$GARRYSMOD_COMMON/premake5.lua" ]; then
+        echo "garrysmod_common directory is empty, doing git clone of the remote repo";
+        git clone --recursive "$GARRYSMOD_COMMON_REPOSITORY" "$GARRYSMOD_COMMON";
+      else
+        echo "garrysmod_common directory is good, pulling any latest changes";
+        git -C "$GARRYSMOD_COMMON" pull;
+        git -C "$GARRYSMOD_COMMON" submodule update --init --recursive;
+      fi
