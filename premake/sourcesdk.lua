@@ -237,8 +237,8 @@ function IncludeSDKTier1(directory)
 			files(directory .. "/tier1/processor_detect_linux.cpp")
 
 			if _workspace.abi_compatible then
-				buildoptions("-mmacosx-version-min=10.5")
-				linkoptions("-mmacosx-version-min=10.5")
+				buildoptions("-mmacosx-version-min=10.7")
+				linkoptions("-mmacosx-version-min=10.7")
 			end
 
 	project(_project.name)
@@ -353,8 +353,8 @@ function IncludeSDKMathlib(directory)
 			defines({"COMPILER_GCC", "POSIX", "_POSIX", "OSX", "GNUC", "NO_MALLOC_OVERRIDE"})
 
 			if _workspace.abi_compatible then
-				buildoptions("-mmacosx-version-min=10.5")
-				linkoptions("-mmacosx-version-min=10.5")
+				buildoptions("-mmacosx-version-min=10.7")
+				linkoptions("-mmacosx-version-min=10.7")
 			end
 
 	project(_project.name)
@@ -408,8 +408,8 @@ function IncludeSDKRaytrace(directory)
 			defines({"COMPILER_GCC", "POSIX", "_POSIX", "OSX", "GNUC", "NO_MALLOC_OVERRIDE"})
 
 			if _workspace.abi_compatible then
-				buildoptions("-mmacosx-version-min=10.5")
-				linkoptions("-mmacosx-version-min=10.5")
+				buildoptions("-mmacosx-version-min=10.7")
+				linkoptions("-mmacosx-version-min=10.7")
 			end
 
 	project(_project.name)

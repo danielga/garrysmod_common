@@ -55,8 +55,8 @@ function IncludeDetouring()
 
 		if _workspace.abi_compatible then
 			filter("system:macosx")
-				buildoptions("-mmacosx-version-min=10.5")
-				linkoptions("-mmacosx-version-min=10.5")
+				buildoptions("-mmacosx-version-min=10.7")
+				linkoptions("-mmacosx-version-min=10.7")
 		end
 
 		if not _workspace.abi_compatible then
