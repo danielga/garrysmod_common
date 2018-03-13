@@ -59,6 +59,6 @@ Push-Location "$env:REPOSITORY_DIR/projects"
 & "$env:PREMAKE5" "$env:COMPILER_PLATFORM"
 Pop-Location
 
-Push-Location "$REPOSITORY_DIR/projects/$PROJECT_OS/$COMPILER_PLATFORM"
+Push-Location "$env:REPOSITORY_DIR/projects/$env:PROJECT_OS/$env:COMPILER_PLATFORM"
 msbuild "$env:MODULE_NAME.sln" /p:Configuration=Release /p:Platform=Win32 /m
 Pop-Location
