@@ -37,7 +37,7 @@ namespace GarrysMod
                 struct UserData
                 {
                     void*         data;
-                    unsigned char type;
+                    uint8_t       type;
                 };
 
                 // Returns the amount of values on the stack
@@ -113,10 +113,10 @@ namespace GarrysMod
 
 #ifdef GMOD_ALLOW_DEPRECATED
                 // Deprecated: Use the UserType functions instead of this
-                virtual void*       NewUserdata( unsigned int iSize ) = 0;
+                virtual void*       NewUserdata( size_t iSize ) = 0;
 #else
             protected:
-                virtual UserData*   NewUserdata( unsigned int iSize ) = 0;
+                virtual UserData*   NewUserdata( size_t iSize ) = 0;
 #endif
 
             public:
@@ -149,7 +149,7 @@ namespace GarrysMod
                 // Returns the string at iStackPos. iOutLen is set to the length of the string if it is not NULL
                 // If the value at iStackPos is a number, it will be converted in to a string
                 // Returns NULL upon failure
-                virtual const char* GetString( int iStackPos = -1, unsigned int* iOutLen = NULL ) = 0;
+                virtual const char* GetString( int iStackPos = -1, size_t* iOutLen = NULL ) = 0;
 
                 // Returns the number at iStackPos
                 // Returns 0 upon failure
@@ -175,7 +175,7 @@ namespace GarrysMod
 
                 // Pushes the given string on to the stack
                 // If iLen is 0, strlen will be used to determine the string's length
-                virtual void        PushString( const char* val, unsigned int iLen = 0 ) = 0;
+                virtual void        PushString( const char* val, size_t iLen = 0 ) = 0;
 
                 // Pushes the given double on to the stack
                 virtual void        PushNumber( double val ) = 0;
@@ -286,7 +286,7 @@ namespace GarrysMod
 
                     T* data = reinterpret_cast<T*>( reinterpret_cast<uintptr_t>( ud ) + sizeof( UserData ) );
                     ud->data = new( data ) T;
-                    ud->type = static_cast<unsigned char>( iType );
+                    ud->type = static_cast<uint8_t>( iType );
 
                     return data;
                 }
