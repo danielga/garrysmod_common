@@ -12,7 +12,7 @@ local pkg_config_parsers = {
 		libdirs(libsfolder)
 	end,
 	I = function(incfolder)
-		includedirs(incfolder)
+		sysincludedirs(incfolder)
 	end,
 	D = function(define)
 		defines(define)

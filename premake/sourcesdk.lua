@@ -22,18 +22,18 @@ local function IncludeSDKCommonInternal(directory)
 	local _workspace = _project.workspace
 
 	defines(_project.serverside and "GAME_DLL" or "CLIENT_DLL")
-	includedirs({
+	sysincludedirs({
 		directory .. "/common",
 		directory .. "/public"
 	})
 
 	if _project.serverside then
-		includedirs({
+		sysincludedirs({
 			directory .. "/game/server",
 			directory .. "/game/shared"
 		})
 	else
-		includedirs({
+		sysincludedirs({
 			directory .. "/game/client",
 			directory .. "/game/shared"
 		})
@@ -88,7 +88,7 @@ function IncludeSDKTier0(directory)
 
 	directory = GetSDKPath(directory)
 
-	includedirs(directory .. "/public/tier0")
+	sysincludedirs(directory .. "/public/tier0")
 
 	filter("system:windows or macosx")
 		links("tier0")
@@ -108,7 +108,7 @@ function IncludeSDKTier1(directory)
 
 	directory = GetSDKPath(directory)
 
-	includedirs(directory .. "/public/tier1")
+	sysincludedirs(directory .. "/public/tier1")
 	links("tier1")
 
 	filter("system:windows")
@@ -127,7 +127,7 @@ function IncludeSDKTier1(directory)
 		cppdialect("GNU++11")
 		location(_GARRYSMOD_COMMON_DIRECTORY .. "/projects/" .. os.target() .. "/" .. _ACTION)
 		defines({"TIER1_STATIC_LIB", "_CRT_SECURE_NO_WARNINGS"})
-		includedirs({
+		sysincludedirs({
 			directory .. "/public/tier0",
 			directory .. "/public/tier1"
 		})
@@ -249,7 +249,7 @@ function IncludeSDKTier2(directory)
 
 	directory = GetSDKPath(directory)
 
-	includedirs(directory .. "/public/tier2")
+	sysincludedirs(directory .. "/public/tier2")
 
 	filter("system:windows")
 		links("tier2")
@@ -268,7 +268,7 @@ function IncludeSDKTier3(directory)
 
 	directory = GetSDKPath(directory)
 
-	includedirs(directory .. "/public/tier3")
+	sysincludedirs(directory .. "/public/tier3")
 
 	filter("system:windows")
 		links("tier3")
@@ -291,7 +291,7 @@ function IncludeSDKMathlib(directory)
 
 	directory = GetSDKPath(directory)
 
-	includedirs(directory .. "/public/mathlib")
+	sysincludedirs(directory .. "/public/mathlib")
 	links("mathlib")
 
 	project("mathlib")
@@ -299,7 +299,7 @@ function IncludeSDKMathlib(directory)
 		warnings("Default")
 		location(_GARRYSMOD_COMMON_DIRECTORY .. "/projects/" .. os.target() .. "/" .. _ACTION)
 		defines("MATHLIB_LIB")
-		includedirs({
+		sysincludedirs({
 			directory .. "/public/mathlib",
 			directory .. "/public/tier0",
 		})
@@ -375,7 +375,7 @@ function IncludeSDKRaytrace(directory)
 		kind("StaticLib")
 		warnings("Default")
 		location(_GARRYSMOD_COMMON_DIRECTORY .. "/projects/" .. os.target() .. "/" .. _ACTION)
-		includedirs({
+		sysincludedirs({
 			directory .. "/utils/common",
 			directory .. "/public/tier0",
 			directory .. "/public/tier1",
@@ -422,7 +422,7 @@ function IncludeSteamAPI(directory)
 
 	directory = GetSDKPath(directory)
 
-	includedirs(directory .. "/public/steam")
+	sysincludedirs(directory .. "/public/steam")
 
 	links("steam_api")
 end

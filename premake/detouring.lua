@@ -8,8 +8,8 @@ function IncludeDetouring()
 	local _project_directory = _GARRYSMOD_COMMON_DIRECTORY .. "/projects/" .. os.target() .. "/" .. _ACTION
 
 	-- This first include directory is deprecated and might be removed in the future.
-	includedirs(directory)
-	includedirs(_GARRYSMOD_COMMON_DIRECTORY .. "/include")
+	sysincludedirs(directory)
+	sysincludedirs(_GARRYSMOD_COMMON_DIRECTORY .. "/include")
 	links("detouring")
 
 	filter("system:macosx")
@@ -20,7 +20,7 @@ function IncludeDetouring()
 		language("C++")
 		cppdialect("C++11")
 		location(_project_directory)
-		includedirs(directory)
+		sysincludedirs(directory)
 		files({
 			directory .. "/*.hpp",
 			directory .. "/*.h",

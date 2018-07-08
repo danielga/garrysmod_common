@@ -258,10 +258,8 @@ function CreateProject(config)
 			string.upper(string.gsub(_workspace.name, "%.", "_")) .. (_project.serverside and "_SERVER" or "_CLIENT"),
 			"IS_SERVERSIDE=" .. tostring(is_server)
 		})
-		includedirs({
-			_project.directory,
-			_GARRYSMOD_COMMON_DIRECTORY .. "/include"
-		})
+		sysincludedirs(_GARRYSMOD_COMMON_DIRECTORY .. "/include")
+		includedirs(_project.directory)
 
 		if not manual_files then
 			files({

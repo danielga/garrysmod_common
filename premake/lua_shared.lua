@@ -5,7 +5,7 @@ function IncludeLuaShared()
 	local _workspace = _project.workspace
 	local _project_directory = _GARRYSMOD_COMMON_DIRECTORY .. "/projects/" .. os.target() .. "/" .. _ACTION
 
-	includedirs(_GARRYSMOD_COMMON_DIRECTORY .. "/include")
+	sysincludedirs(_GARRYSMOD_COMMON_DIRECTORY .. "/include")
 	links("lua_shared")
 
 	project("lua_shared")
@@ -13,7 +13,7 @@ function IncludeLuaShared()
 		language("C++")
 		cppdialect("C++11")
 		location(_GARRYSMOD_COMMON_DIRECTORY .. "/projects/" .. os.target() .. "/" .. _ACTION)
-		includedirs(_GARRYSMOD_COMMON_DIRECTORY .. "/include")
+		sysincludedirs(_GARRYSMOD_COMMON_DIRECTORY .. "/include")
 		files({
 			_GARRYSMOD_COMMON_DIRECTORY .. "/include/**.h",
 			_GARRYSMOD_COMMON_DIRECTORY .. "/include/**.hpp",
