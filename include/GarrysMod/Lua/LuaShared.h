@@ -9,6 +9,17 @@ class LuaClientDatatableHook;
 class IGet;
 class CSteamAPIContext;
 
+namespace Bootil
+{
+	struct AutoBuffer
+	{
+		void *m_pData;
+		uint32_t m_iSize;
+		uint32_t m_iPos;
+		uint32_t m_iWritten;
+	};
+}
+
 namespace GarrysMod
 {
 	namespace Lua
@@ -33,6 +44,17 @@ namespace GarrysMod
 			};
 		}
 
+		struct File
+		{
+			int32_t time;
+			std::string name;
+			std::string source;
+			std::string contents;
+			Bootil::AutoBuffer compressed;
+			uint32_t timesloadedserver;
+			uint32_t timesloadedclient;
+		};
+
 		class ILuaShared
 		{
 		public:
@@ -43,7 +65,7 @@ namespace GarrysMod
 			virtual ILuaInterface *CreateLuaInterface( unsigned char, bool ) = 0;
 			virtual void CloseLuaInterface( ILuaInterface * ) = 0;
 			virtual ILuaInterface *GetLuaInterface( unsigned char ) = 0;
-			virtual void LoadFile( const std::string &, const std::string &, bool, bool ) = 0;
+			virtual File *LoadFile( const std::string &path, const std::string &pathId, bool fromDatatable, bool fromFile ) = 0;
 			virtual void GetCache( const std::string & );
 			virtual void MountLua( const char * ) = 0;
 			virtual void MountLuaAdd( const char *, const char * ) = 0;

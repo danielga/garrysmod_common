@@ -65,7 +65,7 @@ namespace GarrysMod
 			virtual void Error( const char *err ) = 0;
 			virtual const char *GetStringOrError( int index ) = 0;
 			virtual bool RunLuaModule( const char *name ) = 0;
-			virtual bool FindAndRunScript( const char *filename, bool run, bool showErrors, const char *, bool ) = 0;
+			virtual bool FindAndRunScript( const char *filename, bool run, bool showErrors, const char *stringToRun, bool noReturns ) = 0;
 			virtual void SetPathID( const char *pathID ) = 0;
 			virtual const char *GetPathID( ) = 0;
 			virtual void ErrorNoHalt( const char *fmt, ... ) = 0;
