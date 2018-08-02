@@ -1,5 +1,9 @@
 #pragma once
 
+#include <stdint.h>
+#include <string>
+#include <vector>
+
 class Color;
 
 namespace GarrysMod
@@ -12,6 +16,20 @@ namespace GarrysMod
 		class ILuaGameCallback
 		{
 		public:
+			struct CLuaError
+			{
+				struct StackEntry
+				{
+					std::string source;
+					std::string function;
+					int32_t line;
+				};
+
+				std::string message;
+				std::string side;
+				std::vector<StackEntry> stack;
+			};
+
 			virtual ILuaObject *CreateLuaObject( ) = 0;
 			virtual void DestroyLuaObject( ILuaObject *pObject ) = 0;
 
@@ -20,7 +38,7 @@ namespace GarrysMod
 			virtual void Msg( const char *msg, bool useless ) = 0;
 			virtual void MsgColour( const char *msg, const Color &color ) = 0;
 
-			virtual void LuaError( const std::string &error ) = 0;
+			virtual void LuaError( const CLuaError *error ) = 0;
 
 			virtual void InterfaceCreated( ILuaInterface *iface ) = 0;
 		};
