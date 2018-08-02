@@ -13,12 +13,12 @@ namespace GarrysMod
 			AutoReference( ) :
 				lua( nullptr ),
 				ref( -2 )
-			{ };
+			{ }
 
 			AutoReference( GarrysMod::Lua::ILuaBase *luabase ) :
 				lua( luabase ),
 				ref( luabase->ReferenceCreate( ) )
-			{ };
+			{ }
 
 			AutoReference( GarrysMod::Lua::ILuaBase *luabase, int32_t index ) :
 				lua( luabase ),
@@ -26,12 +26,12 @@ namespace GarrysMod
 			{
 				lua->Push( index );
 				ref = lua->ReferenceCreate( );
-			};
+			}
 
 			~AutoReference( )
 			{
 				Free( );
-			};
+			}
 
 			bool IsValid( ) const
 			{
@@ -46,7 +46,7 @@ namespace GarrysMod
 			operator int32_t( ) const
 			{
 				return ref;
-			};
+			}
 
 			void Setup( GarrysMod::Lua::ILuaBase *luabase )
 			{
