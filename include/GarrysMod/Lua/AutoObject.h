@@ -12,11 +12,11 @@ namespace GarrysMod
 		public:
 			AutoObject( ) :
 				lua_object( nullptr )
-			{ };
+			{ }
 
 			AutoObject( ILuaObject *obj ) :
 				lua_object( obj )
-			{ };
+			{ }
 
 			~AutoObject( )
 			{
@@ -25,7 +25,7 @@ namespace GarrysMod
 					lua_object->UnReference( );
 					lua_object = nullptr;
 				}
-			};
+			}
 
 			bool IsValid( ) const
 			{
@@ -43,7 +43,7 @@ namespace GarrysMod
 					throw std::runtime_error( "invalid ILuaObject" );
 
 				return lua_object;
-			};
+			}
 
 			operator ILuaObject *( ) const
 			{
@@ -51,7 +51,7 @@ namespace GarrysMod
 					throw std::runtime_error( "invalid ILuaObject" );
 
 				return lua_object;
-			};
+			}
 
 			const AutoObject &operator=( const ILuaObject *obj )
 			{
