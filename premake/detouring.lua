@@ -53,12 +53,6 @@ function IncludeDetouring()
 			objdir(_project_directory .. "/intermediate")
 			targetdir(_project_directory .. "/release")
 
-		if _workspace.abi_compatible then
-			filter("system:macosx")
-				buildoptions("-mmacosx-version-min=10.7")
-				linkoptions("-mmacosx-version-min=10.7")
-		end
-
 		if not _workspace.abi_compatible then
 			filter("configurations:Debug")
 				objdir(_project_directory .. "/intermediate")
