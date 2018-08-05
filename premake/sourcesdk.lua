@@ -10,7 +10,7 @@ local function GetSDKPath(directory)
 	assert(type(directory) == "string", "Source SDK path is not a string!")
 
 	directory = CleanPath(directory)
-	
+
 	local dir = path.getabsolute(directory)
 	assert(os.isdir(dir), "'" .. dir .. "' doesn't exist (Source SDK)")
 
@@ -114,7 +114,7 @@ function IncludeSDKTier1(directory)
 	filter("system:windows")
 		links({"vstdlib", "ws2_32", "rpcrt4"})
 
-    filter("system:linux")
+	filter("system:linux")
 		links(_project.serverside and "vstdlib_srv" or "vstdlib")
 
 	filter("system:macosx")
@@ -396,6 +396,127 @@ function IncludeSDKRaytrace(directory)
 
 		filter("system:macosx")
 			defines({"COMPILER_GCC", "POSIX", "_POSIX", "OSX", "GNUC", "NO_MALLOC_OVERRIDE"})
+
+	project(_project.name)
+end
+
+function IncludeSDKBitmap(directory)
+	IncludePackage("sdkbitmap")
+
+	local _project = project()
+	local _workspace = _project.workspace
+	local _project_directory = _GARRYSMOD_COMMON_DIRECTORY .. "/projects/" .. os.target() .. "/" .. _ACTION
+
+	directory = GetSDKPath(directory)
+
+	links("bitmap")
+
+	project("bitmap")
+		kind("StaticLib")
+		warnings("Default")
+		location(_GARRYSMOD_COMMON_DIRECTORY .. "/projects/" .. os.target() .. "/" .. _ACTION)
+		includedirs({
+			directory .. "/utils/common",
+			directory .. "/public/tier0",
+			directory .. "/public/tier1",
+		})
+		vpaths({["Source files/*"] = directory .. "/bitmap/*.cpp"})
+		IncludeSDKCommonInternal(directory)
+		files({
+			directory .. "/bitmap/colorconversion.cpp",
+			directory .. "/bitmap/float_bm_bilateral_filter.cpp",
+			directory .. "/bitmap/float_bm.cpp",
+			directory .. "/bitmap/float_bm2.cpp",
+			directory .. "/bitmap/float_bm3.cpp",
+			directory .. "/bitmap/float_bm4.cpp",
+			directory .. "/bitmap/float_cube.cpp",
+			directory .. "/bitmap/imageformat.cpp",
+			directory .. "/bitmap/psd.cpp",
+			directory .. "/bitmap/resample.cpp",
+			directory .. "/bitmap/tgaloader.cpp",
+			directory .. "/bitmap/tgawriter.cpp",
+		})
+
+		filter("configurations:Release")
+			objdir(_project_directory .. "/intermediate")
+			targetdir(_project_directory .. "/release")
+
+		if not _workspace.abi_compatible then
+			filter("configurations:Debug")
+				objdir(_project_directory .. "/intermediate")
+				targetdir(_project_directory .. "/debug")
+		end
+
+		filter("system:windows")
+			defines("WIN32")
+
+		filter("system:linux")
+			defines({"COMPILER_GCC", "POSIX", "_POSIX", "LINUX", "_LINUX", "GNUC", "NO_MALLOC_OVERRIDE"})
+
+		filter("system:macosx")
+			defines({"COMPILER_GCC", "POSIX", "_POSIX", "OSX", "GNUC", "NO_MALLOC_OVERRIDE"})
+
+			if _workspace.abi_compatible then
+				buildoptions("-mmacosx-version-min=10.5")
+				linkoptions("-mmacosx-version-min=10.5")
+			end
+
+	project(_project.name)
+end
+
+function IncludeSDKVTF(directory)
+	IncludePackage("sdkvtf")
+
+	local _project = project()
+	local _workspace = _project.workspace
+	local _project_directory = _GARRYSMOD_COMMON_DIRECTORY .. "/projects/" .. os.target() .. "/" .. _ACTION
+
+	directory = GetSDKPath(directory)
+
+	links("vtf")
+
+	project("vtf")
+		kind("StaticLib")
+		warnings("Default")
+		links("bitmap")
+		location(_GARRYSMOD_COMMON_DIRECTORY .. "/projects/" .. os.target() .. "/" .. _ACTION)
+		includedirs({
+			directory .. "/utils/common",
+			directory .. "/public/tier0",
+			directory .. "/public/tier1",
+		})
+		vpaths({["Source files/*"] = directory .. "/vtf/*.cpp"})
+		IncludeSDKCommonInternal(directory)
+		files({
+			directory .. "/vtf/cvtf.h",
+			directory .. "/vtf/vtf.cpp",
+			directory .. "/vtf/s3tc_decode.h",
+			directory .. "/vtf/s3tc_decode.cpp",
+		})
+
+		filter("configurations:Release")
+			objdir(_project_directory .. "/intermediate")
+			targetdir(_project_directory .. "/release")
+
+		if not _workspace.abi_compatible then
+			filter("configurations:Debug")
+				objdir(_project_directory .. "/intermediate")
+				targetdir(_project_directory .. "/debug")
+		end
+
+		filter("system:windows")
+			defines("WIN32")
+
+		filter("system:linux")
+			defines({"COMPILER_GCC", "POSIX", "_POSIX", "LINUX", "_LINUX", "GNUC", "NO_MALLOC_OVERRIDE"})
+
+		filter("system:macosx")
+			defines({"COMPILER_GCC", "POSIX", "_POSIX", "OSX", "GNUC", "NO_MALLOC_OVERRIDE"})
+
+			if _workspace.abi_compatible then
+				buildoptions("-mmacosx-version-min=10.5")
+				linkoptions("-mmacosx-version-min=10.5")
+			end
 
 	project(_project.name)
 end
