@@ -70,6 +70,9 @@ function CreateWorkspace(config)
 
 		if abi_compatible then
 			configurations("Release")
+
+			filter("system:linux or macosx")
+				defines("_GLIBCXX_USE_CXX11_ABI=0")
 		else
 			configurations({"Release", "Debug"})
 		end
@@ -227,14 +230,8 @@ function CreateProject(config)
 
 	local name = (is_server and "gmsv_" or "gmcl_") .. _workspace.name
 
-	if abi_compatible then
-		if os.istarget("windows") and _ACTION ~= "vs2017" then
-			error("The only supported compilation platform for this project (" .. name .. ") on Windows is Visual Studio 2017.")
-		elseif os.istarget("linux") then
-			print("WARNING: The only supported compilation platforms (tested) for this project (" .. name .. ") on Linux are GCC/G++ 4.8 or 4.9. However, any version between 4.4 and 4.9 *MIGHT* work.")
-		elseif os.istarget("macosx") then
-			print("WARNING: The only supported compilation platform (tested) for this project (" .. name .. ") on Mac OSX is Xcode 4.1 (GCC/G++ compiler). However, any Xcode version *MIGHT* work as long as the Mac OSX 10.7 SDK is used (-mmacosx-version-min=10.7).")
-		end
+	if abi_compatible and os.istarget("windows") and _ACTION ~= "vs2017" then
+		error("The only supported compilation platform for this project (" .. name .. ") on Windows is Visual Studio 2017.")
 	end
 
 	local _project = project(name)
@@ -302,11 +299,6 @@ function CreateProject(config)
 
 		filter("system:macosx")
 			targetsuffix("_osx")
-
-			if abi_compatible then
-				buildoptions("-mmacosx-version-min=10.7")
-				linkoptions("-mmacosx-version-min=10.7")
-			end
 
 		if _OPTIONS["autoinstall"] then
 			local binDir = _OPTIONS["autoinstall"] ~= "" and _OPTIONS["autoinstall"] or os.getenv("GARRYSMOD_LUA_BIN") or FindGarrysModLuaBinDirectory() or DEFAULT_GARRYSMOD_LUA_BIN_DIRECTORY

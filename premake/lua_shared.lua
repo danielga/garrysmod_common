@@ -40,11 +40,5 @@ function IncludeLuaShared()
 		filter("system:linux or macosx")
 			links("dl")
 
-		if _workspace.abi_compatible then
-			filter("system:macosx")
-				buildoptions("-mmacosx-version-min=10.7")
-				linkoptions("-mmacosx-version-min=10.7")
-		end
-
 	project(_project.name)
 end
