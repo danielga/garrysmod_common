@@ -1,3 +1,6 @@
+# Exit if any command fails
+$ErrorActionPreference = "Stop"
+
 if( "$env:SOURCE_SDK" ) {
 	if( !( ( Get-Item "$env:SOURCE_SDK/LICENSE" -ErrorAction SilentlyContinue ) -is [System.IO.FileInfo] ) ) {
 		Write-Output "sourcesdk-minimal local repository is empty, doing git clone of the remote repo"

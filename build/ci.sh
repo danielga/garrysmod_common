@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Exit if any command fails
+set -e
+
 if [ ! -z ${SOURCE_SDK+x} ]; then
 	if [ ! -f "$SOURCE_SDK/LICENSE" ]; then
 		echo "sourcesdk-minimal local repository is empty, doing git clone of the remote repo";
