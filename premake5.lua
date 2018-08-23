@@ -59,7 +59,6 @@ function CreateWorkspace(config)
 	_workspace.directory = directory
 
 		language("C++")
-		cppdialect("GNU++17")
 		location(_workspace.directory)
 		warnings("Extra")
 		flags({"NoPCH"})
@@ -98,6 +97,12 @@ function CreateWorkspace(config)
 				"_CRT_SECURE_NO_WARNINGS",
 				"STRICT"
 			})
+
+		filter("system:windows or macosx")
+			cppdialect("C++17")
+
+		filter("system:linux")
+			cppdialect("GNU++17")
 
 		filter({})
 end
