@@ -123,8 +123,6 @@ function IncludeSDKTier1(directory)
 	project("tier1")
 		kind("StaticLib")
 		warnings("Default")
-		language("C++")
-		cppdialect("GNU++11")
 		location(_GARRYSMOD_COMMON_DIRECTORY .. "/projects/" .. os.target() .. "/" .. _ACTION)
 		defines({"TIER1_STATIC_LIB", "_CRT_SECURE_NO_WARNINGS"})
 		sysincludedirs({
