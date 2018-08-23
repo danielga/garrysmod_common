@@ -18,7 +18,7 @@ extern "C"
     extern const char *( *lua_pushvfstring )( lua_State* L, const char* fmt, va_list argp );
     extern int ( *lua_error )( lua_State* L );
     extern int ( *luaL_typerror )( lua_State* L, int narg, const char* tname );
-    extern void* ( *lua_topointer )( lua_State* L, int idx );
+    extern const void* ( *lua_topointer )( lua_State* L, int idx );
     extern int ( *luaL_callmeta )( lua_State* L, int idx, const char* e );
 }
 
@@ -350,7 +350,7 @@ namespace GarrysMod
                 }
 
                 // Converts the value at the given index to a generic C pointer (void*)
-                inline void* GetPointer( int iStackPos )
+                inline const void* GetPointer( int iStackPos )
                 {
                     return lua_topointer( state, iStackPos );
                 }
