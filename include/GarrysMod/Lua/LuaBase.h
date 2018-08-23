@@ -13,11 +13,13 @@ struct lua_State;
 
 extern "C"
 {
-    extern void ( *lua_getfenv )( lua_State *L, int idx );
-    extern int ( *lua_setfenv )( lua_State *L, int idx );
-    extern const char *( *lua_pushvfstring )( lua_State *L, const char *fmt, va_list argp );
-    extern int ( *lua_error )( lua_State *L );
-    extern int ( *luaL_typerror )( lua_State *L, int narg, const char *tname );
+    extern void ( *lua_getfenv )( lua_State* L, int idx );
+    extern int ( *lua_setfenv )( lua_State* L, int idx );
+    extern const char *( *lua_pushvfstring )( lua_State* L, const char* fmt, va_list argp );
+    extern int ( *lua_error )( lua_State* L );
+    extern int ( *luaL_typerror )( lua_State* L, int narg, const char* tname );
+    extern void* ( *lua_topointer )( lua_State* L, int idx );
+    extern int ( *luaL_callmeta )( lua_State* L, int idx, const char* e );
 }
 
 namespace GarrysMod
@@ -310,17 +312,17 @@ namespace GarrysMod
                 }
 
                 // Pushes a formatted string onto the stack
-                inline const char *PushFormattedString( const char *fmt, va_list args )
+                inline const char* PushFormattedString( const char* fmt, va_list args )
                 {
                     return lua_pushvfstring( state, fmt, args );
                 }
 
                 // Pushes a formatted string onto the stack
-                inline const char *PushFormattedString( const char *fmt, ... )
+                inline const char* PushFormattedString( const char* fmt, ... )
                 {
                     va_list args;
                     va_start( args, fmt );
-                    const char *res = PushFormattedString( fmt, args );
+                    const char* res = PushFormattedString( fmt, args );
                     va_end( args );
                     return res;
                 }
@@ -332,7 +334,7 @@ namespace GarrysMod
                 }
 
                 // Throws an error (pushes a formatted string onto the stack and uses it)
-                inline int FormattedError( const char *fmt, ... )
+                inline int FormattedError( const char* fmt, ... )
                 {
                     va_list args;
                     va_start( args, fmt );
@@ -342,9 +344,21 @@ namespace GarrysMod
                 }
 
                 // Throws an error related to type differences
-                inline int TypeError( int iStackPos, const char *tname )
+                inline int TypeError( int iStackPos, const char* tname )
                 {
                     return luaL_typerror( state, iStackPos, tname );
+                }
+
+                // Converts the value at the given index to a generic C pointer (void*)
+                inline void* GetPointer( int iStackPos )
+                {
+                    return lua_topointer( state, iStackPos );
+                }
+
+                // Calls a metamethod on the object at iStackPos
+                inline int CallMeta( int iStackPos, const char* e )
+                {
+                    return luaL_callmeta( state, iStackPos, e );
                 }
 
             private:
