@@ -113,13 +113,11 @@ namespace GarrysMod
                 // See: lua_next( lua_State*, int );
                 virtual int         Next( int iStackPos ) = 0;
 
-#ifdef GMOD_ALLOW_DEPRECATED
+#ifndef GMOD_ALLOW_DEPRECATED
+            private:
+#endif
                 // Deprecated: Use the UserType functions instead of this
                 virtual void*       NewUserdata( size_t iSize ) = 0;
-#else
-            protected:
-                virtual UserData*   NewUserdata( size_t iSize ) = 0;
-#endif
 
             public:
                 // Throws an error and ceases execution of the function
@@ -165,13 +163,13 @@ namespace GarrysMod
                 // returns NULL upon failure
                 virtual CFunc       GetCFunction( int iStackPos = -1 ) = 0;
 
-                // You should probably be using the UserType functions instead of this
-#ifdef GMOD_ALLOW_DEPRECATED
-                virtual void*       GetUserdata( int iStackPos = -1 ) = 0;
-#else
-                virtual UserData*   GetUserdata( int iStackPos = -1 ) = 0;
+#ifndef GMOD_ALLOW_DEPRECATED
+            private:
 #endif
+                // Deprecated: You should probably be using the UserType functions instead of this
+                virtual void*       GetUserdata( int iStackPos = -1 ) = 0;
 
+            public:
                 // Pushes a nil value on to the stack
                 virtual void        PushNil() = 0;
 
@@ -257,7 +255,7 @@ namespace GarrysMod
                 // Pushes the metatable associated with the given type
                 virtual bool        PushMetaTable( int iType ) = 0;
 
-                // Created a new UserData of type iType that references the given data
+                // Creates a new UserData of type iType that references the given data
                 virtual void        PushUserType( void* data, int iType ) = 0;
 
                 // Sets the data pointer of the UserType at iStackPos
