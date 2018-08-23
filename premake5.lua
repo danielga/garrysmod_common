@@ -98,10 +98,10 @@ function CreateWorkspace(config)
 				"STRICT"
 			})
 
-		filter("system:windows or macosx")
+		filter("system:windows")
 			cppdialect("C++17")
 
-		filter("system:linux")
+		filter("system:linux or macosx")
 			cppdialect("GNU++17")
 
 		filter({})
