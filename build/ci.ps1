@@ -4,7 +4,7 @@ $ErrorActionPreference = "Stop"
 if( "$env:SOURCE_SDK" ) {
 	if( !( ( Get-Item "$env:SOURCE_SDK/LICENSE" -ErrorAction SilentlyContinue ) -is [System.IO.FileInfo] ) ) {
 		Write-Output "sourcesdk-minimal local repository is empty, doing git clone of the remote repo"
-		git clone "https://github.com/danielga/sourcesdk-minimal.git" "$env:SOURCE_SDK"
+		git clone --depth 1 --shallow-submodules "https://github.com/danielga/sourcesdk-minimal.git" "$env:SOURCE_SDK"
 	} else {
 		$LOCAL = git -C "$env:SOURCE_SDK" rev-parse "@"
 		$REMOTE = git -C "$env:SOURCE_SDK" rev-parse "@{u}"
@@ -18,7 +18,7 @@ if( "$env:SOURCE_SDK" ) {
 		} else {
 			Write-Output "sourcesdk-minimal local repository is bad, cloning again"
 			Remove-Item -Force -Recurse "$env:SOURCE_SDK"
-			git clone "https://github.com/danielga/sourcesdk-minimal.git" "$env:SOURCE_SDK"
+			git clone --depth 1 --shallow-submodules "https://github.com/danielga/sourcesdk-minimal.git" "$env:SOURCE_SDK"
 		}
 	}
 }
@@ -26,7 +26,7 @@ if( "$env:SOURCE_SDK" ) {
 $BUILD_PREMAKE5 = $FALSE
 if( !( ( Get-Item "$env:DEPENDENCIES/premake-core/premake5.lua" -ErrorAction SilentlyContinue ) -is [System.IO.FileInfo] ) ) {
 	Write-Output "premake-core local repository is empty, doing git clone of the remote repo"
-	git clone "https://github.com/premake/premake-core.git" "$env:DEPENDENCIES/premake-core"
+	git clone --depth 1 --shallow-submodules "https://github.com/premake/premake-core.git" "$env:DEPENDENCIES/premake-core"
 	$BUILD_PREMAKE5 = $TRUE
 } else {
 	$LOCAL = git -C "$env:DEPENDENCIES/premake-core" rev-parse "@"
@@ -42,7 +42,7 @@ if( !( ( Get-Item "$env:DEPENDENCIES/premake-core/premake5.lua" -ErrorAction Sil
 	} else {
 		Write-Output "premake-core local repository is bad, cloning again"
 		Remove-Item -Force -Recurse "$env:DEPENDENCIES/premake-core"
-		git clone "https://github.com/premake/premake-core.git" "$env:DEPENDENCIES/premake-core"
+		git clone --depth 1 --shallow-submodules "https://github.com/premake/premake-core.git" "$env:DEPENDENCIES/premake-core"
 		$BUILD_PREMAKE5 = $TRUE
 	}
 }

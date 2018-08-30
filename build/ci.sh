@@ -6,7 +6,7 @@ set -e
 if [ ! -z ${SOURCE_SDK+x} ]; then
 	if [ ! -f "$SOURCE_SDK/LICENSE" ]; then
 		echo "sourcesdk-minimal local repository is empty, doing git clone of the remote repo";
-		git clone "https://github.com/danielga/sourcesdk-minimal.git" "$SOURCE_SDK";
+		git clone --depth 1 --shallow-submodules "https://github.com/danielga/sourcesdk-minimal.git" "$SOURCE_SDK";
 	else
 		LOCAL=$(git -C "$SOURCE_SDK" rev-parse @);
 		REMOTE=$(git -C "$SOURCE_SDK" rev-parse @{u});
@@ -20,7 +20,7 @@ if [ ! -z ${SOURCE_SDK+x} ]; then
 		else
 			echo "sourcesdk-minimal local repository is bad, cloning again";
 			rm -rf "$SOURCE_SDK";
-			git clone "https://github.com/danielga/sourcesdk-minimal.git" "$SOURCE_SDK";
+			git clone --depth 1 --shallow-submodules "https://github.com/danielga/sourcesdk-minimal.git" "$SOURCE_SDK";
 		fi
 	fi
 fi
@@ -28,7 +28,7 @@ fi
 BUILD_PREMAKE5=false;
 if [ ! -f "$DEPENDENCIES/premake-core/premake5.lua" ]; then
 	echo "premake-core local repository is empty, doing git clone of the remote repo";
-	git clone "https://github.com/premake/premake-core.git" "$DEPENDENCIES/premake-core";
+	git clone --depth 1 --shallow-submodules "https://github.com/premake/premake-core.git" "$DEPENDENCIES/premake-core";
 	BUILD_PREMAKE5=true;
 else
 	LOCAL=$(git -C "$DEPENDENCIES/premake-core" rev-parse @);
@@ -44,7 +44,7 @@ else
 	else
 		echo "premake-core local repository is bad, cloning again";
 		rm -rf "$DEPENDENCIES/premake-core";
-		git clone "https://github.com/premake/premake-core.git" "$DEPENDENCIES/premake-core";
+		git clone --depth 1 --shallow-submodules "https://github.com/premake/premake-core.git" "$DEPENDENCIES/premake-core";
 		BUILD_PREMAKE5=true;
 	fi
 fi
