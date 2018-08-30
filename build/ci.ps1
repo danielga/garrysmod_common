@@ -52,6 +52,7 @@ New-Item "$env:DEPENDENCIES/$env:PROJECT_OS" -ItemType Directory -ErrorAction Si
 if( $BUILD_PREMAKE5 ) {
 	Write-Output "premake-core needs building, bootstrapping"
 	Push-Location "$env:DEPENDENCIES/premake-core"
+	$env:CL = "/MP"
 	nmake -f Bootstrap.mak "$env:PROJECT_OS"
 	Pop-Location
 	New-Item "$env:DEPENDENCIES/$env:PROJECT_OS/premake-core" -ItemType Directory -ErrorAction SilentlyContinue
