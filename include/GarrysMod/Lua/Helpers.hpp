@@ -1,12 +1,12 @@
 #pragma once
 
-#include <stdint.h>
+#include <cstdint>
 #include <cstring>
 #include <string>
 #include <sstream>
-#include <GarrysMod/Lua/LuaInterface.h>
-#include <GarrysMod/Lua/Interface.h>
-#include <lua.hpp>
+#include "LuaInterface.h"
+#include "Interface.h"
+#include "../../lua.hpp"
 
 namespace LuaHelpers
 {
