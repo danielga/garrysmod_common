@@ -64,8 +64,7 @@ function CreateWorkspace(config)
 		flags({"NoPCH", "MultiProcessorCompile"})
 		staticruntime("On")
 		characterset("MBCS")
-		platforms("x86")
-		architecture("x32")
+		platforms({"x86", "x64"})
 
 		if abi_compatible then
 			configurations("Release")
@@ -76,19 +75,41 @@ function CreateWorkspace(config)
 			configurations({"Release", "Debug"})
 		end
 
+		filter("platforms:x86")
+			architecture("x86")
+
+		filter("platforms:x64")
+			architecture("x86_64")
+
 		filter("configurations:Release")
 			optimize("On")
 			vectorextensions("SSE2")
 			defines("NDEBUG")
-			objdir(_workspace.directory .. "/intermediate")
-			targetdir(_workspace.directory .. "/release")
+
+			filter({"configurations:Release", "architecture:x86"})
+				targetdir(_workspace.directory .. "/x86/release")
+				debugdir(_workspace.directory .. "/x86/release")
+				objdir("!" .. _workspace.directory .. "/x86/release/intermediate/%{prj.name}")
+
+			filter({"configurations:Release", "architecture:x86_64"})
+				targetdir(_workspace.directory .. "/x64/release")
+				debugdir(_workspace.directory .. "/x64/release")
+				objdir("!" .. _workspace.directory .. "/x64/release/intermediate/%{prj.name}")
 
 		if not abi_compatible then
 			filter("configurations:Debug")
 				symbols("On")
 				defines({"DEBUG", "_DEBUG"})
-				objdir(_workspace.directory .. "/intermediate")
-				targetdir(_workspace.directory .. "/debug")
+
+				filter({"configurations:Debug", "architecture:x86"})
+					targetdir(_workspace.directory .. "/x86/debug")
+					debugdir(_workspace.directory .. "/x86/debug")
+					objdir("!" .. _workspace.directory .. "/x86/debug/intermediate/%{prj.name}")
+
+				filter({"configurations:Debug", "architecture:x86_64"})
+					targetdir(_workspace.directory .. "/x64/debug")
+					debugdir(_workspace.directory .. "/x64/debug")
+					objdir("!" .. _workspace.directory .. "/x64/debug/intermediate/%{prj.name}")
 		end
 
 		filter("system:windows")
