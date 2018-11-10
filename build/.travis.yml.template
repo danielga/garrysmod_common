@@ -25,7 +25,7 @@ install:
   - export GARRYSMOD_COMMON="$DEPENDENCIES/garrysmod_common"
   - export SOURCE_SDK="$DEPENDENCIES/sourcesdk-minimal"
   - export TARGET_OS="$TRAVIS_OS_NAME"
-  - export COMPILER_PLATFORM="gmake";
+  - export COMPILER_PLATFORM="gmake"
   - export BUILD_SCRIPT="$GARRYSMOD_COMMON/build/ci.sh"
   - export GARRYSMOD_COMMON_REPOSITORY="https://github.com/danielga/garrysmod_common.git"
   - export PREMAKE5_EXECUTABLE=premake5
