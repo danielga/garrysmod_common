@@ -1,6 +1,6 @@
 #pragma once
 
-#include <GarrysMod/Helpers.hpp>
+#include "Helpers.hpp"
 #include <interface.h>
 #include <string>
 
