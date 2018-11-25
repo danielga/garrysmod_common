@@ -82,7 +82,7 @@ namespace GarrysMod
 			virtual bool RunStringEx( const char *filename, const char *path, const char *stringToRun, bool run, bool printErrors, bool dontPushErrors, bool noReturns ) = 0;
 			virtual size_t GetDataString( int index, const char **str ) = 0;
 			virtual void ErrorFromLua( const char *fmt, ... ) = 0;
-			virtual void *GetCurrentLocation( ) = 0;
+			virtual const char *GetCurrentLocation( ) = 0;
 			virtual void MsgColour( const Color &col, const char *fmt, ... ) = 0;
 			virtual void GetCurrentFile( std::string &outStr ) = 0;
 			virtual void CompileString( Bootil::Buffer &dumper, const std::string &stringToCompile ) = 0;
