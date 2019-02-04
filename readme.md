@@ -28,12 +28,12 @@ Example:
 ```lua
 newoption({
     trigger = "gmcommon",
-    description = "Sets the path to the garrysmod\_common (https://github.com/danielga/garrysmod\_common) directory",
-    value = "path to garrysmod\_common directory"
+    description = "Sets the path to the garrysmod_common (https://github.com/danielga/garrysmod_common) directory",
+    value = "path to garrysmod_common directory"
 })
 
-local gmcommon = \_OPTIONS.gmcommon or os.getenv("GARRYSMOD\_COMMON")
-assert(gmcommon ~= nil, "you didn't provide a path to your garrysmod\_common (https://github.com/danielga/garrysmod\_common) directory")
+local gmcommon = _OPTIONS.gmcommon or os.getenv("GARRYSMOD_COMMON")
+assert(gmcommon ~= nil, "you didn't provide a path to your garrysmod_common (https://github.com/danielga/garrysmod_common) directory")
 include(gmcommon)
 ```
 
@@ -41,9 +41,9 @@ Creates the workspace with the provided workspace\_name, optional workspace\_add
 
 ```lua
 CreateWorkspace({
-    name = workspace\_name
-    [, allow\_debug = workspace\_add\_debug]
-    [, path = workspace\_path]
+    name = workspace_name
+    [, allow_debug = workspace_add_debug]
+    [, path = workspace_path]
 })
 ```
 
@@ -51,9 +51,9 @@ Creates the project for the provided state on project\_serverside (it's a boolea
 
 ```lua
 CreateProject({
-    serverside = project\_serverside
-    [, manual\_files = project\_manual\_files]
-    [, source\_path = project\_source\_path]
+    serverside = project_serverside
+    [, manual_files = project_manual_files]
+    [, source_path = project_source_path]
 })
 ```
 
@@ -64,14 +64,14 @@ IncludeLuaShared() -- uses this repo path
 IncludeDetouring() -- uses this repo detouring submodule
 IncludeScanning() -- uses this repo scanning submodule
 
-IncludeSDKCommon([directory]) -- premake option: --sourcesdk=directory - env var: SOURCE\_SDK
-IncludeSDKTier0([directory]) -- premake option: --sourcesdk=directory - env var: SOURCE\_SDK
-IncludeSDKTier1([directory]) -- premake option: --sourcesdk=directory - env var: SOURCE\_SDK
-IncludeSDKTier2([directory]) -- premake option: --sourcesdk=directory - env var: SOURCE\_SDK
-IncludeSDKTier3([directory]) -- premake option: --sourcesdk=directory - env var: SOURCE\_SDK
-IncludeSDKMathlib([directory]) -- premake option: --sourcesdk=directory - env var: SOURCE\_SDK
-IncludeSDKRaytrace([directory]) -- premake option: --sourcesdk=directory - env var: SOURCE\_SDK
-IncludeSteamAPI([directory]) -- premake option: --sourcesdk=directory - env var: SOURCE\_SDK
+IncludeSDKCommon([directory]) -- premake option: --sourcesdk=directory - env var: SOURCE_SDK
+IncludeSDKTier0([directory]) -- premake option: --sourcesdk=directory - env var: SOURCE_SDK
+IncludeSDKTier1([directory]) -- premake option: --sourcesdk=directory - env var: SOURCE_SDK
+IncludeSDKTier2([directory]) -- premake option: --sourcesdk=directory - env var: SOURCE_SDK
+IncludeSDKTier3([directory]) -- premake option: --sourcesdk=directory - env var: SOURCE_SDK
+IncludeSDKMathlib([directory]) -- premake option: --sourcesdk=directory - env var: SOURCE_SDK
+IncludeSDKRaytrace([directory]) -- premake option: --sourcesdk=directory - env var: SOURCE_SDK
+IncludeSteamAPI([directory]) -- premake option: --sourcesdk=directory - env var: SOURCE_SDK
 ```
 
 You can also request the project to auto-install the compiled files to a directory selected by you or automatically found on your system. Use one of the following:  
