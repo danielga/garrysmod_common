@@ -19,31 +19,53 @@
 
 #endif
 
+#if defined SYSTEM_WINDOWS
+
 template<typename FunctionType>
 static FunctionType GetSymbol( const char *name )
 {
-
-#if defined SYSTEM_WINDOWS
-
 	HMODULE binary = nullptr;
-	if( GetModuleHandleEx( 0, "garrysmod/bin/lua_shared.dll", &binary ) && binary != nullptr )
+
+#if defined ARCHITECTURE_X86
+
+	if( GetModuleHandleEx( 0, "bin/lua_shared.dll", &binary ) && binary != nullptr )
+
+#elif defined ARCHITECTURE_X86_64
+
+	if( GetModuleHandleEx( 0, "bin/win64/lua_shared.dll", &binary ) && binary != nullptr )
+
+#endif
+
 	{
-		FunctionType symbol_pointer = reinterpret_cast<FunctionType>( GetProcAddress( reinterpret_cast<HMODULE>( binary ), name ) );
-		FreeModule( binary );
+		FunctionType symbol_pointer = reinterpret_cast<FunctionType>( GetProcAddress( binary, name ) );
+		FreeLibrary( binary );
 		return symbol_pointer;
 	}
 
+	return nullptr;
+}
+
 #elif defined SYSTEM_POSIX
+
+template<typename FunctionType>
+static FunctionType GetSymbol( const char *name )
+{
 
 #if defined SYSTEM_MACOSX
 
 	void *binary = dlopen( "garrysmod/bin/lua_shared.dylib", RTLD_LAZY | RTLD_NOLOAD );
 
-#else
+#elif defined SYSTEM_LINUX && defined ARCHITECTURE_X86
 
-	void *binary = dlopen( "garrysmod/bin/lua_shared_srv.so", RTLD_LAZY | RTLD_NOLOAD );
+	void *binary = dlopen( "bin/linux32/lua_shared.so", RTLD_LAZY | RTLD_NOLOAD );
 	if( binary == nullptr )
-		binary = dlopen( "garrysmod/bin/lua_shared.so", RTLD_LAZY | RTLD_NOLOAD );
+		binary = dlopen( "bin/linux32/lua_shared_client.so", RTLD_LAZY | RTLD_NOLOAD );
+
+#elif defined SYSTEM_LINUX && defined ARCHITECTURE_X86_64
+
+	void *binary = dlopen( "bin/linux64/lua_shared.so", RTLD_LAZY | RTLD_NOLOAD );
+	if( binary == nullptr )
+		binary = dlopen( "bin/linux64/lua_shared_client.so", RTLD_LAZY | RTLD_NOLOAD );
 
 #endif
 
@@ -54,10 +76,10 @@ static FunctionType GetSymbol( const char *name )
 		return symbol_pointer;
 	}
 
-#endif
-
 	return nullptr;
 }
+
+#endif
 
 template<const char *Name, typename FunctionType>
 struct Loader;
