@@ -3,32 +3,28 @@ skip_non_tags: true
 image: Visual Studio 2017
 clone_depth: 1
 init:
-- cmd: git config --global core.autocrlf true
+- ps: git config --global core.autocrlf true
 environment:
   MODULE_NAME: module name here
   REPOSITORY_DIR: $(APPVEYOR_BUILD_FOLDER)
   DEPENDENCIES: $(APPVEYOR_BUILD_FOLDER)/dependencies
   GARRYSMOD_COMMON: $(APPVEYOR_BUILD_FOLDER)/dependencies/garrysmod_common
   SOURCE_SDK: $(APPVEYOR_BUILD_FOLDER)/dependencies/sourcesdk-minimal
+  PREMAKE5_URL: https://github.com/premake/premake-core/releases/download/v5.0.0-alpha13/premake-5.0.0-alpha13-windows.zip
   PREMAKE5_EXECUTABLE: premake5.exe
   PREMAKE5: $(APPVEYOR_BUILD_FOLDER)/dependencies/windows/premake-core/premake5.exe
-  BUILD_SCRIPT: $(APPVEYOR_BUILD_FOLDER)/dependencies/garrysmod_common/build/ci.ps1
+  BUILD_SCRIPT: $(APPVEYOR_BUILD_FOLDER)/dependencies/garrysmod_common/build/build.ps1
   GARRYSMOD_COMMON_REPOSITORY: https://github.com/danielga/garrysmod_common.git
+  BOOTSTRAP_URL: https://raw.githubusercontent.com/danielga/garrysmod_common/master/build/bootstrap.ps1
   PROJECT_OS: windows
   TARGET_OS: win32
   COMPILER_PLATFORM: vs2017
 install:
-- cmd: >-
-    if not exist "%DEPENDENCIES%/" mkdir "%DEPENDENCIES%"
-
-    if exist "%GARRYSMOD_COMMON%/premake5.lua" (echo "garrysmod_common directory is good, pulling any latest changes" & git -C "%GARRYSMOD_COMMON%" pull & git -C "%GARRYSMOD_COMMON%" submodule update --init --recursive)
-
-    if not exist "%GARRYSMOD_COMMON%/premake5.lua" (echo "garrysmod_common directory is empty, doing git clone of the remote repo" & git clone --recursive "%GARRYSMOD_COMMON_REPOSITORY%" "%GARRYSMOD_COMMON%")
+- ps: 'Invoke-Expression ((New-Object System.Net.WebClient).DownloadString("$env:BOOTSTRAP_URL"))'
 cache:
 - $(APPVEYOR_BUILD_FOLDER)/dependencies/
-- $(APPVEYOR_BUILD_FOLDER)/projects/
 build_script:
-- cmd: '"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars32.bat" && powershell -File "%BUILD_SCRIPT%"'
+- ps: '& "$env:BUILD_SCRIPT"'
 test: off
 artifacts:
 - path: projects/$(PROJECT_OS)/$(COMPILER_PLATFORM)/release/gmsv_$(MODULE_NAME)_$(TARGET_OS).dll
