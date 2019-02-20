@@ -7,15 +7,15 @@ variables:
   GARRYSMOD_COMMON: "$CI_PROJECT_DIR/dependencies/garrysmod_common"
   SOURCE_SDK: "$CI_PROJECT_DIR/dependencies/sourcesdk-minimal"
   REPOSITORY_DIR: "$CI_PROJECT_DIR"
+  PREMAKE5: "$CI_PROJECT_DIR/dependencies/windows/premake-core/premake5.exe"
   GARRYSMOD_COMMON_REPOSITORY: "https://github.com/danielga/garrysmod_common.git"
+  BOOTSTRAP_URL: "https://raw.githubusercontent.com/danielga/garrysmod_common/master/build/bootstrap.sh"
 cache:
   paths:
     - "$DEPENDENCIES/*"
-    - "$CI_PROJECT_DIR/projects/*"
 stage: build
 only:
   - tags
-script: "$BUILD_SCRIPT"
 artifacts:
   paths:
     - "${CI_PROJECT_DIR}/projects/${PROJECT_OS}/${COMPILER_PLATFORM}/release/gmsv_${MODULE_NAME}_${TARGET_OS}.dll"
@@ -24,64 +24,38 @@ job_win32:
   tags:
     - windows
   variables:
-    BUILD_SCRIPT: "$CI_PROJECT_DIR/dependencies/garrysmod_common/build/ci.ps1"
+    BUILD_SCRIPT: "$CI_PROJECT_DIR/dependencies/garrysmod_common/build/build.ps1"
     PROJECT_OS: "windows"
     TARGET_OS: "win32"
     COMPILER_PLATFORM: "vs2017"
-    PREMAKE5_EXECUTABLE: "premake5.exe"
     PREMAKE5: "$CI_PROJECT_DIR/dependencies/windows/premake-core/premake5.exe"
-  before_script:
-    - mkdir "%DEPENDENCIES%"
-    - if not exist "%GARRYSMOD_COMMON%/premake5.lua" (
-        echo "garrysmod_common directory is empty, doing git clone of the remote repo"
-        git clone --recursive "%GARRYSMOD_COMMON_REPOSITORY%" "%GARRYSMOD_COMMON%"
-      ) else (
-        echo "garrysmod_common directory is good, pulling any latest changes"
-        git -C "%GARRYSMOD_COMMON%" pull
-        git -C "%GARRYSMOD_COMMON%" submodule update --init --recursive
-      )
-  script: "\"C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Auxiliary/Build/vcvars32.bat\" && powershell -File \"%BUILD_SCRIPT%\""
+  before_script: "Invoke-Expression ((New-Object System.Net.WebClient).DownloadString(\"$env:BOOTSTRAP_URL\"))"
+  script: "& \"$BUILD_SCRIPT\""
 job_linux:
   tags:
     - linux
   variables:
-    BUILD_SCRIPT: "$CI_PROJECT_DIR/dependencies/garrysmod_common/build/ci.sh"
+    BUILD_SCRIPT: "$CI_PROJECT_DIR/dependencies/garrysmod_common/build/build.sh"
     PROJECT_OS: "linux"
     TARGET_OS: "linux"
     COMPILER_PLATFORM: "gmake"
-    PREMAKE5_EXECUTABLE: "premake5"
     PREMAKE5: "$CI_PROJECT_DIR/dependencies/linux/premake-core/premake5"
-    CXX: "g++-4.8"
-    CC: "gcc-4.8"
-  before_script:
-    - mkdir -p "$DEPENDENCIES"
-    - if [ ! -f "$GARRYSMOD_COMMON/premake5.lua" ]; then
-        echo "garrysmod_common directory is empty, doing git clone of the remote repo";
-        git clone --recursive "$GARRYSMOD_COMMON_REPOSITORY" "$GARRYSMOD_COMMON";
-      else
-        echo "garrysmod_common directory is good, pulling any latest changes";
-        git -C "$GARRYSMOD_COMMON" pull;
-        git -C "$GARRYSMOD_COMMON" submodule update --init --recursive;
-      fi
+    PREMAKE5_URL: "https://github.com/premake/premake-core/releases/download/v5.0.0-alpha13/premake-5.0.0-alpha13-linux.tar.gz"
+    CXX: "g++-8"
+    CC: "gcc-8"
+  before_script: "curl -s -L \"$BOOTSTRAP_URL\" | bash"
+  script: "$BUILD_SCRIPT"
 job_macosx:
   tags:
     - macosx
   variables:
-    BUILD_SCRIPT: "$CI_PROJECT_DIR/dependencies/garrysmod_common/build/ci.sh"
+    BUILD_SCRIPT: "$CI_PROJECT_DIR/dependencies/garrysmod_common/build/build.sh"
     PROJECT_OS: "macosx"
     TARGET_OS: "osx"
     COMPILER_PLATFORM: "gmake"
-    PREMAKE5_EXECUTABLE: "premake5"
     PREMAKE5: "$CI_PROJECT_DIR/dependencies/macosx/premake-core/premake5"
-    CXX: "g++"
-    CC: "gcc"
-  before_script:
-    - mkdir -p "$DEPENDENCIES"
-    - if [ ! -f "$GARRYSMOD_COMMON/premake5.lua" ]; then
-        echo "garrysmod_common directory is empty, doing git clone of the remote repo";
-        git clone --recursive "$GARRYSMOD_COMMON_REPOSITORY" "$GARRYSMOD_COMMON";
-      else
-        echo "garrysmod_common directory is good, pulling any latest changes";
-        git -C "$GARRYSMOD_COMMON" pull;
-        git -C "$GARRYSMOD_COMMON" submodule update --init --recursive;
-      fi
+    PREMAKE5_URL: "https://github.com/premake/premake-core/releases/download/v5.0.0-alpha13/premake-5.0.0-alpha13-macosx.tar.gz"
+    CXX: "clang++"
+    CC: "clang"
+  before_script: "curl -s -L \"$BOOTSTRAP_URL\" | bash"
+  script: "$BUILD_SCRIPT"
