@@ -11,7 +11,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE:-$0}" )" && pwd )"
 # Checkout with the correct line endings on plain text files, depending on the host OS
 git config --global core.autocrlf true >/dev/null 2>/dev/null
 
-update_local_git_repository "$GARRYSMOD_COMMON" "$GARRYSMOD_COMMON_REPOSITORY" "improve-build-scripts"
+update_local_git_repository "$GARRYSMOD_COMMON" "$GARRYSMOD_COMMON_REPOSITORY"
 
 if [ ! -z "${SOURCE_SDK+x}" ]; then
 	update_local_git_repository "$SOURCE_SDK" "https://github.com/danielga/sourcesdk-minimal.git"

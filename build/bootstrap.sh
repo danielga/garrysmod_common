@@ -74,4 +74,4 @@ function update_local_git_repository {
 validate_variable_or_set_default "GARRYSMOD_COMMON_REPOSITORY" "https://github.com/danielga/garrysmod_common.git"
 validate_variable_or_set_default "GARRYSMOD_COMMON" "./garrysmod_common"
 
-update_local_git_repository "$GARRYSMOD_COMMON" "$GARRYSMOD_COMMON_REPOSITORY" "improve-build-scripts"
+update_local_git_repository "$GARRYSMOD_COMMON" "$GARRYSMOD_COMMON_REPOSITORY"
