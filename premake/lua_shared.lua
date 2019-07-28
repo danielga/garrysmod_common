@@ -23,16 +23,9 @@ function IncludeLuaShared()
 			},
 			["Source files/*"] = path.join(_GARRYSMOD_COMMON_DIRECTORY, "source/LuaShared.cpp")
 		})
-
-		filter("configurations:Release")
-			objdir("%{prj.location}/intermediate")
-			targetdir("%{prj.location}/release")
-
-		if not _workspace.abi_compatible then
-			filter("configurations:Debug")
-				objdir("%{prj.location}/intermediate")
-				targetdir("%{prj.location}/debug")
-		end
+		targetdir("%{prj.location}/%{cfg.architecture}/%{cfg.buildcfg}")
+		debugdir("%{prj.location}/%{cfg.architecture}/%{cfg.buildcfg}")
+		objdir("!%{prj.location}/%{cfg.architecture}/%{cfg.buildcfg}/intermediate/%{prj.name}")
 
 		filter("system:linux or macosx")
 			links("dl")

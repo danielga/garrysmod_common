@@ -40,19 +40,12 @@ function IncludeDetouring()
 			["Source files/hde"] = path.join(directory, "hde/src/hde.c"),
 			["Source files/minhook"] = path.join(directory, "minhook/src/*.c")
 		})
+		targetdir("%{prj.location}/%{cfg.architecture}/%{cfg.buildcfg}")
+		debugdir("%{prj.location}/%{cfg.architecture}/%{cfg.buildcfg}")
+		objdir("!%{prj.location}/%{cfg.architecture}/%{cfg.buildcfg}/intermediate/%{prj.name}")
 
 		filter("files:**.c")
 			language("C")
-
-		filter("configurations:Release")
-			objdir("%{prj.location}/intermediate")
-			targetdir("%{prj.location}/release")
-
-		if not _workspace.abi_compatible then
-			filter("configurations:Debug")
-				objdir("%{prj.location}/intermediate")
-				targetdir("%{prj.location}/debug")
-		end
 
 	project(_project.name)
 end
