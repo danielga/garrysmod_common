@@ -214,8 +214,8 @@ function CreateProject(config)
 
 	local name = (is_server and "gmsv_" or "gmcl_") .. _workspace.name
 
-	if abi_compatible and os.istarget("windows") and _ACTION ~= "vs2017" then
-		error("The only supported compilation platform for this project (" .. name .. ") on Windows is Visual Studio 2017.")
+	if abi_compatible and os.istarget("windows") and _ACTION ~= "vs2015" and _ACTION ~= "vs2017" and _ACTION ~= "vs2019" then
+		error("The only supported compilation platforms for this project (" .. name .. ") on Windows are Visual Studio 2015, 2017 and 2019.")
 	end
 
 	local _project = project(name)
