@@ -9,10 +9,10 @@ if gmcommon == nil then
 	error("you didn't provide a path to your garrysmod_common (https://github.com/danielga/garrysmod_common) directory")
 end
 
-include(gmcommon)
+include(path.join(gmcommon, "generator.v2.lua"))
 
-CreateWorkspace({name = "example", abi_compatible = false, path = os.target() .. "/" .. _ACTION})
-	CreateProject({serverside = true, source_path = "../source", manual_files = false})
+CreateWorkspace({name = "example", abi_compatible = false, path = path.join("projects", os.target(), _ACTION)})
+	CreateProject({serverside = true, source_path = "source", manual_files = false})
 		IncludeLuaShared()
 		IncludeScanning()
 		IncludeDetouring()
@@ -20,7 +20,7 @@ CreateWorkspace({name = "example", abi_compatible = false, path = os.target() ..
 		IncludeSDKTier0()
 		IncludeSDKTier1()
 
-	CreateProject({serverside = false, source_path = "../source", manual_files = true})
+	CreateProject({serverside = false, source_path = "source", manual_files = true})
 		IncludeLuaShared()
 		IncludeScanning()
 		IncludeDetouring()
@@ -29,7 +29,7 @@ CreateWorkspace({name = "example", abi_compatible = false, path = os.target() ..
 		IncludeSDKTier1()
 
 		filter("system:windows")
-			files({"../source/win32/*.cpp", "../source/win32/*.hpp"})
+			files({"source/win32/*.cpp", "source/win32/*.hpp"})
 
 		filter("system:linux or macosx")
-			files({"../source/posix/*.cpp", "../source/posix/*.hpp"})
+			files({"source/posix/*.cpp", "source/posix/*.hpp"})

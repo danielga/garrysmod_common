@@ -3,38 +3,35 @@ function IncludeLuaShared()
 
 	local _project = project()
 	local _workspace = _project.workspace
-	local _project_directory = _GARRYSMOD_COMMON_DIRECTORY .. "/projects/" .. os.target() .. "/" .. _ACTION
 
-	sysincludedirs(_GARRYSMOD_COMMON_DIRECTORY .. "/include")
+	sysincludedirs(path.join(_GARRYSMOD_COMMON_DIRECTORY, "include"))
 	links("lua_shared")
 
 	project("lua_shared")
 		kind("StaticLib")
-		language("C++")
-		cppdialect("C++11")
-		location(_GARRYSMOD_COMMON_DIRECTORY .. "/projects/" .. os.target() .. "/" .. _ACTION)
-		sysincludedirs(_GARRYSMOD_COMMON_DIRECTORY .. "/include")
+		location(path.join(_GARRYSMOD_COMMON_DIRECTORY, "projects", os.target(), _ACTION))
+		sysincludedirs(path.join(_GARRYSMOD_COMMON_DIRECTORY, "include"))
 		files({
-			_GARRYSMOD_COMMON_DIRECTORY .. "/include/**.h",
-			_GARRYSMOD_COMMON_DIRECTORY .. "/include/**.hpp",
-			_GARRYSMOD_COMMON_DIRECTORY .. "/source/LuaShared.cpp"
+			path.join(_GARRYSMOD_COMMON_DIRECTORY, "include/**.h"),
+			path.join(_GARRYSMOD_COMMON_DIRECTORY, "include/**.hpp"),
+			path.join(_GARRYSMOD_COMMON_DIRECTORY, "source/LuaShared.cpp")
 		})
 		vpaths({
 			["Header files/*"] = {
-				_GARRYSMOD_COMMON_DIRECTORY .. "/include/**.h",
-				_GARRYSMOD_COMMON_DIRECTORY .. "/include/**.hpp"
+				path.join(_GARRYSMOD_COMMON_DIRECTORY, "include/**.h"),
+				path.join(_GARRYSMOD_COMMON_DIRECTORY, "include/**.hpp")
 			},
-			["Source files/*"] = _GARRYSMOD_COMMON_DIRECTORY .. "/source/LuaShared.cpp"
+			["Source files/*"] = path.join(_GARRYSMOD_COMMON_DIRECTORY, "source/LuaShared.cpp")
 		})
 
 		filter("configurations:Release")
-			objdir(_project_directory .. "/intermediate")
-			targetdir(_project_directory .. "/release")
+			objdir("%{prj.location}/intermediate")
+			targetdir("%{prj.location}/release")
 
 		if not _workspace.abi_compatible then
 			filter("configurations:Debug")
-				objdir(_project_directory .. "/intermediate")
-				targetdir(_project_directory .. "/debug")
+				objdir("%{prj.location}/intermediate")
+				targetdir("%{prj.location}/debug")
 		end
 
 		filter("system:linux or macosx")
