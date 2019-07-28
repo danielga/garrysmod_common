@@ -25,7 +25,7 @@ public:
 		if( filename.find( '.' ) == filename.npos )
 			filename = Helpers::GetBinaryFileName( name, libprefix, srvsuffix, extraprefix );
 
-		module = Sys_LoadModule( filename.c_str( ), noload ? SYS_NOLOAD : SYS_NOFLAGS );
+		module = Sys_LoadModule( filename.c_str( ) );
 		if( module != nullptr )
 			factory = Sys_GetFactory( module );
 	}
