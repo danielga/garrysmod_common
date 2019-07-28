@@ -171,16 +171,9 @@ function IncludeSDKTier1(directory)
 			path.join(directory, "tier1/snappy-stubs-internal.cpp"),
 			path.join(directory, "utils/lzma/C/LzmaDec.c")
 		})
-
-		filter("configurations:Release")
-			objdir("%{prj.location}/intermediate")
-			targetdir("%{prj.location}/release")
-
-		if not _workspace.abi_compatible then
-			filter("configurations:Debug")
-				objdir("%{prj.location}/intermediate")
-				targetdir("%{prj.location}/debug")
-		end
+		targetdir("%{prj.location}/%{cfg.architecture}/%{cfg.buildcfg}")
+		debugdir("%{prj.location}/%{cfg.architecture}/%{cfg.buildcfg}")
+		objdir("!%{prj.location}/%{cfg.architecture}/%{cfg.buildcfg}/intermediate/%{prj.name}")
 
 		filter("system:windows")
 			defines({"_DLL_EXT=.dll", "WIN32"})
@@ -317,16 +310,9 @@ function IncludeSDKMathlib(directory)
 			path.join(directory, "mathlib/vmatrix.cpp"),
 			path.join(directory, "mathlib/almostequal.cpp")
 		})
-
-		filter("configurations:Release")
-			objdir("%{prj.location}/intermediate")
-			targetdir("%{prj.location}/release")
-
-		if not _workspace.abi_compatible then
-			filter("configurations:Debug")
-				objdir("%{prj.location}/intermediate")
-				targetdir("%{prj.location}/debug")
-		end
+		targetdir("%{prj.location}/%{cfg.architecture}/%{cfg.buildcfg}")
+		debugdir("%{prj.location}/%{cfg.architecture}/%{cfg.buildcfg}")
+		objdir("!%{prj.location}/%{cfg.architecture}/%{cfg.buildcfg}/intermediate/%{prj.name}")
 
 		filter("system:windows or linux")
 			files(path.join(directory, "mathlib/3dnow.cpp"))
@@ -370,16 +356,9 @@ function IncludeSDKRaytrace(directory)
 			path.join(directory, "raytrace/trace2.cpp"),
 			path.join(directory, "raytrace/trace3.cpp")
 		})
-
-		filter("configurations:Release")
-			objdir("%{prj.location}/intermediate")
-			targetdir("%{prj.location}/release")
-
-		if not _workspace.abi_compatible then
-			filter("configurations:Debug")
-				objdir("%{prj.location}/intermediate")
-				targetdir("%{prj.location}/debug")
-		end
+		targetdir("%{prj.location}/%{cfg.architecture}/%{cfg.buildcfg}")
+		debugdir("%{prj.location}/%{cfg.architecture}/%{cfg.buildcfg}")
+		objdir("!%{prj.location}/%{cfg.architecture}/%{cfg.buildcfg}/intermediate/%{prj.name}")
 
 		filter("system:windows")
 			defines("WIN32")
@@ -428,16 +407,9 @@ function IncludeSDKBitmap(directory)
 			path.join(directory, "bitmap/tgaloader.cpp"),
 			path.join(directory, "bitmap/tgawriter.cpp")
 		})
-
-		filter("configurations:Release")
-			objdir("%{prj.location}/intermediate")
-			targetdir("%{prj.location}/release")
-
-		if not _workspace.abi_compatible then
-			filter("configurations:Debug")
-				objdir("%{prj.location}/intermediate")
-				targetdir("%{prj.location}/debug")
-		end
+		targetdir("%{prj.location}/%{cfg.architecture}/%{cfg.buildcfg}")
+		debugdir("%{prj.location}/%{cfg.architecture}/%{cfg.buildcfg}")
+		objdir("!%{prj.location}/%{cfg.architecture}/%{cfg.buildcfg}/intermediate/%{prj.name}")
 
 		filter("system:windows")
 			defines("WIN32")
@@ -484,16 +456,9 @@ function IncludeSDKVTF(directory)
 			path.join(directory, "vtf/s3tc_decode.h"),
 			path.join(directory, "vtf/s3tc_decode.cpp")
 		})
-
-		filter("configurations:Release")
-			objdir("%{prj.location}/intermediate")
-			targetdir("%{prj.location}/release")
-
-		if not _workspace.abi_compatible then
-			filter("configurations:Debug")
-				objdir("%{prj.location}/intermediate")
-				targetdir("%{prj.location}/debug")
-		end
+		targetdir("%{prj.location}/%{cfg.architecture}/%{cfg.buildcfg}")
+		debugdir("%{prj.location}/%{cfg.architecture}/%{cfg.buildcfg}")
+		objdir("!%{prj.location}/%{cfg.architecture}/%{cfg.buildcfg}/intermediate/%{prj.name}")
 
 		filter("system:windows")
 			defines("WIN32")
