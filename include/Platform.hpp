@@ -3,7 +3,7 @@
 * A C++ header that defines macros depending on the compilation
 * environment and targets.
 *------------------------------------------------------------------------
-* Copyright (c) 2017-2018, Daniel Almeida
+* Copyright (c) 2017-2019, Daniel Almeida
 * All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without

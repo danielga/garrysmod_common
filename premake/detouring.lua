@@ -1,15 +1,12 @@
 function IncludeDetouring()
 	IncludePackage("detouring")
 
-	local directory = _GARRYSMOD_COMMON_DIRECTORY .. "/include/detouring"
+	local directory = path.join(_GARRYSMOD_COMMON_DIRECTORY, "include/detouring")
 
 	local _project = project()
 	local _workspace = _project.workspace
-	local _project_directory = _GARRYSMOD_COMMON_DIRECTORY .. "/projects/" .. os.target() .. "/" .. _ACTION
 
-	-- This first include directory is deprecated and might be removed in the future.
-	sysincludedirs(directory)
-	sysincludedirs(_GARRYSMOD_COMMON_DIRECTORY .. "/include")
+	sysincludedirs(path.join(_GARRYSMOD_COMMON_DIRECTORY, "include"))
 	links("detouring")
 
 	filter("system:macosx")
@@ -17,46 +14,44 @@ function IncludeDetouring()
 
 	project("detouring")
 		kind("StaticLib")
-		language("C++")
-		cppdialect("C++11")
-		location(_project_directory)
+		location(path.join(_GARRYSMOD_COMMON_DIRECTORY, "projects", os.target(), _ACTION))
 		sysincludedirs(directory)
 		files({
-			directory .. "/*.hpp",
-			directory .. "/*.h",
-			directory .. "/*.cpp",
-			directory .. "/hde/include/*.h",
-			directory .. "/hde/src/hde.c",
-			directory .. "/minhook/include/*.h",
-			directory .. "/minhook/src/*.h",
-			directory .. "/minhook/src/*.c"
+			path.join(directory, "*.hpp"),
+			path.join(directory, "*.h"),
+			path.join(directory, "*.cpp"),
+			path.join(directory, "hde/include/*.h"),
+			path.join(directory, "hde/src/hde.c"),
+			path.join(directory, "minhook/include/*.h"),
+			path.join(directory, "minhook/src/*.h"),
+			path.join(directory, "minhook/src/*.c")
 		})
 		vpaths({
 			["Header files"] = {
-				directory .. "/*.hpp",
-				directory .. "/*.h"
+				path.join(directory, "*.hpp"),
+				path.join(directory, "*.h")
 			},
-			["Header files/hde"] = directory .. "/hde/include/*.h",
+			["Header files/hde"] = path.join(directory, "hde/include/*.h"),
 			["Header files/minhook"] = {
-				directory .. "/minhook/include/*.h",
-				directory .. "/minhook/src/*.h"
+				path.join(directory, "minhook/include/*.h"),
+				path.join(directory, "minhook/src/*.h")
 			},
-			["Source files"] = directory .. "/*.cpp",
-			["Source files/hde"] = directory .. "/hde/src/hde.c",
-			["Source files/minhook"] = directory .. "/minhook/src/*.c"
+			["Source files"] = path.join(directory, "*.cpp"),
+			["Source files/hde"] = path.join(directory, "hde/src/hde.c"),
+			["Source files/minhook"] = path.join(directory, "minhook/src/*.c")
 		})
 
 		filter("files:**.c")
 			language("C")
 
 		filter("configurations:Release")
-			objdir(_project_directory .. "/intermediate")
-			targetdir(_project_directory .. "/release")
+			objdir("%{prj.location}/intermediate")
+			targetdir("%{prj.location}/release")
 
 		if not _workspace.abi_compatible then
 			filter("configurations:Debug")
-				objdir(_project_directory .. "/intermediate")
-				targetdir(_project_directory .. "/debug")
+				objdir("%{prj.location}/intermediate")
+				targetdir("%{prj.location}/debug")
 		end
 
 	project(_project.name)
