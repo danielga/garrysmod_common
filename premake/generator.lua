@@ -47,8 +47,10 @@ function CreateWorkspace(config)
 		flags({"NoPCH", "MultiProcessorCompile"})
 		staticruntime("On")
 		characterset("MBCS")
-		platforms("x86")
-		architecture("x32")
+		platforms({"x86", "x86_64"})
+		targetdir("%{wks.location}/%{cfg.architecture}/%{cfg.buildcfg}")
+		debugdir("%{wks.location}/%{cfg.architecture}/%{cfg.buildcfg}")
+		objdir("!%{wks.location}/%{cfg.architecture}/%{cfg.buildcfg}/intermediate/%{prj.name}")
 
 		if abi_compatible then
 			configurations("Release")
@@ -59,19 +61,21 @@ function CreateWorkspace(config)
 			configurations({"Release", "Debug"})
 		end
 
+		filter("platforms:x86")
+			architecture("x86")
+
+		filter("platforms:x86_64")
+			architecture("x86_64")
+
 		filter("configurations:Release")
 			optimize("On")
 			vectorextensions("SSE2")
 			defines("NDEBUG")
-			objdir("%{wks.location}/intermediate")
-			targetdir("%{wks.location}/release")
 
 		if not abi_compatible then
 			filter("configurations:Debug")
 				symbols("On")
 				defines({"DEBUG", "_DEBUG"})
-				objdir("%{wks.location}/intermediate")
-				targetdir("%{wks.location}/debug")
 		end
 
 		filter("system:windows")
@@ -275,15 +279,23 @@ function CreateProject(config)
 		targetprefix("")
 		targetextension(".dll")
 
-		filter("system:windows")
+		filter({"system:windows", "platforms:x86"})
 			targetsuffix("_win32")
 
-		filter("system:linux")
-			targetsuffix("_linux")
-			linkoptions({"-static-libgcc", "-static-libstdc++"})
+		filter({"system:windows", "platforms:x64"})
+			targetsuffix("_win64")
 
-		filter("system:macosx")
-			targetsuffix("_osx")
+		filter({"system:linux", "platforms:x86"})
+			targetsuffix("_linux32")
+
+		filter({"system:linux", "platforms:x64"})
+			targetsuffix("_linux64")
+
+		filter({"system:macosx", "platforms:x86"})
+			targetsuffix("_osx32")
+
+		filter({"system:macosx", "platforms:x64"})
+			targetsuffix("_osx64")
 
 		if _OPTIONS["autoinstall"] then
 			local binDir = _OPTIONS["autoinstall"] ~= "" and _OPTIONS["autoinstall"] or os.getenv("GARRYSMOD_LUA_BIN") or FindGarrysModLuaBinDirectory() or GARRYSMOD_LUA_BIN_DIRECTORY or --[[deprecated]] DEFAULT_GARRYSMOD_LUA_BIN_DIRECTORY
