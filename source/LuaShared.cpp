@@ -28,21 +28,20 @@ static FunctionType GetSymbol( const char *name )
 
 #if defined ARCHITECTURE_X86
 
-	if( GetModuleHandleEx( 0, "bin/lua_shared.dll", &binary ) && binary != nullptr )
+	if( !GetModuleHandleEx( 0, "garrysmod/bin/lua_shared.dll", &binary ) &&
+		!GetModuleHandleEx( 0, "bin/lua_shared.dll", &binary ) )
+		return nullptr;
 
 #elif defined ARCHITECTURE_X86_64
 
-	if( GetModuleHandleEx( 0, "bin/win64/lua_shared.dll", &binary ) && binary != nullptr )
+	if( !GetModuleHandleEx( 0, "bin/win64/lua_shared.dll", &binary ) )
+		return nullptr;
 
 #endif
 
-	{
-		FunctionType symbol_pointer = reinterpret_cast<FunctionType>( GetProcAddress( binary, name ) );
-		FreeLibrary( binary );
-		return symbol_pointer;
-	}
-
-	return nullptr;
+	FunctionType symbol_pointer = reinterpret_cast<FunctionType>( GetProcAddress( binary, name ) );
+	FreeLibrary( binary );
+	return symbol_pointer;
 }
 
 #elif defined SYSTEM_POSIX
@@ -57,7 +56,13 @@ static FunctionType GetSymbol( const char *name )
 
 #elif defined SYSTEM_LINUX && defined ARCHITECTURE_X86
 
-	void *binary = dlopen( "bin/linux32/lua_shared.so", RTLD_LAZY | RTLD_NOLOAD );
+	void *binary = dlopen( "garrysmod/bin/lua_shared_srv.so", RTLD_LAZY | RTLD_NOLOAD );
+	if( binary == nullptr )
+		binary = dlopen( "garrysmod/bin/lua_shared.so", RTLD_LAZY | RTLD_NOLOAD );
+
+	if( binary == nullptr )
+		binary = dlopen( "bin/linux32/lua_shared.so", RTLD_LAZY | RTLD_NOLOAD );
+
 	if( binary == nullptr )
 		binary = dlopen( "bin/linux32/lua_shared_client.so", RTLD_LAZY | RTLD_NOLOAD );
 
@@ -139,9 +144,9 @@ static const char *lua_pushfstring_loader( lua_State *L, const char *fmt, ... )
 	}
 
 #ifndef SYSTEM_MACOSX_BAD
-	
+
 	throw std::bad_function_call( );
-	
+
 #else
 
 	throw std::runtime_error( "unable to find function" );
@@ -167,9 +172,9 @@ static int luaL_error_loader( lua_State *L, const char *fmt, ... )
 	}
 
 #ifndef SYSTEM_MACOSX_BAD
-	
+
 	throw std::bad_function_call( );
-	
+
 #else
 
 	throw std::runtime_error( "unable to find function" );
@@ -179,7 +184,7 @@ static int luaL_error_loader( lua_State *L, const char *fmt, ... )
 }
 
 #define CreateLoader( ret, name, args ) \
-	char __ ## name ## _name__[] = #name; \
+	static const char __ ## name ## _name__[] = #name; \
 	ret ( *name ) args = Loader<__ ## name ## _name__, ret args>::Function<&name>
 
 extern "C"
