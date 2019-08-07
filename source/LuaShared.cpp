@@ -310,4 +310,19 @@ extern "C"
 
 	const char *( *lua_pushfstring )( lua_State *, const char *, ... ) = lua_pushfstring_loader;
 	int ( *luaL_error )( lua_State *, const char *, ... ) = luaL_error_loader;
+
+	CreateLoader( int, luaopen_base, ( lua_State *L ) );
+	CreateLoader( int, luaopen_math, ( lua_State *L ) );
+	CreateLoader( int, luaopen_string, ( lua_State *L ) );
+	CreateLoader( int, luaopen_table, ( lua_State *L ) );
+	CreateLoader( int, luaopen_os, ( lua_State *L ) );
+	CreateLoader( int, luaopen_package, ( lua_State *L ) );
+	CreateLoader( int, luaopen_debug, ( lua_State *L ) );
+	CreateLoader( int, luaopen_bit, ( lua_State *L ) );
+	CreateLoader( int, luaopen_jit, ( lua_State *L ) );
+
+	CreateLoader( void, luaL_openlibs, ( lua_State *L ) );
+
+	CreateLoader( int, luaJIT_setmode, ( lua_State *L, int idx, int mode ) );
+	CreateLoader( void, LUAJIT_VERSION_SYM, ( ) );
 }
