@@ -282,19 +282,19 @@ function CreateProject(config)
 		filter({"system:windows", "platforms:x86"})
 			targetsuffix("_win32")
 
-		filter({"system:windows", "platforms:x64"})
+		filter({"system:windows", "platforms:x86_64"})
 			targetsuffix("_win64")
 
 		filter({"system:linux", "platforms:x86"})
 			targetsuffix("_linux32")
 
-		filter({"system:linux", "platforms:x64"})
+		filter({"system:linux", "platforms:x86_64"})
 			targetsuffix("_linux64")
 
 		filter({"system:macosx", "platforms:x86"})
 			targetsuffix("_osx32")
 
-		filter({"system:macosx", "platforms:x64"})
+		filter({"system:macosx", "platforms:x86_64"})
 			targetsuffix("_osx64")
 
 		if _OPTIONS["autoinstall"] then
