@@ -12,8 +12,10 @@ function IncludeLuaShared()
 		location(path.join(_GARRYSMOD_COMMON_DIRECTORY, "projects", os.target(), _ACTION))
 		sysincludedirs(path.join(_GARRYSMOD_COMMON_DIRECTORY, "include"))
 		files({
-			path.join(_GARRYSMOD_COMMON_DIRECTORY, "include/**.h"),
-			path.join(_GARRYSMOD_COMMON_DIRECTORY, "include/**.hpp"),
+			path.join(_GARRYSMOD_COMMON_DIRECTORY, "include/*.h"),
+			path.join(_GARRYSMOD_COMMON_DIRECTORY, "include/*.hpp"),
+			path.join(_GARRYSMOD_COMMON_DIRECTORY, "include/GarrysMod/**.h"),
+			path.join(_GARRYSMOD_COMMON_DIRECTORY, "include/GarrysMod/**.hpp"),
 			path.join(_GARRYSMOD_COMMON_DIRECTORY, "source/LuaShared.cpp")
 		})
 		vpaths({
