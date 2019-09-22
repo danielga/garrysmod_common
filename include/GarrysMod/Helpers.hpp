@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include "../Platform.hpp"
+#include "Platform.hpp"
 
 namespace Helpers
 {
