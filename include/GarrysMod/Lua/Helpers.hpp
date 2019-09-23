@@ -6,7 +6,7 @@
 #include <sstream>
 #include "LuaInterface.h"
 #include "Interface.h"
-#include "../../lua.hpp"
+#include "lua.hpp"
 
 namespace LuaHelpers
 {
