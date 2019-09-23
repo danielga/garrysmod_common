@@ -29,7 +29,7 @@ public:
 		return module.IsValid( ) && factory != nullptr;
 	}
 
-	const ModuleLoader &GetModule( ) const
+	const ModuleLoader &GetModuleLoader( ) const
 	{
 		return module;
 	}
