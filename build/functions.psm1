@@ -119,7 +119,15 @@ function GetMSBuildPath() {
 	}
 
 	$Path = $Instance.InstallationPath
-	return "$Path/MSBuild/15.0/Bin/amd64/MSBuild.exe"
+	$MSBuild = "$Path/MSBuild/Current/Bin/MSBuild.exe"
+	if (![System.IO.File]::Exists($MSBuild)) {
+		$MSBuild = "$Path/MSBuild/15.0/Bin/MSBuild.exe"
+		if (![System.IO.File]::Exists($MSBuild)) {
+			throw "Unable to retrieve path to MSBuild"
+		}
+	}
+
+	return $MSBuild
 }
 
 Set-Variable MSBuild (GetMSBuildPath) -ErrorAction Stop -Confirm:$false
