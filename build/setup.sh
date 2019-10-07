@@ -7,8 +7,8 @@ DIR="$( cd "$( dirname "${BASH_SOURCE:-$0}" )" && pwd )"
 
 . "${DIR}/functions.sh"
 
-validate_variable_or_set_default "MODULE_NAME"
-validate_variable_or_set_default "REPOSITORY_DIR"
+validate_variable_or_set_default "REPOSITORY_DIR" "$(cd "${DIR}/../.." && pwd)"
+validate_variable_or_set_default "MODULE_NAME" "$(basename "$REPOSITORY_DIR")"
 validate_variable_or_set_default "DEPENDENCIES" "$REPOSITORY_DIR/dependencies"
 validate_variable_or_set_default "GARRYSMOD_COMMON_REPOSITORY" "https://github.com/danielga/garrysmod_common.git"
 validate_variable_or_set_default "GARRYSMOD_COMMON" "$DEPENDENCIES/garrysmod_common"

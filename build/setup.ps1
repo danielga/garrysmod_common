@@ -3,8 +3,8 @@ Set-StrictMode -Version Latest
 
 Import-Module "$PSScriptRoot/functions.psm1"
 
-ValidateVariableOrSetDefault "MODULE_NAME" -Default (Split-Path (Split-Path $PSScriptRoot -Parent) -Leaf)
-ValidateVariableOrSetDefault "REPOSITORY_DIR" -Default "$PSScriptRoot"
+ValidateVariableOrSetDefault "REPOSITORY_DIR" -Default (Split-Path (Split-Path $PSScriptRoot))
+ValidateVariableOrSetDefault "MODULE_NAME" -Default (Split-Path $REPOSITORY_DIR -Leaf)
 ValidateVariableOrSetDefault "DEPENDENCIES" -Default "$REPOSITORY_DIR/dependencies"
 ValidateVariableOrSetDefault "GARRYSMOD_COMMON_REPOSITORY" -Default "https://github.com/danielga/garrysmod_common.git"
 ValidateVariableOrSetDefault "GARRYSMOD_COMMON" -Default "$DEPENDENCIES/garrysmod_common"
