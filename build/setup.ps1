@@ -13,6 +13,7 @@ ValidateVariableOrSetDefault "PREMAKE5_URL" -Default "https://github.com/premake
 ValidateVariableOrSetDefault "PREMAKE5_EXECUTABLE" -Default "premake5.exe"
 ValidateVariableOrSetDefault "PREMAKE5" -Default "premake5.exe"
 ValidateVariableOrSetDefault "PROJECT_OS" -Default "windows"
+ValidateVariableOrSetDefault "PROJECT_GENERATOR_VERSION" -Default "1"
 ValidateVariableOrSetDefault "TARGET_OS" -Default "win32"
 ValidateVariableOrSetDefault "TARGET_OS_64" -Default "win64"
 ValidateVariableOrSetDefault "TARGET_ARCHITECTURE" -Default "x86"

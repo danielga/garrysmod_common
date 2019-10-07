@@ -22,6 +22,7 @@ environment:
   TARGET_OS_64: win64
   TARGET_ARCHITECTURE: x86
   TARGET_ARCHITECTURE_64: x86_64
+  PROJECT_GENERATOR_VERSION: 2
 install:
 - ps: 'Invoke-Expression ((New-Object System.Net.WebClient).DownloadString("$env:BOOTSTRAP_URL"))'
 cache:

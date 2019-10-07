@@ -15,6 +15,7 @@ validate_variable_or_set_default "GARRYSMOD_COMMON" "$DEPENDENCIES/garrysmod_com
 validate_variable_or_set_default "COMPILER_PLATFORM" "gmake"
 validate_variable_or_set_default "PREMAKE5_EXECUTABLE" "premake5"
 validate_variable_or_set_default "PREMAKE5" "premake5"
+validate_variable_or_set_default "PROJECT_GENERATOR_VERSION" "1"
 
 case "$(uname -s)" in
     Linux*)
