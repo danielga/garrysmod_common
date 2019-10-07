@@ -29,7 +29,7 @@ function update_local_git_repository {
 	if ! git -C "$DIRECTORY" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
 		echo "Cloning repository \"${REPOSITORY}\" into \"${DIRECTORY}\"..."
 		rm -rf "$DIRECTORY"
-		git clone --quiet --depth 1 --shallow-submodules --recursive --branch "$BRANCH" "$REPOSITORY" "$DIRECTORY"
+		git clone --quiet --recursive --branch "$BRANCH" "$REPOSITORY" "$DIRECTORY"
 		local UPDATED=1
 	else
 		pushd "$DIRECTORY"

@@ -41,7 +41,7 @@ function UpdateLocalGitRepository([string]$Repository, [string]$Directory, [stri
 	if ($shouldclone) {
 		Write-Output "Cloning repository `"${Repository}`" into `"${Directory}`"..."
 		Remove-Item -Recurse -Force -ErrorAction SilentlyContinue $Directory
-		Invoke-Call { git clone --quiet --depth 1 --shallow-submodules --recursive --branch "$Branch" "$Repository" "$Directory" } -ErrorAction Stop
+		Invoke-Call { git clone --quiet --recursive --branch "$Branch" "$Repository" "$Directory" } -ErrorAction Stop
 		$updated = $true
 	} else {
 		Push-Location $Directory -ErrorAction Stop
