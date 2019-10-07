@@ -22,12 +22,10 @@ env:
 matrix:
   include:
     - os: linux
-      dist: trusty
+      dist: bionic
       compiler: gcc
       addons:
         apt:
-          sources:
-            - ubuntu-toolchain-r-test
           packages:
             - linux-libc-dev:i386
             - g++-8-multilib
@@ -39,7 +37,7 @@ matrix:
         - export CC=gcc-8
           export CXX=g++-8
     - os: osx
-      osx_image: xcode9.4
+      osx_image: xcode11
       env:
         - PREMAKE5="$TRAVIS_BUILD_DIR/dependencies/macosx/premake-core/premake5"
           PROJECT_OS=macosx
