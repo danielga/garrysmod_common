@@ -10,7 +10,7 @@ environment:
   DEPENDENCIES: $(APPVEYOR_BUILD_FOLDER)/dependencies
   GARRYSMOD_COMMON: $(APPVEYOR_BUILD_FOLDER)/dependencies/garrysmod_common
   SOURCE_SDK: $(APPVEYOR_BUILD_FOLDER)/dependencies/sourcesdk-minimal
-  PREMAKE5_URL: https://github.com/premake/premake-core/releases/download/v5.0.0-alpha13/premake-5.0.0-alpha13-windows.zip
+  PREMAKE5_URL: https://github.com/premake/premake-core/releases/download/v5.0.0-alpha14/premake-5.0.0-alpha14-windows.zip
   PREMAKE5_EXECUTABLE: premake5.exe
   PREMAKE5: $(APPVEYOR_BUILD_FOLDER)/dependencies/windows/premake-core/premake5.exe
   BUILD_SCRIPT: $(APPVEYOR_BUILD_FOLDER)/dependencies/garrysmod_common/build/build.ps1

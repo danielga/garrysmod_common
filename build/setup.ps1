@@ -10,7 +10,7 @@ ValidateVariableOrSetDefault "GARRYSMOD_COMMON_REPOSITORY" -Default "https://git
 ValidateVariableOrSetDefault "GARRYSMOD_COMMON" -Default "$DEPENDENCIES/garrysmod_common"
 ValidateVariableOrSetDefault "TARGET_OS" -Default "windows"
 ValidateVariableOrSetDefault "COMPILER_PLATFORM" -Default "vs2017"
-ValidateVariableOrSetDefault "PREMAKE5_URL" -Default "https://github.com/premake/premake-core/releases/download/v5.0.0-alpha13/premake-5.0.0-alpha13-windows.zip"
+ValidateVariableOrSetDefault "PREMAKE5_URL" -Default "https://github.com/premake/premake-core/releases/download/v5.0.0-alpha14/premake-5.0.0-alpha14-windows.zip"
 ValidateVariableOrSetDefault "PREMAKE5_EXECUTABLE" -Default "premake5.exe"
 ValidateVariableOrSetDefault "PREMAKE5" -Default "premake5.exe"
 ValidateVariableOrSetDefault "PROJECT_OS" -Default "windows"

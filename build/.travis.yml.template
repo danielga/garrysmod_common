@@ -30,7 +30,7 @@ matrix:
       env:
         - PREMAKE5="$TRAVIS_BUILD_DIR/dependencies/linux/premake-core/premake5"
           PROJECT_OS=linux
-          PREMAKE5_URL="https://github.com/premake/premake-core/releases/download/v5.0.0-alpha13/premake-5.0.0-alpha13-linux.tar.gz"
+          PREMAKE5_URL="https://github.com/premake/premake-core/releases/download/v5.0.0-alpha14/premake-5.0.0-alpha14-linux.tar.gz"
       before_install:
         - export CC=gcc-8
           export CXX=g++-8
@@ -39,7 +39,7 @@ matrix:
       env:
         - PREMAKE5="$TRAVIS_BUILD_DIR/dependencies/macosx/premake-core/premake5"
           PROJECT_OS=macosx
-          PREMAKE5_URL="https://github.com/premake/premake-core/releases/download/v5.0.0-alpha13/premake-5.0.0-alpha13-macosx.tar.gz"
+          PREMAKE5_URL="https://github.com/premake/premake-core/releases/download/v5.0.0-alpha14/premake-5.0.0-alpha14-macosx.tar.gz"
 cache:
   directories:
     - "$TRAVIS_BUILD_DIR/dependencies"
