@@ -1,6 +1,6 @@
 version: '{build}'
 skip_non_tags: true
-image: Visual Studio 2017
+image: Visual Studio 2019
 clone_depth: 1
 init:
 - ps: git config --global core.autocrlf true
@@ -18,11 +18,11 @@ environment:
   BOOTSTRAP_URL: https://raw.githubusercontent.com/danielga/garrysmod_common/master/build/bootstrap.ps1
   PROJECT_OS: windows
   TARGET_OS: win32
-  COMPILER_PLATFORM: vs2017
   TARGET_OS_64: win64
   TARGET_ARCHITECTURE: x86
   TARGET_ARCHITECTURE_64: x86_64
   PROJECT_GENERATOR_VERSION: 2
+  COMPILER_PLATFORM: vs2019
 install:
 - ps: 'Invoke-Expression ((New-Object System.Net.WebClient).DownloadString("$env:BOOTSTRAP_URL"))'
 cache:
