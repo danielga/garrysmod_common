@@ -12,7 +12,6 @@ validate_variable_or_set_default "MODULE_NAME" "$(basename "$REPOSITORY_DIR")"
 validate_variable_or_set_default "DEPENDENCIES" "$REPOSITORY_DIR/dependencies"
 validate_variable_or_set_default "GARRYSMOD_COMMON_REPOSITORY" "https://github.com/danielga/garrysmod_common.git"
 validate_variable_or_set_default "GARRYSMOD_COMMON" "$DEPENDENCIES/garrysmod_common"
-validate_variable_or_set_default "TARGET_OS"
 validate_variable_or_set_default "COMPILER_PLATFORM" "gmake"
 validate_variable_or_set_default "PREMAKE5_EXECUTABLE" "premake5"
 validate_variable_or_set_default "PREMAKE5" "premake5"
@@ -31,5 +30,10 @@ case "$(uname -s)" in
         exit 1;
         ;
 esac
+
+validate_variable_or_set_default "TARGET_OS" "$PROJECT_OS"
+validate_variable_or_set_default "TARGET_OS_64" "${PROJECT_OS}64"
+validate_variable_or_set_default "TARGET_ARCHITECTURE" "x86"
+validate_variable_or_set_default "TARGET_ARCHITECTURE_64" "x86_64"
 
 create_directory_forcefully "$DEPENDENCIES"

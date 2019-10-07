@@ -14,6 +14,9 @@ env:
       GARRYSMOD_COMMON_REPOSITORY="https://github.com/danielga/garrysmod_common.git"
       BOOTSTRAP_URL="https://raw.githubusercontent.com/danielga/garrysmod_common/master/build/bootstrap.sh"
       TARGET_OS="$TRAVIS_OS_NAME"
+      TARGET_OS_64="${TRAVIS_OS_NAME}64"
+      TARGET_ARCHITECTURE=x86
+      TARGET_ARCHITECTURE_64=x86_64
       COMPILER_PLATFORM=gmake
 matrix:
   include:
@@ -49,8 +52,10 @@ deploy:
   provider: releases
   skip_cleanup: true
   file:
-    - "${TRAVIS_BUILD_DIR}/projects/${PROJECT_OS}/${COMPILER_PLATFORM}/release/gmsv_${MODULE_NAME}_${TARGET_OS}.dll"
-    - "${TRAVIS_BUILD_DIR}/projects/${PROJECT_OS}/${COMPILER_PLATFORM}/release/gmcl_${MODULE_NAME}_${TARGET_OS}.dll"
+    - "${TRAVIS_BUILD_DIR}/projects/${PROJECT_OS}/${COMPILER_PLATFORM}/${TARGET_ARCHITECTURE}/Release/gmsv_${MODULE_NAME}_${TARGET_OS}.dll"
+    - "${TRAVIS_BUILD_DIR}/projects/${PROJECT_OS}/${COMPILER_PLATFORM}/${TARGET_ARCHITECTURE}/Release/gmcl_${MODULE_NAME}_${TARGET_OS}.dll"
+    - "${TRAVIS_BUILD_DIR}/projects/${PROJECT_OS}/${COMPILER_PLATFORM}/${TARGET_ARCHITECTURE_64}/Release/gmsv_${MODULE_NAME}_${TARGET_OS_64}.dll"
+    - "${TRAVIS_BUILD_DIR}/projects/${PROJECT_OS}/${COMPILER_PLATFORM}/${TARGET_ARCHITECTURE_64}/Release/gmcl_${MODULE_NAME}_${TARGET_OS_64}.dll"
   on:
     tags: true
   api_key:
