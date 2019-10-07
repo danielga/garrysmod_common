@@ -23,10 +23,10 @@ function ValidateVariableOrSetDefault([string]$Name, $Default = $null) {
 }
 
 function Invoke-Call([scriptblock]$ScriptBlock, [string]$ErrorAction = $ErrorActionPreference) {
-    & @ScriptBlock
-    if (($LastExitCode -ne 0) -and ($ErrorAction -eq "Stop")) {
-        exit $LastExitCode
-    }
+	& @ScriptBlock
+	if (($LastExitCode -ne 0) -and ($ErrorAction -eq "Stop")) {
+		exit $LastExitCode
+	}
 }
 
 function UpdateLocalGitRepository([string]$Repository, [string]$Directory, [string]$Branch = "master") {

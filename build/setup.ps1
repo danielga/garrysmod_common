@@ -16,7 +16,7 @@ ValidateVariableOrSetDefault "PREMAKE5" -Default "premake5.exe"
 ValidateVariableOrSetDefault "PROJECT_OS" -Default "windows"
 
 if (Test-Path env:SOURCE_SDK) {
-    Set-Variable SOURCE_SDK -Value (Get-Item env:SOURCE_SDK).Value -Scope Global -ErrorAction Stop -Confirm:$false
+	Set-Variable SOURCE_SDK -Value (Get-Item env:SOURCE_SDK).Value -Scope Global -ErrorAction Stop -Confirm:$false
 }
 
 CreateDirectoryForcefully $DEPENDENCIES
