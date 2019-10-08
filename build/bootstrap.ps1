@@ -100,4 +100,4 @@ ValidateVariableOrSetDefault "GARRYSMOD_COMMON_REPOSITORY" -Default "https://git
 ValidateVariableOrSetDefault "GARRYSMOD_COMMON_BRANCH" -Default "master"
 ValidateVariableOrSetDefault "GARRYSMOD_COMMON" -Default "./garrysmod_common"
 
-UpdateLocalGitRepository $GARRYSMOD_COMMON -Repository $GARRYSMOD_COMMON_REPOSITORY -Branch $GARRYSMOD_COMMON_BRANCH
+UpdateLocalGitRepository $GARRYSMOD_COMMON -Repository $GARRYSMOD_COMMON_REPOSITORY -Branch $GARRYSMOD_COMMON_BRANCH | Out-Null
