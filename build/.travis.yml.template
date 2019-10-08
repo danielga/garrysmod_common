@@ -8,38 +8,43 @@ env:
       REPOSITORY_DIR="$TRAVIS_BUILD_DIR"
       DEPENDENCIES="$TRAVIS_BUILD_DIR/dependencies"
       GARRYSMOD_COMMON="$TRAVIS_BUILD_DIR/dependencies/garrysmod_common"
+      GARRYSMOD_COMMON_REPOSITORY="https://github.com/danielga/garrysmod_common.git"
+      GARRYSMOD_COMMON_BRANCH=master
       SOURCE_SDK="$TRAVIS_BUILD_DIR/dependencies/sourcesdk-minimal"
+      SOURCE_SDK_REPOSITORY="https://github.com/danielga/sourcesdk-minimal.git"
+      SOURCE_SDK_BRANCH=master
       PREMAKE5="$TRAVIS_BUILD_DIR/dependencies/windows/premake-core/premake5.exe"
       BUILD_SCRIPT="$TRAVIS_BUILD_DIR/dependencies/garrysmod_common/build/build.sh"
-      GARRYSMOD_COMMON_REPOSITORY="https://github.com/danielga/garrysmod_common.git"
       BOOTSTRAP_URL="https://raw.githubusercontent.com/danielga/garrysmod_common/master/build/bootstrap.sh"
       TARGET_OS="$TRAVIS_OS_NAME"
+      TARGET_OS_64="${TRAVIS_OS_NAME}64"
+      TARGET_ARCHITECTURE=x86
+      TARGET_ARCHITECTURE_64=x86_64
+      PROJECT_GENERATOR_VERSION=2
       COMPILER_PLATFORM=gmake
 matrix:
   include:
     - os: linux
-      dist: trusty
+      dist: bionic
       compiler: gcc
       addons:
         apt:
-          sources:
-            - ubuntu-toolchain-r-test
           packages:
             - linux-libc-dev:i386
             - g++-8-multilib
       env:
         - PREMAKE5="$TRAVIS_BUILD_DIR/dependencies/linux/premake-core/premake5"
           PROJECT_OS=linux
-          PREMAKE5_URL="https://github.com/premake/premake-core/releases/download/v5.0.0-alpha13/premake-5.0.0-alpha13-linux.tar.gz"
+          PREMAKE5_URL="https://github.com/premake/premake-core/releases/download/v5.0.0-alpha14/premake-5.0.0-alpha14-linux.tar.gz"
       before_install:
         - export CC=gcc-8
           export CXX=g++-8
     - os: osx
-      osx_image: xcode9.4
+      osx_image: xcode11
       env:
         - PREMAKE5="$TRAVIS_BUILD_DIR/dependencies/macosx/premake-core/premake5"
           PROJECT_OS=macosx
-          PREMAKE5_URL="https://github.com/premake/premake-core/releases/download/v5.0.0-alpha13/premake-5.0.0-alpha13-macosx.tar.gz"
+          PREMAKE5_URL="https://github.com/premake/premake-core/releases/download/v5.0.0-alpha14/premake-5.0.0-alpha14-macosx.tar.gz"
 cache:
   directories:
     - "$TRAVIS_BUILD_DIR/dependencies"
@@ -49,8 +54,10 @@ deploy:
   provider: releases
   skip_cleanup: true
   file:
-    - "${TRAVIS_BUILD_DIR}/projects/${PROJECT_OS}/${COMPILER_PLATFORM}/release/gmsv_${MODULE_NAME}_${TARGET_OS}.dll"
-    - "${TRAVIS_BUILD_DIR}/projects/${PROJECT_OS}/${COMPILER_PLATFORM}/release/gmcl_${MODULE_NAME}_${TARGET_OS}.dll"
+    - "${TRAVIS_BUILD_DIR}/projects/${PROJECT_OS}/${COMPILER_PLATFORM}/${TARGET_ARCHITECTURE}/Release/gmsv_${MODULE_NAME}_${TARGET_OS}.dll"
+    - "${TRAVIS_BUILD_DIR}/projects/${PROJECT_OS}/${COMPILER_PLATFORM}/${TARGET_ARCHITECTURE}/Release/gmcl_${MODULE_NAME}_${TARGET_OS}.dll"
+    - "${TRAVIS_BUILD_DIR}/projects/${PROJECT_OS}/${COMPILER_PLATFORM}/${TARGET_ARCHITECTURE_64}/Release/gmsv_${MODULE_NAME}_${TARGET_OS_64}.dll"
+    - "${TRAVIS_BUILD_DIR}/projects/${PROJECT_OS}/${COMPILER_PLATFORM}/${TARGET_ARCHITECTURE_64}/Release/gmcl_${MODULE_NAME}_${TARGET_OS_64}.dll"
   on:
     tags: true
   api_key:

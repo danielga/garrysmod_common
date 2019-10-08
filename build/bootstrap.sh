@@ -31,7 +31,7 @@ function update_local_git_repository {
 	if ! git -C "$DIRECTORY" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
 		echo "Cloning repository \"${REPOSITORY}\" into \"${DIRECTORY}\"..."
 		rm -rf "$DIRECTORY"
-		git clone --quiet --depth 1 --shallow-submodules --recursive --branch "$BRANCH" "$REPOSITORY" "$DIRECTORY"
+		git clone --quiet --recursive --branch "$BRANCH" "$REPOSITORY" "$DIRECTORY"
 		local UPDATED=1
 	else
 		pushd "$DIRECTORY"
@@ -72,6 +72,7 @@ function update_local_git_repository {
 }
 
 validate_variable_or_set_default "GARRYSMOD_COMMON_REPOSITORY" "https://github.com/danielga/garrysmod_common.git"
+validate_variable_or_set_default "GARRYSMOD_COMMON_BRANCH" "master"
 validate_variable_or_set_default "GARRYSMOD_COMMON" "./garrysmod_common"
 
 update_local_git_repository "$GARRYSMOD_COMMON" "$GARRYSMOD_COMMON_REPOSITORY"

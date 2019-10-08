@@ -22,10 +22,10 @@ function ValidateVariableOrSetDefault([string]$Name, $Default = $null) {
 }
 
 function Invoke-Call([scriptblock]$ScriptBlock, [string]$ErrorAction = $ErrorActionPreference) {
-    & @ScriptBlock
-    if (($LastExitCode -ne 0) -and ($ErrorAction -eq "Stop")) {
-        exit $LastExitCode
-    }
+	& @ScriptBlock
+	if (($LastExitCode -ne 0) -and ($ErrorAction -eq "Stop")) {
+		exit $LastExitCode
+	}
 }
 
 function UpdateLocalGitRepository([string]$Repository, [string]$Directory, [string]$Branch = "master") {
@@ -41,7 +41,7 @@ function UpdateLocalGitRepository([string]$Repository, [string]$Directory, [stri
 	if ($shouldclone) {
 		Write-Output "Cloning repository `"${Repository}`" into `"${Directory}`"..."
 		Remove-Item -Recurse -Force -ErrorAction SilentlyContinue $Directory
-		Invoke-Call { git clone --quiet --depth 1 --shallow-submodules --recursive --branch "$Branch" "$Repository" "$Directory" } -ErrorAction Stop
+		Invoke-Call { git clone --quiet --recursive --branch "$Branch" "$Repository" "$Directory" } -ErrorAction Stop
 		$updated = $true
 	} else {
 		Push-Location $Directory -ErrorAction Stop
@@ -97,6 +97,7 @@ function UpdateLocalGitRepository([string]$Repository, [string]$Directory, [stri
 }
 
 ValidateVariableOrSetDefault "GARRYSMOD_COMMON_REPOSITORY" -Default "https://github.com/danielga/garrysmod_common.git"
+ValidateVariableOrSetDefault "GARRYSMOD_COMMON_BRANCH" -Default "master"
 ValidateVariableOrSetDefault "GARRYSMOD_COMMON" -Default "./garrysmod_common"
 
-UpdateLocalGitRepository $GARRYSMOD_COMMON -Repository $GARRYSMOD_COMMON_REPOSITORY
+UpdateLocalGitRepository $GARRYSMOD_COMMON -Repository $GARRYSMOD_COMMON_REPOSITORY -Branch $GARRYSMOD_COMMON_BRANCH

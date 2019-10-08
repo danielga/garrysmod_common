@@ -23,10 +23,10 @@ function ValidateVariableOrSetDefault([string]$Name, $Default = $null) {
 }
 
 function Invoke-Call([scriptblock]$ScriptBlock, [string]$ErrorAction = $ErrorActionPreference) {
-    & @ScriptBlock
-    if (($LastExitCode -ne 0) -and ($ErrorAction -eq "Stop")) {
-        exit $LastExitCode
-    }
+	& @ScriptBlock
+	if (($LastExitCode -ne 0) -and ($ErrorAction -eq "Stop")) {
+		exit $LastExitCode
+	}
 }
 
 function UpdateLocalGitRepository([string]$Repository, [string]$Directory, [string]$Branch = "master") {
@@ -42,7 +42,7 @@ function UpdateLocalGitRepository([string]$Repository, [string]$Directory, [stri
 	if ($shouldclone) {
 		Write-Output "Cloning repository `"${Repository}`" into `"${Directory}`"..."
 		Remove-Item -Recurse -Force -ErrorAction SilentlyContinue $Directory
-		Invoke-Call { git clone --quiet --depth 1 --shallow-submodules --recursive --branch "$Branch" "$Repository" "$Directory" } -ErrorAction Stop
+		Invoke-Call { git clone --quiet --recursive --branch "$Branch" "$Repository" "$Directory" } -ErrorAction Stop
 		$updated = $true
 	} else {
 		Push-Location $Directory -ErrorAction Stop
@@ -119,7 +119,15 @@ function GetMSBuildPath() {
 	}
 
 	$Path = $Instance.InstallationPath
-	return "$Path/MSBuild/15.0/Bin/amd64/MSBuild.exe"
+	$MSBuild = "$Path/MSBuild/Current/Bin/MSBuild.exe"
+	if (![System.IO.File]::Exists($MSBuild)) {
+		$MSBuild = "$Path/MSBuild/15.0/Bin/MSBuild.exe"
+		if (![System.IO.File]::Exists($MSBuild)) {
+			throw "Unable to retrieve path to MSBuild"
+		}
+	}
+
+	return $MSBuild
 }
 
 Set-Variable MSBuild (GetMSBuildPath) -ErrorAction Stop -Confirm:$false
