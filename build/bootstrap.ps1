@@ -97,6 +97,7 @@ function UpdateLocalGitRepository([string]$Repository, [string]$Directory, [stri
 }
 
 ValidateVariableOrSetDefault "GARRYSMOD_COMMON_REPOSITORY" -Default "https://github.com/danielga/garrysmod_common.git"
+ValidateVariableOrSetDefault "GARRYSMOD_COMMON_BRANCH" -Default "master"
 ValidateVariableOrSetDefault "GARRYSMOD_COMMON" -Default "./garrysmod_common"
 
-UpdateLocalGitRepository $GARRYSMOD_COMMON -Repository $GARRYSMOD_COMMON_REPOSITORY
+UpdateLocalGitRepository $GARRYSMOD_COMMON -Repository $GARRYSMOD_COMMON_REPOSITORY -Branch $GARRYSMOD_COMMON_BRANCH

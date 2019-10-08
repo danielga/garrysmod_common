@@ -9,12 +9,15 @@ environment:
   REPOSITORY_DIR: $(APPVEYOR_BUILD_FOLDER)
   DEPENDENCIES: $(APPVEYOR_BUILD_FOLDER)/dependencies
   GARRYSMOD_COMMON: $(APPVEYOR_BUILD_FOLDER)/dependencies/garrysmod_common
+  GARRYSMOD_COMMON_REPOSITORY: https://github.com/danielga/garrysmod_common.git
+  GARRYSMOD_COMMON_BRANCH: master
   SOURCE_SDK: $(APPVEYOR_BUILD_FOLDER)/dependencies/sourcesdk-minimal
+  SOURCE_SDK_REPOSITORY: https://github.com/danielga/sourcesdk-minimal.git
+  SOURCE_SDK_BRANCH: master
   PREMAKE5_URL: https://github.com/premake/premake-core/releases/download/v5.0.0-alpha14/premake-5.0.0-alpha14-windows.zip
   PREMAKE5_EXECUTABLE: premake5.exe
   PREMAKE5: $(APPVEYOR_BUILD_FOLDER)/dependencies/windows/premake-core/premake5.exe
   BUILD_SCRIPT: $(APPVEYOR_BUILD_FOLDER)/dependencies/garrysmod_common/build/build.ps1
-  GARRYSMOD_COMMON_REPOSITORY: https://github.com/danielga/garrysmod_common.git
   BOOTSTRAP_URL: https://raw.githubusercontent.com/danielga/garrysmod_common/master/build/bootstrap.ps1
   PROJECT_OS: windows
   TARGET_OS: win32

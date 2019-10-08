@@ -11,11 +11,14 @@ validate_variable_or_set_default "REPOSITORY_DIR" "$(cd "${DIR}/../.." && pwd)"
 validate_variable_or_set_default "MODULE_NAME" "$(basename "$REPOSITORY_DIR")"
 validate_variable_or_set_default "DEPENDENCIES" "$REPOSITORY_DIR/dependencies"
 validate_variable_or_set_default "GARRYSMOD_COMMON_REPOSITORY" "https://github.com/danielga/garrysmod_common.git"
+validate_variable_or_set_default "GARRYSMOD_COMMON_BRANCH" "master"
 validate_variable_or_set_default "GARRYSMOD_COMMON" "$DEPENDENCIES/garrysmod_common"
 validate_variable_or_set_default "COMPILER_PLATFORM" "gmake"
 validate_variable_or_set_default "PREMAKE5_EXECUTABLE" "premake5"
 validate_variable_or_set_default "PREMAKE5" "premake5"
 validate_variable_or_set_default "PROJECT_GENERATOR_VERSION" "1"
+validate_variable_or_set_default "SOURCE_SDK_REPOSITORY" "https://github.com/danielga/sourcesdk-minimal.git"
+validate_variable_or_set_default "SOURCE_SDK_BRANCH" "master"
 
 case "$(uname -s)" in
     Linux*)

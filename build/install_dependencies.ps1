@@ -10,10 +10,10 @@ Add-Type -AssemblyName System.IO.Compression.FileSystem
 # Checkout with the correct line endings on plain text files, depending on the host OS
 git config --global core.autocrlf true >$null 2>$null
 
-UpdateLocalGitRepository $GARRYSMOD_COMMON -Repository $GARRYSMOD_COMMON_REPOSITORY
+UpdateLocalGitRepository $GARRYSMOD_COMMON -Repository $GARRYSMOD_COMMON_REPOSITORY -Branch $GARRYSMOD_COMMON_BRANCH
 
 if (Test-Path variable:SOURCE_SDK) {
-	UpdateLocalGitRepository $SOURCE_SDK -Repository "https://github.com/danielga/sourcesdk-minimal.git"
+	UpdateLocalGitRepository $SOURCE_SDK -Repository $SOURCE_SDK_REPOSITORY -Branch $SOURCE_SDK_BRANCH
 }
 
 if (!((Get-Item $PREMAKE5 -ErrorAction SilentlyContinue) -is [System.IO.FileInfo])) {
