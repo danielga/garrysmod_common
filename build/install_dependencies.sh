@@ -11,10 +11,10 @@ DIR="$( cd "$( dirname "${BASH_SOURCE:-$0}" )" && pwd )"
 # Checkout with the correct line endings on plain text files, depending on the host OS
 git config --global core.autocrlf true >/dev/null 2>/dev/null
 
-update_local_git_repository "$GARRYSMOD_COMMON" "$GARRYSMOD_COMMON_REPOSITORY" "$GARRYSMOD_COMMON_BRANCH"
+update_local_git_repository "$GARRYSMOD_COMMON" "$GARRYSMOD_COMMON_REPOSITORY" "$GARRYSMOD_COMMON_BRANCH" >/dev/null
 
 if [ ! -z "${SOURCE_SDK+x}" ]; then
-	update_local_git_repository "$SOURCE_SDK" "$SOURCE_SDK_REPOSITORY" "$SOURCE_SDK_BRANCH"
+	update_local_git_repository "$SOURCE_SDK" "$SOURCE_SDK_REPOSITORY" "$SOURCE_SDK_BRANCH" >/dev/null
 fi
 
 if [ ! -f "$PREMAKE5" ]; then
