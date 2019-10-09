@@ -22,6 +22,7 @@ env:
       TARGET_ARCHITECTURE_64=x86_64
       PROJECT_GENERATOR_VERSION=2
       COMPILER_PLATFORM=gmake
+      DISABLE_X86_64_BUILD=true
 matrix:
   include:
     - os: linux

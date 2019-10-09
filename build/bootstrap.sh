@@ -40,7 +40,7 @@ function update_local_git_repository {
 		git fetch --quiet --all --prune
 
 		local CURBRANCH=$(git symbolic-ref --quiet --short HEAD)
-		if [ ! $BRANCH = $CURBRANCH ]; then
+		if [ ! "$BRANCH" = "$CURBRANCH" ]; then
 			echo "Checking out branch \"${BRANCH}\" in \"${DIRECTORY}\"..."
 			git checkout --quiet --force "$BRANCH"
 			local UPDATED=1
@@ -50,17 +50,17 @@ function update_local_git_repository {
 		local REMOTE=$(git rev-parse @{u})
 		local BASE=$(git merge-base @ @{u})
 
-		if [ $LOCAL = $BASE ]; then
+		if [ "$LOCAL" = "$BASE" ]; then
 			echo "Branch \"${BRANCH}\" in \"${DIRECTORY}\" needs updating..."
 			local UPDATED=1
-		elif [ ! $LOCAL = $REMOTE ]; then
+		elif [ ! "$LOCAL" = "$REMOTE" ]; then
 			echo "Hard resetting branch \"${BRANCH}\" in \"${DIRECTORY}\"..."
 			git reset --quiet --hard "origin/${BRANCH}"
 			git clean --quiet --force -dx
 			local UPDATED=1
 		fi
 
-		if [ $UPDATED -eq 1 ]; then
+		if [ "$UPDATED" = "1" ]; then
 			echo "Updating branch \"${BRANCH}\" in \"${DIRECTORY}\"..."
 			git pull --quiet --recurse-submodules
 		fi
