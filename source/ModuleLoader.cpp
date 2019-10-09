@@ -106,7 +106,6 @@ void *ModuleLoader::LoadModule( const std::string &name )
 
 	};
 
-	const int flags = RTLD_LAZY | ( noload ? RTLD_NOLOAD : 0 );
 	void *module = nullptr;
 	for( const std::string &search_path : search_paths )
 	{
@@ -117,7 +116,7 @@ void *ModuleLoader::LoadModule( const std::string &name )
 			continue;
 		}
 
-		module = dlopen( buffer, flags );
+		module = dlopen( buffer, RTLD_LAZY | RTLD_NOLOAD );
 		if( module != nullptr )
 		{
 			break;
