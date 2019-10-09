@@ -110,7 +110,7 @@ void *ModuleLoader::LoadModule( const std::string &name )
 	for( const std::string &search_path : search_paths )
 	{
 		char buffer[256] = { };
-		if( snprintf( buffer, sizeof( buffer ), search_path.c_str( ), name.c_str( ) ) >= sizeof( buffer ) )
+		if( snprintf( buffer, sizeof( buffer ), search_path.c_str( ), name.c_str( ) ) >= static_cast<int32_t>( sizeof( buffer ) ) )
 		{
 			// somehow truncated
 			continue;
