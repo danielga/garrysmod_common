@@ -26,4 +26,8 @@ if (Test-Path env:SOURCE_SDK) {
 	Set-Variable SOURCE_SDK -Value (Get-Item env:SOURCE_SDK).Value -Scope Global -ErrorAction Stop -Confirm:$false
 }
 
+if (Test-Path env:DISABLE_X86_64_BUILD) {
+	Set-Variable DISABLE_X86_64_BUILD -Value (Get-Item env:DISABLE_X86_64_BUILD).Value -Scope Global -ErrorAction Stop -Confirm:$false
+}
+
 CreateDirectoryForcefully $DEPENDENCIES

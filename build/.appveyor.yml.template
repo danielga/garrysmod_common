@@ -26,6 +26,7 @@ environment:
   TARGET_ARCHITECTURE_64: x86_64
   PROJECT_GENERATOR_VERSION: 2
   COMPILER_PLATFORM: vs2019
+  DISABLE_X86_64_BUILD: true
 install:
 - ps: 'Invoke-Expression ((New-Object System.Net.WebClient).DownloadString("$env:BOOTSTRAP_URL"))'
 cache:
