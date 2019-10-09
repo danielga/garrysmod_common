@@ -91,6 +91,10 @@ function CreateWorkspace(config)
 		filter("system:linux or macosx")
 			cppdialect("GNU++17")
 
+		filter("system:macosx")
+			buildoptions("-mmacosx-version-min=10.7")
+			linkoptions("-mmacosx-version-min=10.7")
+
 		filter({})
 end
 
