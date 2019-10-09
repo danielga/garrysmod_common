@@ -92,8 +92,8 @@ function CreateWorkspace(config)
 			cppdialect("GNU++17")
 
 		filter("system:macosx")
-			buildoptions("-mmacosx-version-min=10.7")
-			linkoptions("-mmacosx-version-min=10.7")
+			buildoptions({"-mmacosx-version-min=10.7", "-stdlib=libc++"})
+			linkoptions({"-mmacosx-version-min=10.7", "-stdlib=libc++"})
 
 		filter({})
 end
