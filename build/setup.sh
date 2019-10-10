@@ -14,7 +14,6 @@ validate_variable_or_set_default "GARRYSMOD_COMMON_REPOSITORY" "https://github.c
 validate_variable_or_set_default "GARRYSMOD_COMMON_BRANCH" "master"
 validate_variable_or_set_default "GARRYSMOD_COMMON" "$DEPENDENCIES/garrysmod_common"
 validate_variable_or_set_default "COMPILER_PLATFORM" "gmake"
-validate_variable_or_set_default "PREMAKE5_EXECUTABLE" "premake5"
 validate_variable_or_set_default "PREMAKE5" "premake5"
 validate_variable_or_set_default "PROJECT_GENERATOR_VERSION" "1"
 validate_variable_or_set_default "SOURCE_SDK_REPOSITORY" "https://github.com/danielga/sourcesdk-minimal.git"
@@ -23,12 +22,14 @@ validate_variable_or_set_default "DISABLE_X86_64_BUILD" "true"
 
 case "$(uname -s)" in
     Linux*)
+        TARGET="linux"
         validate_variable_or_set_default "PREMAKE5_URL" "https://github.com/premake/premake-core/releases/download/v5.0.0-alpha14/premake-5.0.0-alpha14-linux.tar.gz"
         validate_variable_or_set_default "PROJECT_OS" "linux"
         ;;
     Darwin*)
+        TARGET="osx"
         validate_variable_or_set_default "PREMAKE5_URL" "https://github.com/premake/premake-core/releases/download/v5.0.0-alpha14/premake-5.0.0-alpha14-macosx.tar.gz"
-        validate_variable_or_set_default "PROJECT_OS" "osx"
+        validate_variable_or_set_default "PROJECT_OS" "macosx"
         ;;
     *)
         echo "Unknown operating system"
@@ -36,8 +37,9 @@ case "$(uname -s)" in
         ;;
 esac
 
-validate_variable_or_set_default "TARGET_OS" "$PROJECT_OS"
-validate_variable_or_set_default "TARGET_OS_64" "${PROJECT_OS}64"
+validate_variable_or_set_default "PREMAKE5_EXECUTABLE" "$DEPENDENCIES/$PROJECT_OS/premake-core/premake5"
+validate_variable_or_set_default "TARGET_OS" "$TARGET"
+validate_variable_or_set_default "TARGET_OS_64" "${TARGET}64"
 validate_variable_or_set_default "TARGET_ARCHITECTURE" "x86"
 validate_variable_or_set_default "TARGET_ARCHITECTURE_64" "x86_64"
 
