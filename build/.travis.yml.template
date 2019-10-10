@@ -13,7 +13,6 @@ env:
       SOURCE_SDK="$TRAVIS_BUILD_DIR/dependencies/sourcesdk-minimal"
       SOURCE_SDK_REPOSITORY="https://github.com/danielga/sourcesdk-minimal.git"
       SOURCE_SDK_BRANCH=master
-      PREMAKE5="$TRAVIS_BUILD_DIR/dependencies/windows/premake-core/premake5.exe"
       BUILD_SCRIPT="$TRAVIS_BUILD_DIR/dependencies/garrysmod_common/build/build.sh"
       BOOTSTRAP_URL="https://raw.githubusercontent.com/danielga/garrysmod_common/master/build/bootstrap.sh"
       TARGET_OS="$TRAVIS_OS_NAME"
