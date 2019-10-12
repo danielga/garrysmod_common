@@ -290,13 +290,13 @@ function CreateProject(config)
 			targetsuffix("_win64")
 
 		filter({"system:linux", "platforms:x86"})
-			targetsuffix("_linux32")
+			targetsuffix("_linux")
 
 		filter({"system:linux", "platforms:x86_64"})
 			targetsuffix("_linux64")
 
 		filter({"system:macosx", "platforms:x86"})
-			targetsuffix("_osx32")
+			targetsuffix("_osx")
 
 		filter({"system:macosx", "platforms:x86_64"})
 			targetsuffix("_osx64")
