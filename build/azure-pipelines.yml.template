@@ -1,0 +1,148 @@
+variables:
+  MODULE_NAME: module name here
+  DEPENDENCIES: $(System.DefaultWorkingDirectory)/dependencies
+  GARRYSMOD_COMMON: $(System.DefaultWorkingDirectory)/dependencies/garrysmod_common
+  GARRYSMOD_COMMON_BRANCH: master
+  GARRYSMOD_COMMON_REPOSITORY: https://github.com/danielga/garrysmod_common.git
+  PROJECT_GENERATOR_VERSION: 2
+  REPOSITORY_DIR: $(System.DefaultWorkingDirectory)
+  TARGET_ARCHITECTURE: x86
+  TARGET_ARCHITECTURE_64: x86_64
+  DISABLE_X86_64_BUILD: true
+  SOURCE_SDK: $(System.DefaultWorkingDirectory)/dependencies/sourcesdk-minimal
+  SOURCE_SDK_BRANCH: master
+  SOURCE_SDK_REPOSITORY: https://github.com/danielga/sourcesdk-minimal.git
+trigger:
+  tags:
+    include:
+    - '*'
+jobs:
+- job: windows
+  displayName: Windows
+  pool:
+    name: Azure Pipelines
+    vmImage: windows-2019
+  timeoutInMinutes: 10
+  variables:
+    BOOTSTRAP_URL: https://raw.githubusercontent.com/danielga/garrysmod_common/master/build/bootstrap.ps1
+    BUILD_SCRIPT: $(System.DefaultWorkingDirectory)/dependencies/garrysmod_common/build/build.ps1
+    TARGET_OS: win32
+    TARGET_OS_64: win64
+    COMPILER_PLATFORM: vs2019
+    PROJECT_OS: windows
+    PREMAKE5_EXECUTABLE: premake5.exe
+    PREMAKE5: $(System.DefaultWorkingDirectory)/dependencies/windows/premake-core/premake5.exe
+    PREMAKE5_URL: https://github.com/premake/premake-core/releases/download/v5.0.0-alpha14/premake-5.0.0-alpha14-windows.zip
+  steps:
+  - powershell: 'Invoke-Expression ((New-Object System.Net.WebClient).DownloadString("$env:BOOTSTRAP_URL"))'
+    displayName: Bootstrap
+  - powershell: '& "$env:BUILD_SCRIPT"'
+    displayName: Build
+  - task: CopyFiles@2
+    displayName: 'Copy files to $(Build.ArtifactStagingDirectory)'
+    inputs:
+      SourceFolder: '$(System.DefaultWorkingDirectory)/projects/windows/vs2019'
+      Contents: '*/Release/*.dll'
+      TargetFolder: '$(Build.ArtifactStagingDirectory)'
+      CleanTargetFolder: true
+      flattenFolders: true
+      preserveTimestamp: true
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish build artifacts'
+    inputs:
+      ArtifactName: windows
+- job: linux
+  displayName: Linux
+  pool:
+    name: Azure Pipelines
+    vmImage: ubuntu-18.04
+  timeoutInMinutes: 10
+  variables:
+    BOOTSTRAP_URL: https://raw.githubusercontent.com/danielga/garrysmod_common/master/build/bootstrap.sh
+    BUILD_SCRIPT: $(System.DefaultWorkingDirectory)/dependencies/garrysmod_common/build/build.sh
+    TARGET_OS: linux
+    TARGET_OS_64: linux64
+    COMPILER_PLATFORM: gmake
+    PREMAKE5: $(System.DefaultWorkingDirectory)/dependencies/linux/premake-core/premake5
+    PROJECT_OS: linux
+    PREMAKE5_URL: https://github.com/premake/premake-core/releases/download/v5.0.0-alpha14/premake-5.0.0-alpha14-linux.tar.gz
+    CC: gcc-8
+    CXX: g++-8
+  steps:
+  - bash: 'curl -s -L "$BOOTSTRAP_URL" | bash'
+    displayName: Bootstrap
+  - bash: |
+      sudo apt-get update && sudo apt-get install -y g++-8-multilib
+      $BUILD_SCRIPT
+    displayName: Build
+  - task: CopyFiles@2
+    displayName: 'Copy files to $(Build.ArtifactStagingDirectory)'
+    inputs:
+      SourceFolder: '$(System.DefaultWorkingDirectory)/projects/linux/gmake'
+      Contents: '*/Release/*.dll'
+      TargetFolder: '$(Build.ArtifactStagingDirectory)'
+      CleanTargetFolder: true
+      flattenFolders: true
+      preserveTimestamp: true
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish build artifacts'
+    inputs:
+      ArtifactName: linux
+- job: macosx
+  displayName: macOS
+  pool:
+    name: Azure Pipelines
+    vmImage: macOS-10.13
+  timeoutInMinutes: 10
+  variables:
+    BOOTSTRAP_URL: https://raw.githubusercontent.com/danielga/garrysmod_common/master/build/bootstrap.sh
+    BUILD_SCRIPT: $(System.DefaultWorkingDirectory)/dependencies/garrysmod_common/build/build.sh
+    TARGET_OS: osx
+    TARGET_OS_64: osx64
+    COMPILER_PLATFORM: gmake
+    PREMAKE5: $(System.DefaultWorkingDirectory)/dependencies/macosx/premake-core/premake5
+    PROJECT_OS: macosx
+    PREMAKE5_URL: https://github.com/premake/premake-core/releases/download/v5.0.0-alpha14/premake-5.0.0-alpha14-macosx.tar.gz
+  steps:
+  - bash: 'curl -s -L "$BOOTSTRAP_URL" | bash'
+    displayName: Bootstrap
+  - bash: |
+      sudo xcode-select -s "/Applications/Xcode_9.4.1.app/Contents/Developer"
+      $BUILD_SCRIPT
+    displayName: Build
+  - task: CopyFiles@2
+    displayName: 'Copy files to $(Build.ArtifactStagingDirectory)'
+    inputs:
+      SourceFolder: '$(System.DefaultWorkingDirectory)/projects/macosx/gmake'
+      Contents: '*/Release/*.dll'
+      TargetFolder: '$(Build.ArtifactStagingDirectory)'
+      CleanTargetFolder: true
+      flattenFolders: true
+      preserveTimestamp: true
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish build artifacts'
+    inputs:
+      ArtifactName: macosx
+- job: publish
+  displayName: Publish to GitHub Releases
+  pool:
+    name: Azure Pipelines
+    vmImage: ubuntu-18.04
+  timeoutInMinutes: 5
+  dependsOn:
+    - windows
+    - linux
+    - macosx
+  steps:
+  - task: DownloadBuildArtifacts@0
+    displayName: 'Download build artifacts'
+    inputs:
+      downloadType: specific
+      parallelizationLimit: 12
+  - task: GitHubRelease@1
+    displayName: 'Publish GitHub release $(build.sourceBranchName)'
+    inputs:
+      gitHubConnection: 'name of your github connection here'
+      releaseNotesSource: inline
+      assets: '$(System.ArtifactsDirectory)/**'
+      addChangeLog: false
