@@ -7,6 +7,8 @@ function IncludeLuaShared()
 	sysincludedirs(path.join(_GARRYSMOD_COMMON_DIRECTORY, "include"))
 	links("lua_shared")
 
+	group("garrysmod_common")
+
 	project("lua_shared")
 		kind("StaticLib")
 		location(path.join(_GARRYSMOD_COMMON_DIRECTORY, "projects", os.target(), _ACTION))
@@ -32,6 +34,8 @@ function IncludeLuaShared()
 
 		filter("system:linux or macosx")
 			links("dl")
+
+	group("")
 
 	project(_project.name)
 end

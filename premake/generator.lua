@@ -44,21 +44,25 @@ function CreateWorkspace(config)
 		language("C++")
 		location(_workspace.directory)
 		warnings("Extra")
-		flags({"NoPCH", "MultiProcessorCompile"})
+		flags({"NoPCH", "MultiProcessorCompile", "ShadowedVariables", "UndefinedIdentifiers"})
 		staticruntime("On")
 		characterset("MBCS")
+		intrinsics("On")
+		inlining("Auto")
+		rtti("On")
+		strictaliasing("Level3")
 		platforms({"x86", "x86_64"})
 		targetdir("%{wks.location}/%{cfg.architecture}/%{cfg.buildcfg}")
 		debugdir("%{wks.location}/%{cfg.architecture}/%{cfg.buildcfg}")
 		objdir("!%{wks.location}/%{cfg.architecture}/%{cfg.buildcfg}/intermediate/%{prj.name}")
 
 		if abi_compatible then
-			configurations("Release")
+			configurations({"Release", "ReleaseWithSymbols"})
 
 			filter("system:linux or macosx")
 				defines("_GLIBCXX_USE_CXX11_ABI=0")
 		else
-			configurations({"Release", "Debug"})
+			configurations({"Release", "ReleaseWithSymbols", "Debug"})
 		end
 
 		filter("platforms:x86")
@@ -68,13 +72,21 @@ function CreateWorkspace(config)
 			architecture("x86_64")
 
 		filter("configurations:Release")
-			optimize("On")
+			flags("LinkTimeOptimization")
+			optimize("Full")
+			symbols("Off")
 			vectorextensions("SSE2")
+			defines("NDEBUG")
+
+		filter("configurations:ReleaseWithSymbols")
+			optimize("Debug")
+			symbols("Full")
 			defines("NDEBUG")
 
 		if not abi_compatible then
 			filter("configurations:Debug")
-				symbols("On")
+				optimize("Off")
+				symbols("Full")
 				defines({"DEBUG", "_DEBUG"})
 		end
 
@@ -235,9 +247,9 @@ function CreateProject(config)
 
 		if abi_compatible then
 			removeconfigurations("Debug")
-			configurations("Release")
+			configurations({"Release", "ReleaseWithSymbols"})
 		else
-			configurations({"Release", "Debug"})
+			configurations({"Release", "ReleaseWithSymbols", "Debug"})
 		end
 
 		kind("SharedLib")
