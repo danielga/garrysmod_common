@@ -51,18 +51,18 @@ function CreateWorkspace(config)
 		inlining("Auto")
 		rtti("On")
 		strictaliasing("Level3")
-		platforms({"x86", "x86_64"})
+		platforms({"x86_64", "x86"})
 		targetdir(path.join("%{wks.location}", "%{cfg.architecture}", "%{cfg.buildcfg}"))
 		debugdir(path.join("%{wks.location}", "%{cfg.architecture}", "%{cfg.buildcfg}"))
 		objdir(path.join("!%{wks.location}", "%{cfg.architecture}", "%{cfg.buildcfg}", "intermediate", "%{prj.name}"))
 
 		if abi_compatible then
-			configurations({"Release", "ReleaseWithSymbols"})
+			configurations({"ReleaseWithSymbols", "Release"})
 
 			filter("system:linux or macosx")
 				defines("_GLIBCXX_USE_CXX11_ABI=0")
 		else
-			configurations({"Release", "ReleaseWithSymbols", "Debug"})
+			configurations({"ReleaseWithSymbols", "Release", "Debug"})
 		end
 
 		filter("platforms:x86")
