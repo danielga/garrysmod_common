@@ -117,6 +117,8 @@ function IncludeSDKTier1(directory)
 	filter("system:macosx")
 		links({"vstdlib", "iconv"})
 
+	group("garrysmod_common")
+
 	project("tier1")
 		kind("StaticLib")
 		warnings("Default")
@@ -224,6 +226,8 @@ function IncludeSDKTier1(directory)
 			defines({"_DLL_EXT=.dylib", "COMPILER_GCC", "POSIX", "_POSIX", "OSX", "GNUC", "NO_MALLOC_OVERRIDE"})
 			files(path.join(directory, "tier1/processor_detect_linux.cpp"))
 
+	group("")
+
 	project(_project.name)
 end
 
@@ -276,6 +280,8 @@ function IncludeSDKMathlib(directory)
 	sysincludedirs(path.join(directory, "public/mathlib"))
 	links("mathlib")
 
+	group("garrysmod_common")
+
 	project("mathlib")
 		kind("StaticLib")
 		warnings("Default")
@@ -327,6 +333,8 @@ function IncludeSDKMathlib(directory)
 		filter("system:macosx")
 			defines({"COMPILER_GCC", "POSIX", "_POSIX", "OSX", "GNUC", "NO_MALLOC_OVERRIDE"})
 
+	group("")
+
 	project(_project.name)
 end
 
@@ -339,6 +347,8 @@ function IncludeSDKRaytrace(directory)
 	directory = GetSDKPath(directory)
 
 	links("raytrace")
+
+	group("garrysmod_common")
 
 	project("raytrace")
 		kind("StaticLib")
@@ -369,6 +379,8 @@ function IncludeSDKRaytrace(directory)
 		filter("system:macosx")
 			defines({"COMPILER_GCC", "POSIX", "_POSIX", "OSX", "GNUC", "NO_MALLOC_OVERRIDE"})
 
+	group("")
+
 	project(_project.name)
 end
 
@@ -381,6 +393,8 @@ function IncludeSDKBitmap(directory)
 	directory = GetSDKPath(directory)
 
 	links("bitmap")
+
+	group("garrysmod_common")
 
 	project("bitmap")
 		kind("StaticLib")
@@ -425,6 +439,8 @@ function IncludeSDKBitmap(directory)
 				linkoptions("-mmacosx-version-min=10.5")
 			end
 
+	group("")
+
 	project(_project.name)
 end
 
@@ -437,6 +453,8 @@ function IncludeSDKVTF(directory)
 	directory = GetSDKPath(directory)
 
 	links("vtf")
+
+	group("garrysmod_common")
 
 	project("vtf")
 		kind("StaticLib")
@@ -473,6 +491,8 @@ function IncludeSDKVTF(directory)
 				buildoptions("-mmacosx-version-min=10.5")
 				linkoptions("-mmacosx-version-min=10.5")
 			end
+
+	group("")
 
 	project(_project.name)
 end

@@ -12,6 +12,8 @@ function IncludeDetouring()
 	filter("system:macosx")
 		links("CoreServices.framework")
 
+	group("garrysmod_common")
+
 	project("detouring")
 		kind("StaticLib")
 		location(path.join(_GARRYSMOD_COMMON_DIRECTORY, "projects", os.target(), _ACTION))
@@ -46,6 +48,8 @@ function IncludeDetouring()
 
 		filter("files:**.c")
 			language("C")
+
+	group("")
 
 	project(_project.name)
 end

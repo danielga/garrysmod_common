@@ -12,6 +12,8 @@ function IncludeScanning()
 	filter("system:macosx")
 		links("CoreServices.framework")
 
+	group("garrysmod_common")
+
 	project("scanning")
 		kind("StaticLib")
 		location(path.join(_GARRYSMOD_COMMON_DIRECTORY, "projects", os.target(), _ACTION))
@@ -30,6 +32,8 @@ function IncludeScanning()
 
 		filter("system:linux or macosx")
 			links("dl")
+
+	group("")
 
 	project(_project.name)
 end
