@@ -52,6 +52,7 @@ function CreateWorkspace(config)
 		rtti("On")
 		strictaliasing("Level3")
 		platforms({"x86_64", "x86"})
+		defaultplatform("x86_64")
 		targetdir(path.join("%{wks.location}", "%{cfg.architecture}", "%{cfg.buildcfg}"))
 		debugdir(path.join("%{wks.location}", "%{cfg.architecture}", "%{cfg.buildcfg}"))
 		objdir(path.join("!%{wks.location}", "%{cfg.architecture}", "%{cfg.buildcfg}", "intermediate", "%{prj.name}"))
@@ -65,22 +66,22 @@ function CreateWorkspace(config)
 			configurations({"ReleaseWithSymbols", "Release", "Debug"})
 		end
 
+		filter("platforms:x86_64")
+			architecture("x86_64")
+
 		filter("platforms:x86")
 			architecture("x86")
 
-		filter("platforms:x86_64")
-			architecture("x86_64")
+		filter("configurations:ReleaseWithSymbols")
+			optimize("Debug")
+			symbols("Full")
+			defines("NDEBUG")
 
 		filter("configurations:Release")
 			flags("LinkTimeOptimization")
 			optimize("Full")
 			symbols("Off")
 			vectorextensions("SSE2")
-			defines("NDEBUG")
-
-		filter("configurations:ReleaseWithSymbols")
-			optimize("Debug")
-			symbols("Full")
 			defines("NDEBUG")
 
 		if not abi_compatible then
