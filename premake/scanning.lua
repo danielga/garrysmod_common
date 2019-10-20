@@ -1,7 +1,7 @@
 function IncludeScanning()
 	IncludePackage("scanning")
 
-	local directory = path.join(_GARRYSMOD_COMMON_DIRECTORY, "include/scanning")
+	local directory = path.join(_GARRYSMOD_COMMON_DIRECTORY, "include", "scanning")
 
 	local _project = project()
 	local _workspace = _project.workspace
@@ -26,9 +26,9 @@ function IncludeScanning()
 			["Header files/*"] = path.join(directory, "*.hpp"),
 			["Source files/*"] = path.join(directory, "*.cpp")
 		})
-		targetdir("%{prj.location}/%{cfg.architecture}/%{cfg.buildcfg}")
-		debugdir("%{prj.location}/%{cfg.architecture}/%{cfg.buildcfg}")
-		objdir("!%{prj.location}/%{cfg.architecture}/%{cfg.buildcfg}/intermediate/%{prj.name}")
+		targetdir(path.join("%{prj.location}", "%{cfg.architecture}", "%{cfg.buildcfg}"))
+		debugdir(path.join("%{prj.location}", "%{cfg.architecture}", "%{cfg.buildcfg}"))
+		objdir(path.join("!%{prj.location}", "%{cfg.architecture}", "%{cfg.buildcfg}", "intermediate", "%{prj.name}"))
 
 		filter("system:linux or macosx")
 			links("dl")

@@ -51,18 +51,18 @@ function CreateWorkspace(config)
 		inlining("Auto")
 		rtti("On")
 		strictaliasing("Level3")
-		platforms({"x86", "x86_64"})
-		targetdir("%{wks.location}/%{cfg.architecture}/%{cfg.buildcfg}")
-		debugdir("%{wks.location}/%{cfg.architecture}/%{cfg.buildcfg}")
-		objdir("!%{wks.location}/%{cfg.architecture}/%{cfg.buildcfg}/intermediate/%{prj.name}")
+		platforms({"x86_64", "x86"})
+		targetdir(path.join("%{wks.location}", "%{cfg.architecture}", "%{cfg.buildcfg}"))
+		debugdir(path.join("%{wks.location}", "%{cfg.architecture}", "%{cfg.buildcfg}"))
+		objdir(path.join("!%{wks.location}", "%{cfg.architecture}", "%{cfg.buildcfg}", "intermediate", "%{prj.name}"))
 
 		if abi_compatible then
-			configurations({"Release", "ReleaseWithSymbols"})
+			configurations({"ReleaseWithSymbols", "Release"})
 
 			filter("system:linux or macosx")
 				defines("_GLIBCXX_USE_CXX11_ABI=0")
 		else
-			configurations({"Release", "ReleaseWithSymbols", "Debug"})
+			configurations({"ReleaseWithSymbols", "Release", "Debug"})
 		end
 
 		filter("platforms:x86")
@@ -133,8 +133,8 @@ local function GetSteamLibraryDirectories()
 
 			for line in p:read("*a"):gmatch("%S+") do
 				if line ~= "Caption" then
-					local steamDir1 = line .. "\\Program Files (x86)\\Steam\\SteamApps\\"
-					local steamDir2 = line .. "\\Program Files\\Steam\\SteamApps\\"
+					local steamDir1 = path.join(line, "Program Files (x86)", "Steam", "SteamApps")
+					local steamDir2 = path.join(line, "Program Files", "Steam", "SteamApps")
 
 					if os.isdir(steamDir1) then
 						dir = steamDir1
@@ -147,9 +147,9 @@ local function GetSteamLibraryDirectories()
 			p:close()
 		end
 	elseif os.istarget("linux") then
-		dir = path.join(os.getenv("HOME") or "~", ".local/share/Steam/SteamApps/")
+		dir = path.join(os.getenv("HOME") or "~", ".local", "share", "Steam", "SteamApps")
 	elseif os.istarget("macosx") then
-		dir = path.join(os.getenv("HOME") or "~", "Library/Application Support/Steam/SteamApps/")
+		dir = path.join(os.getenv("HOME") or "~", "Library", "Application Support", "Steam", "SteamApps")
 	end
 
 	if dir then
@@ -180,10 +180,10 @@ local function FindGarrysModDirectory()
 	local dirs = GetSteamLibraryDirectories()
 
 	for _, dir in ipairs(dirs) do
-		if os.isdir(path.join(dir, "common/GarrysMod")) then
-			return path.join(dir, "common/GarrysMod")
-		elseif os.isdir(path.join(dir, "common/garrysmod")) then
-			return path.join(dir, "common/garrysmod")
+		if os.isdir(path.join(dir, "common", "GarrysMod")) then
+			return path.join(dir, "common", "GarrysMod")
+		elseif os.isdir(path.join(dir, "common", "garrysmod")) then
+			return path.join(dir, "common", "garrysmod")
 		end
 	end
 
@@ -196,7 +196,7 @@ local function FindGarrysModLuaBinDirectory()
 		return
 	end
 
-	local gluabinPath = path.join(dir, "garrysmod/lua/bin")
+	local gluabinPath = path.join(dir, "garrysmod", "lua", "bin")
 	if not os.isdir(gluabinPath) then
 		os.mkdir(gluabinPath)
 	end
@@ -287,7 +287,7 @@ function CreateProject(config)
 		})
 
 		if abi_compatible then
-			local filepath = path.join(_GARRYSMOD_COMMON_DIRECTORY, "source/ABICompatibility.cpp")
+			local filepath = path.join(_GARRYSMOD_COMMON_DIRECTORY, "source", "ABICompatibility.cpp")
 			files(filepath)
 			vpaths({["Source files/garrysmod_common"] = filepath})
 		end
