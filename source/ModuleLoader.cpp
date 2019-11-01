@@ -78,6 +78,7 @@ void *ModuleLoader::LoadModule( const std::string &name )
 
 		"bin/linux32/lib%s.so",
 		"bin/linux32/%s.so",
+		"garrysmod/bin/%s_srv.so",
 		"garrysmod/bin/%s.so",
 		"bin/lib%s_srv.so",
 		"bin/%s_srv.so",
