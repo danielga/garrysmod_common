@@ -45,7 +45,6 @@ function CreateWorkspace(config)
 		location(_workspace.directory)
 		warnings("Extra")
 		flags({"NoPCH", "MultiProcessorCompile", "ShadowedVariables", "UndefinedIdentifiers"})
-		staticruntime("On")
 		characterset("MBCS")
 		intrinsics("On")
 		inlining("Auto")
@@ -93,16 +92,20 @@ function CreateWorkspace(config)
 
 		filter("system:windows")
 			cppdialect("C++17")
+			staticruntime("On")
 			defines({
 				"_CRT_NONSTDC_NO_WARNINGS",
 				"_CRT_SECURE_NO_WARNINGS",
 				"STRICT"
 			})
 
-		filter("system:linux or macosx")
+		filter("system:linux")
 			cppdialect("GNU++17")
+			staticruntime("On")
 
 		filter("system:macosx")
+			cppdialect("GNU++17")
+			staticruntime("Off")
 			buildoptions({"-mmacosx-version-min=10.7", "-stdlib=libc++"})
 			linkoptions({"-mmacosx-version-min=10.7", "-stdlib=libc++"})
 
