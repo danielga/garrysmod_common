@@ -3,7 +3,7 @@
 
 #ifdef GMOD_USE_SOURCESDK
     #include "mathlib/vector.h"
-    #include "Color.h"
+    #include "color.h"
 #else
     struct Vector
     {
