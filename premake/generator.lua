@@ -92,14 +92,12 @@ function CreateWorkspace(config)
 		end
 
 		filter("system:windows")
+			cppdialect("C++17")
 			defines({
 				"_CRT_NONSTDC_NO_WARNINGS",
 				"_CRT_SECURE_NO_WARNINGS",
 				"STRICT"
 			})
-
-		filter("system:windows")
-			cppdialect("C++17")
 
 		filter("system:linux or macosx")
 			cppdialect("GNU++17")
