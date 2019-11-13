@@ -184,7 +184,7 @@ static int luaL_error_loader( lua_State *L, const char *fmt, ... )
 }
 
 #define CreateLoader( ret, name, args ) \
-	static const char __ ## name ## _name__[] = #name; \
+	static constexpr char __ ## name ## _name__[] = #name; \
 	ret ( *name ) args = Loader<__ ## name ## _name__, ret args>::Function<&name>
 
 extern "C"
