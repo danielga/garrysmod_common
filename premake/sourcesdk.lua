@@ -52,7 +52,7 @@ local function IncludeSDKCommonInternal(directory)
 			"unknown-pragmas",
 			"invalid-offsetof"
 		})
-		defines({"COMPILER_GCC", "POSIX", "_POSIX", "LINUX", "_LINUX", "GNUC", "NO_MALLOC_OVERRIDE"})
+		defines({"COMPILER_GCC", "POSIX", "_POSIX", "LINUX", "_LINUX", "GNUC"})
 		libdirs(path.join(path.getabsolute(directory), "lib", "public", "linux32"))
 
 	filter("system:macosx")
@@ -66,7 +66,7 @@ local function IncludeSDKCommonInternal(directory)
 			"unknown-warning-option",
 			"invalid-offsetof"
 		})
-		defines({"COMPILER_GCC", "POSIX", "_POSIX", "OSX", "GNUC", "NO_MALLOC_OVERRIDE"})
+		defines({"COMPILER_GCC", "POSIX", "_POSIX", "OSX", "GNUC"})
 		libdirs(path.join(path.getabsolute(directory), "lib", "public", "osx32"))
 
 	filter({})
@@ -374,10 +374,10 @@ function IncludeSDKRaytrace(directory)
 			defines("WIN32")
 
 		filter("system:linux")
-			defines({"COMPILER_GCC", "POSIX", "_POSIX", "LINUX", "_LINUX", "GNUC", "NO_MALLOC_OVERRIDE"})
+			defines({"COMPILER_GCC", "POSIX", "_POSIX", "LINUX", "_LINUX", "GNUC"})
 
 		filter("system:macosx")
-			defines({"COMPILER_GCC", "POSIX", "_POSIX", "OSX", "GNUC", "NO_MALLOC_OVERRIDE"})
+			defines({"COMPILER_GCC", "POSIX", "_POSIX", "OSX", "GNUC"})
 
 	group("")
 
