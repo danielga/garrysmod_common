@@ -34,6 +34,16 @@ public:
 		return module;
 	}
 
+	void *GetModule( ) const
+	{
+		return module.GetModule( );
+	}
+
+	void *GetSymbol( const std::string &name ) const
+	{
+		return module.GetSymbol( name );
+	}
+
 	CreateInterfaceFn GetFactory( ) const
 	{
 		return factory;
