@@ -13,27 +13,25 @@ function IncludeScanning()
 		links("CoreServices.framework")
 
 	group("garrysmod_common")
+		project("scanning")
+			kind("StaticLib")
+			location(path.join(_GARRYSMOD_COMMON_DIRECTORY, "projects", os.target(), _ACTION))
+			targetdir(path.join("%{prj.location}", "%{cfg.architecture}", "%{cfg.buildcfg}"))
+			debugdir(path.join("%{prj.location}", "%{cfg.architecture}", "%{cfg.buildcfg}"))
+			objdir(path.join("!%{prj.location}", "%{cfg.architecture}", "%{cfg.buildcfg}", "intermediate", "%{prj.name}"))
+			includedirs(directory)
+			files({
+				path.join(directory, "*.hpp"),
+				path.join(directory, "*.cpp")
+			})
+			vpaths({
+				["Header files/*"] = path.join(directory, "*.hpp"),
+				["Source files/*"] = path.join(directory, "*.cpp")
+			})
 
-	project("scanning")
-		kind("StaticLib")
-		location(path.join(_GARRYSMOD_COMMON_DIRECTORY, "projects", os.target(), _ACTION))
-		sysincludedirs(directory)
-		files({
-			path.join(directory, "*.hpp"),
-			path.join(directory, "*.cpp")
-		})
-		vpaths({
-			["Header files/*"] = path.join(directory, "*.hpp"),
-			["Source files/*"] = path.join(directory, "*.cpp")
-		})
-		targetdir(path.join("%{prj.location}", "%{cfg.architecture}", "%{cfg.buildcfg}"))
-		debugdir(path.join("%{prj.location}", "%{cfg.architecture}", "%{cfg.buildcfg}"))
-		objdir(path.join("!%{prj.location}", "%{cfg.architecture}", "%{cfg.buildcfg}", "intermediate", "%{prj.name}"))
-
-		filter("system:linux or macosx")
-			links("dl")
+			filter("system:linux or macosx")
+				links("dl")
 
 	group("")
-
 	project(_project.name)
 end

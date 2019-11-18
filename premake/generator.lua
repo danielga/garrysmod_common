@@ -292,7 +292,7 @@ function CreateProject(config)
 		if abi_compatible then
 			local filepath = path.join(_GARRYSMOD_COMMON_DIRECTORY, "source", "ABICompatibility.cpp")
 			files(filepath)
-			vpaths({["Source files/garrysmod_common"] = filepath})
+			vpaths({["garrysmod_common"] = filepath})
 		end
 
 		targetprefix("")

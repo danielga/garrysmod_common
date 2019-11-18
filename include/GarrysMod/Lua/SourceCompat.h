@@ -2,8 +2,14 @@
 #define GARRYSMOD_LUA_SOURCECOMPAT_H
 
 #ifdef GMOD_USE_SOURCESDK
-    #include "mathlib/vector.h"
-    #include "Color.h"
+    #include <mathlib/vector.h>
+
+#if defined __has_include && __has_include(<color.h>)
+    #include <color.h>
+#else
+    #include <Color.h>
+#endif
+
 #else
     struct Vector
     {
