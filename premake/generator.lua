@@ -77,18 +77,21 @@ function CreateWorkspace(config)
 			optimize("Debug")
 			symbols("Full")
 			defines("NDEBUG")
+			runtime("Release")
 
 		filter("configurations:Release")
 			flags("LinkTimeOptimization")
 			optimize("Full")
 			symbols("Full")
 			defines("NDEBUG")
+			runtime("Release")
 
 		if not abi_compatible then
 			filter("configurations:Debug")
 				optimize("Off")
 				symbols("Full")
 				defines({"DEBUG", "_DEBUG"})
+				runtime("Debug")
 		end
 
 		filter("system:windows")
@@ -300,6 +303,9 @@ function CreateProject(config)
 
 		filter({"system:windows", "platforms:x86"})
 			targetsuffix("_win32")
+
+			filter({"system:windows", "platforms:x86", "configurations:ReleaseWithSymbols or Debug"})
+				linkoptions("/SAFESEH:NO")
 
 		filter({"system:windows", "platforms:x86_64"})
 			targetsuffix("_win64")
