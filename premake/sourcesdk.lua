@@ -511,3 +511,36 @@ function IncludeSteamAPI(directory)
 	sysincludedirs(path.join(GetSDKPath(directory), "public", "steam"))
 	links("steam_api")
 end
+
+function IncludeSDKLZMA(directory)
+	IncludePackage("sdklzma")
+
+	local _project = project()
+
+	directory = GetSDKPath(directory)
+
+	sysincludedirs(path.join(directory, "utils", "lzma", "C"))
+	links("LZMA")
+
+	group("garrysmod_common")
+		project("LZMA")
+			kind("StaticLib")
+			warnings("Default")
+			defines("_7ZIP_ST")
+			location(path.join(_GARRYSMOD_COMMON_DIRECTORY, "projects", os.target(), _ACTION))
+			targetdir(path.join("%{prj.location}", "%{cfg.architecture}", "%{cfg.buildcfg}"))
+			debugdir(path.join("%{prj.location}", "%{cfg.architecture}", "%{cfg.buildcfg}"))
+			objdir(path.join("!%{prj.location}", "%{cfg.architecture}", "%{cfg.buildcfg}", "intermediate", "%{prj.name}"))
+			includedirs(path.join(directory, "utils", "lzma", "C"))
+			files({
+				path.join(directory, "utils", "lzma", "C", "*.h"),
+				path.join(directory, "utils", "lzma", "C", "*.c")
+			})
+			vpaths({
+				["Header files/*"] = path.join(directory, "utils", "lzma", "C", "*.h"),
+				["Source files/*"] = path.join(directory, "utils", "lzma", "C", "*.c"),
+			})
+
+	group("")
+	project(_project.name)
+end
