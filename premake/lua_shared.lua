@@ -5,7 +5,13 @@ function IncludeLuaShared()
 	local _workspace = _project.workspace
 
 	sysincludedirs(path.join(_GARRYSMOD_COMMON_DIRECTORY, "include"))
-	links("lua_shared")
+
+	filter("system:windows or macosx")
+		links("lua_shared")
+
+	filter("system:linux")
+		local libpath = path.join(_GARRYSMOD_COMMON_DIRECTORY, "projects", os.target(), _ACTION, "%{cfg.architecture}", "%{cfg.buildcfg}", "liblua_shared.a")
+		linkoptions({"-Wl,--whole-archive", path.getrelative(_project.location, libpath), "-Wl,--no-whole-archive"})
 
 	group("garrysmod_common")
 		project("lua_shared")
