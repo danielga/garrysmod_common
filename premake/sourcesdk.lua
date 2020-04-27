@@ -22,7 +22,7 @@ local function IncludeSDKCommonInternal(directory)
 	defines(_project.serverside and "GAME_DLL" or "CLIENT_DLL")
 
 	filter("system:windows")
-		defines("WIN32")
+		defines({"WIN32", "RAD_TELEMETRY_DISABLED"})
 		disablewarnings("4324")
 		libdirs(path.join(directory, "lib", "public"))
 
