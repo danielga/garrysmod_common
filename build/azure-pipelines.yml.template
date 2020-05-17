@@ -32,7 +32,7 @@ jobs:
     PROJECT_OS: windows
     PREMAKE5_EXECUTABLE: premake5.exe
     PREMAKE5: $(System.DefaultWorkingDirectory)/dependencies/windows/premake-core/premake5.exe
-    PREMAKE5_URL: https://github.com/premake/premake-core/releases/download/v5.0.0-alpha14/premake-5.0.0-alpha14-windows.zip
+    PREMAKE5_URL: https://github.com/premake/premake-core/releases/download/v5.0.0-alpha15/premake-5.0.0-alpha15-windows.zip
   steps:
   - powershell: 'Invoke-Expression ((New-Object System.Net.WebClient).DownloadString("$env:BOOTSTRAP_URL"))'
     displayName: Bootstrap
@@ -55,7 +55,7 @@ jobs:
   displayName: Linux
   pool:
     name: Azure Pipelines
-    vmImage: ubuntu-18.04
+    vmImage: ubuntu-16.04
   timeoutInMinutes: 10
   variables:
     BOOTSTRAP_URL: https://raw.githubusercontent.com/danielga/garrysmod_common/master/build/bootstrap.sh
@@ -65,14 +65,14 @@ jobs:
     COMPILER_PLATFORM: gmake
     PREMAKE5: $(System.DefaultWorkingDirectory)/dependencies/linux/premake-core/premake5
     PROJECT_OS: linux
-    PREMAKE5_URL: https://github.com/premake/premake-core/releases/download/v5.0.0-alpha14/premake-5.0.0-alpha14-linux.tar.gz
-    CC: gcc-8
-    CXX: g++-8
+    PREMAKE5_URL: https://github.com/premake/premake-core/releases/download/v5.0.0-alpha15/premake-5.0.0-alpha15-linux.tar.gz
+    CC: gcc-9
+    CXX: g++-9
   steps:
   - bash: 'curl -s -L "$BOOTSTRAP_URL" | bash'
     displayName: Bootstrap
   - bash: |
-      sudo apt-get update && sudo apt-get install -y g++-8-multilib
+      sudo apt-get update && sudo apt-get install -y g++-9-multilib
       $BUILD_SCRIPT
     displayName: Build
   - task: CopyFiles@2
@@ -92,7 +92,7 @@ jobs:
   displayName: macOS
   pool:
     name: Azure Pipelines
-    vmImage: macOS-10.13
+    vmImage: macOS-10.15
   timeoutInMinutes: 10
   variables:
     BOOTSTRAP_URL: https://raw.githubusercontent.com/danielga/garrysmod_common/master/build/bootstrap.sh
@@ -102,12 +102,14 @@ jobs:
     COMPILER_PLATFORM: gmake
     PREMAKE5: $(System.DefaultWorkingDirectory)/dependencies/macosx/premake-core/premake5
     PROJECT_OS: macosx
-    PREMAKE5_URL: https://github.com/premake/premake-core/releases/download/v5.0.0-alpha14/premake-5.0.0-alpha14-macosx.tar.gz
+    PREMAKE5_URL: https://github.com/premake/premake-core/releases/download/v5.0.0-alpha15/premake-5.0.0-alpha15-macosx.tar.gz
+    MACOSX_SDK_URL: https://github.com/phracker/MacOSX-SDKs/releases/download/10.15/MacOSX10.7.sdk.tar.xz
+    MACOSX_SDK_DIRECTORY: $(System.DefaultWorkingDirectory)/dependencies/macosx/MacOSX10.7.sdk
   steps:
   - bash: 'curl -s -L "$BOOTSTRAP_URL" | bash'
     displayName: Bootstrap
   - bash: |
-      sudo xcode-select -s "/Applications/Xcode_9.4.1.app/Contents/Developer"
+      sudo xcode-select -s "/Applications/Xcode_11.4.1.app/Contents/Developer"
       $BUILD_SCRIPT
     displayName: Build
   - task: CopyFiles@2

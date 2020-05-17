@@ -48,7 +48,7 @@ static int32_t LuaErrorTraceback( lua_State *state )
 	return 1;
 }
 
-static bool PushHookRun( GarrysMod::Lua::ILuaBase *lua, const char *hook_name )
+static int32_t PushHookRun( GarrysMod::Lua::ILuaBase *lua, const char *hook_name )
 {
 	lua->PushCFunction( LuaErrorTraceback );
 
@@ -56,21 +56,21 @@ static bool PushHookRun( GarrysMod::Lua::ILuaBase *lua, const char *hook_name )
 	if( !lua->IsType( -1, GarrysMod::Lua::Type::TABLE ) )
 	{
 		lua->Pop( 2 );
-		return false;
+		return 0;
 	}
 
 	lua->GetField( -1, "Run" );
 	if( !lua->IsType( -1, GarrysMod::Lua::Type::FUNCTION ) )
 	{
 		lua->Pop( 3 );
-		return false;
+		return 0;
 	}
 
 	lua->Remove( -2 );
 
 	lua->PushString( hook_name );
 
-	return true;
+	return 3;
 }
 
 static bool CallHookRun(

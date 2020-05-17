@@ -26,3 +26,12 @@ if [ ! -f "$PREMAKE5" ]; then
 	tar -xf "$PREMAKE_TAR_PATH" -C "$PREMAKE_DIRECTORY"
 	rm -f "$PREMAKE_TAR_PATH"
 fi
+
+if [ "$(uname -s)" = "Darwin" ] && [ ! -d "$MACOSX_SDK_DIRECTORY" ]; then
+	echo "Installing MacOSX SDK..."
+	MACOSX_SDK_DOWNLOAD_DIR="$DEPENDENCIES/$PROJECT_OS"
+	MACOSX_SDK_TAR_PATH="$MACOSX_SDK_DOWNLOAD_DIR/macosx_sdk.tar.xz"
+	curl -s -L "$MACOSX_SDK_URL" -o "$MACOSX_SDK_TAR_PATH"
+	tar -xf "$MACOSX_SDK_TAR_PATH" -C "$MACOSX_SDK_DOWNLOAD_DIR"
+	rm -f "$MACOSX_SDK_TAR_PATH"
+fi
