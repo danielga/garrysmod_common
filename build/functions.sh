@@ -38,7 +38,7 @@ function update_local_git_repository {
 		git fetch --quiet --all --prune
 
 		local CURBRANCH=$(git symbolic-ref --quiet --short HEAD)
-		if [ ! $BRANCH = $CURBRANCH ]; then
+		if [ ! "$BRANCH" = "$CURBRANCH" ]; then
 			echo "Checking out branch \"${BRANCH}\" in \"${DIRECTORY}\"..."
 			git checkout --quiet --force "$BRANCH"
 			local UPDATED=1

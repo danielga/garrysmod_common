@@ -23,13 +23,15 @@ validate_variable_or_set_default "DISABLE_X86_64_BUILD" "true"
 case "$(uname -s)" in
     Linux*)
         TARGET="linux"
-        validate_variable_or_set_default "PREMAKE5_URL" "https://github.com/premake/premake-core/releases/download/v5.0.0-alpha14/premake-5.0.0-alpha14-linux.tar.gz"
+        validate_variable_or_set_default "PREMAKE5_URL" "https://github.com/premake/premake-core/releases/download/v5.0.0-alpha15/premake-5.0.0-alpha15-linux.tar.gz"
         validate_variable_or_set_default "PROJECT_OS" "linux"
         ;;
     Darwin*)
         TARGET="osx"
-        validate_variable_or_set_default "PREMAKE5_URL" "https://github.com/premake/premake-core/releases/download/v5.0.0-alpha14/premake-5.0.0-alpha14-macosx.tar.gz"
+        validate_variable_or_set_default "PREMAKE5_URL" "https://github.com/premake/premake-core/releases/download/v5.0.0-alpha15/premake-5.0.0-alpha15-macosx.tar.gz"
         validate_variable_or_set_default "PROJECT_OS" "macosx"
+        validate_variable_or_set_default "MACOSX_SDK_URL" "https://github.com/phracker/MacOSX-SDKs/releases/download/10.15/MacOSX10.7.sdk.tar.xz"
+        validate_variable_or_set_default "MACOSX_SDK_DIRECTORY" "$DEPENDENCIES/$PROJECT_OS/MacOSX10.7.sdk"
         ;;
     *)
         echo "Unknown operating system"

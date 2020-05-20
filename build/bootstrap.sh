@@ -75,4 +75,4 @@ validate_variable_or_set_default "GARRYSMOD_COMMON_REPOSITORY" "https://github.c
 validate_variable_or_set_default "GARRYSMOD_COMMON_BRANCH" "master"
 validate_variable_or_set_default "GARRYSMOD_COMMON" "./garrysmod_common"
 
-update_local_git_repository "$GARRYSMOD_COMMON" "$GARRYSMOD_COMMON_REPOSITORY" >/dev/null
+update_local_git_repository "$GARRYSMOD_COMMON" "$GARRYSMOD_COMMON_REPOSITORY" "$GARRYSMOD_COMMON_BRANCH" >/dev/null
