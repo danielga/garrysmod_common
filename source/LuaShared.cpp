@@ -1,7 +1,8 @@
 #include <functional>
 #include <cstdarg>
-#include <lua.hpp>
-#include <Platform.hpp>
+
+#include "lua.hpp"
+#include "Platform.hpp"
 
 #if defined SYSTEM_WINDOWS
 

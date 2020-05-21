@@ -59,7 +59,6 @@ function CreateWorkspace(config)
 		vectorextensions("SSE2")
 		pic("On")
 		platforms({"x86_64", "x86"})
-		defaultplatform("x86_64")
 		targetdir(path.join("%{wks.location}", "%{cfg.architecture}", "%{cfg.buildcfg}"))
 		debugdir(path.join("%{wks.location}", "%{cfg.architecture}", "%{cfg.buildcfg}"))
 		objdir(path.join("!%{wks.location}", "%{cfg.architecture}", "%{cfg.buildcfg}", "intermediate", "%{prj.name}"))
@@ -103,6 +102,7 @@ function CreateWorkspace(config)
 		filter("system:windows")
 			cppdialect("C++17")
 			staticruntime("On")
+			defaultplatform("x86")
 			defines({
 				"_CRT_NONSTDC_NO_WARNINGS",
 				"_CRT_SECURE_NO_WARNINGS",
@@ -112,10 +112,12 @@ function CreateWorkspace(config)
 		filter("system:linux")
 			cppdialect("GNU++17")
 			staticruntime("On")
+			defaultplatform("x86")
 
 		filter("system:macosx")
 			cppdialect("GNU++17")
 			staticruntime("Off")
+			defaultplatform("x86_64")
 			buildoptions({"-mmacosx-version-min=10.7", "-stdlib=libc++"})
 			linkoptions({"-mmacosx-version-min=10.7", "-stdlib=libc++"})
 
@@ -265,9 +267,9 @@ function CreateProject(config)
 
 		if abi_compatible then
 			removeconfigurations("Debug")
-			configurations({"Release", "ReleaseWithSymbols"})
+			configurations({"ReleaseWithSymbols", "Release"})
 		else
-			configurations({"Release", "ReleaseWithSymbols", "Debug"})
+			configurations({"ReleaseWithSymbols", "Release", "Debug"})
 		end
 
 		kind("SharedLib")

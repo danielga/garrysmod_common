@@ -14,7 +14,6 @@ validate_variable_or_set_default "GARRYSMOD_COMMON_REPOSITORY" "https://github.c
 validate_variable_or_set_default "GARRYSMOD_COMMON_BRANCH" "master"
 validate_variable_or_set_default "GARRYSMOD_COMMON" "$DEPENDENCIES/garrysmod_common"
 validate_variable_or_set_default "COMPILER_PLATFORM" "gmake"
-validate_variable_or_set_default "PREMAKE5" "premake5"
 validate_variable_or_set_default "PROJECT_GENERATOR_VERSION" "1"
 validate_variable_or_set_default "SOURCE_SDK_REPOSITORY" "https://github.com/danielga/sourcesdk-minimal.git"
 validate_variable_or_set_default "SOURCE_SDK_BRANCH" "master"
@@ -40,10 +39,6 @@ case "$(uname -s)" in
         ;;
 esac
 
-validate_variable_or_set_default "PREMAKE5_EXECUTABLE" "$DEPENDENCIES/$PROJECT_OS/premake-core/premake5"
-validate_variable_or_set_default "TARGET_OS" "$TARGET"
-validate_variable_or_set_default "TARGET_OS_64" "${TARGET}64"
-validate_variable_or_set_default "TARGET_ARCHITECTURE" "x86"
-validate_variable_or_set_default "TARGET_ARCHITECTURE_64" "x86_64"
+validate_variable_or_set_default "PREMAKE5" "$DEPENDENCIES/$PROJECT_OS/premake-core/premake5"
 
 create_directory_forcefully "$DEPENDENCIES"

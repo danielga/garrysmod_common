@@ -134,7 +134,7 @@ function IncludeSDKTier1(directory)
 			targetdir(path.join("%{prj.location}", "%{cfg.architecture}", "%{cfg.buildcfg}"))
 			debugdir(path.join("%{prj.location}", "%{cfg.architecture}", "%{cfg.buildcfg}"))
 			objdir(path.join("!%{prj.location}", "%{cfg.architecture}", "%{cfg.buildcfg}", "intermediate", "%{prj.name}"))
-			includedirs({
+			sysincludedirs({
 				path.join(directory, "public"),
 				path.join(directory, "public", "tier0"),
 				path.join(directory, "public", "tier1")
@@ -300,7 +300,7 @@ function IncludeSDKMathlib(directory)
 			targetdir(path.join("%{prj.location}", "%{cfg.architecture}", "%{cfg.buildcfg}"))
 			debugdir(path.join("%{prj.location}", "%{cfg.architecture}", "%{cfg.buildcfg}"))
 			objdir(path.join("!%{prj.location}", "%{cfg.architecture}", "%{cfg.buildcfg}", "intermediate", "%{prj.name}"))
-			includedirs({
+			sysincludedirs({
 				path.join(directory, "public"),
 				path.join(directory, "public", "mathlib"),
 				path.join(directory, "public", "tier0"),
@@ -367,7 +367,7 @@ function IncludeSDKRaytrace(directory)
 			targetdir(path.join("%{prj.location}", "%{cfg.architecture}", "%{cfg.buildcfg}"))
 			debugdir(path.join("%{prj.location}", "%{cfg.architecture}", "%{cfg.buildcfg}"))
 			objdir(path.join("!%{prj.location}", "%{cfg.architecture}", "%{cfg.buildcfg}", "intermediate", "%{prj.name}"))
-			includedirs({
+			sysincludedirs({
 				path.join(directory, "utils", "common"),
 				path.join(directory, "public"),
 				path.join(directory, "public", "tier0"),
@@ -413,7 +413,7 @@ function IncludeSDKBitmap(directory)
 			targetdir(path.join("%{prj.location}", "%{cfg.architecture}", "%{cfg.buildcfg}"))
 			debugdir(path.join("%{prj.location}", "%{cfg.architecture}", "%{cfg.buildcfg}"))
 			objdir(path.join("!%{prj.location}", "%{cfg.architecture}", "%{cfg.buildcfg}", "intermediate", "%{prj.name}"))
-			includedirs({
+			sysincludedirs({
 				path.join(directory, "utils", "common"),
 				path.join(directory, "public"),
 				path.join(directory, "public", "tier0"),
@@ -474,7 +474,7 @@ function IncludeSDKVTF(directory)
 			targetdir(path.join("%{prj.location}", "%{cfg.architecture}", "%{cfg.buildcfg}"))
 			debugdir(path.join("%{prj.location}", "%{cfg.architecture}", "%{cfg.buildcfg}"))
 			objdir(path.join("!%{prj.location}", "%{cfg.architecture}", "%{cfg.buildcfg}", "intermediate", "%{prj.name}"))
-			includedirs({
+			sysincludedirs({
 				path.join(directory, "utils", "common"),
 				path.join(directory, "public"),
 				path.join(directory, "public", "tier0"),
@@ -533,7 +533,7 @@ function IncludeSDKLZMA(directory)
 			targetdir(path.join("%{prj.location}", "%{cfg.architecture}", "%{cfg.buildcfg}"))
 			debugdir(path.join("%{prj.location}", "%{cfg.architecture}", "%{cfg.buildcfg}"))
 			objdir(path.join("!%{prj.location}", "%{cfg.architecture}", "%{cfg.buildcfg}", "intermediate", "%{prj.name}"))
-			includedirs(path.join(directory, "utils", "lzma", "C"))
+			sysincludedirs(path.join(directory, "utils", "lzma", "C"))
 			files({
 				path.join(directory, "utils", "lzma", "C", "*.h"),
 				path.join(directory, "utils", "lzma", "C", "*.c")

@@ -91,8 +91,8 @@ void *ModuleLoader::LoadModule( const std::string &name )
 
 #if defined ARCHITECTURE_X86_64
 
-		"lib%s.dylib",
-		"%s.dylib"
+		"GarrysMod_Signed.app/Contents/MacOS/lib%s.dylib",
+		"GarrysMod_Signed.app/Contents/MacOS/%s.dylib"
 
 #elif defined ARCHITECTURE_X86
 
