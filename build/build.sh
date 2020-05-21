@@ -9,10 +9,6 @@ DIR="$( cd "$( dirname "${BASH_SOURCE:-$0}" )" && pwd )"
 
 JOBS=$(getconf _NPROCESSORS_ONLN)
 
-if [ "$(uname -s)" = "Darwin" ]; then
-	export SDKROOT="$MACOSX_SDK_DIRECTORY"
-fi
-
 if [ "$PROJECT_GENERATOR_VERSION" = "1" ]; then
 	pushd "$REPOSITORY_DIR/projects"
 else

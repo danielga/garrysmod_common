@@ -6,6 +6,12 @@ newoption({
 	value = "path for workspace directory"
 })
 
+newoption({
+	trigger = "macosx_sdkroot",
+	description = "Sets the path for the MacOSX SDK directory (the SDKROOT environment variable is a better alternative)",
+	value = "path for MacOSX SDK directory"
+})
+
 _GARRYSMOD_COMMON_DIRECTORY = path.getabsolute("..")
 
 includeexternal("lua_shared.lua")
@@ -112,6 +118,12 @@ function CreateWorkspace(config)
 			staticruntime("Off")
 			buildoptions({"-mmacosx-version-min=10.7", "-stdlib=libc++"})
 			linkoptions({"-mmacosx-version-min=10.7", "-stdlib=libc++"})
+
+			local macosx_sdkroot = _OPTIONS["macosx_sdkroot"]
+			if macosx_sdkroot ~= nil then
+				buildoptions("-isysroot " .. macosx_sdkroot)
+				linkoptions("-isysroot " .. macosx_sdkroot)
+			end
 
 		filter({})
 end

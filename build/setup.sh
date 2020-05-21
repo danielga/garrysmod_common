@@ -32,6 +32,7 @@ case "$(uname -s)" in
         validate_variable_or_set_default "PROJECT_OS" "macosx"
         validate_variable_or_set_default "MACOSX_SDK_URL" "https://github.com/phracker/MacOSX-SDKs/releases/download/10.15/MacOSX10.7.sdk.tar.xz"
         validate_variable_or_set_default "MACOSX_SDK_DIRECTORY" "$DEPENDENCIES/$PROJECT_OS/MacOSX10.7.sdk"
+        validate_variable_or_set_default "SDKROOT" "$MACOSX_SDK_DIRECTORY"
         ;;
     *)
         echo "Unknown operating system"
