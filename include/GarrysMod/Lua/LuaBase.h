@@ -122,6 +122,7 @@ namespace GarrysMod
             public:
                 // Throws an error and ceases execution of the function
                 // If this function is called, any local C values will not have their destructors called!
+                [[noreturn]]
                 virtual void        ThrowError( const char* strError ) = 0;
 
                 // Checks that the type of the value at iStackPos is iType
@@ -131,6 +132,7 @@ namespace GarrysMod
 
                 // Throws a pretty error message about the given argument
                 // If this function is called, any local C values will not have their destructors called!
+                [[noreturn]]
                 virtual void        ArgError( int iArgNum, const char* strMessage ) = 0;
 
                 // Pushes table[key] on to the stack
@@ -326,25 +328,28 @@ namespace GarrysMod
                 }
 
                 // Throws an error (uses the value at the top of the stack)
-                inline int Error( )
+                [[noreturn]]
+                inline void Error( )
                 {
-                    return lua_error( state );
+                    lua_error( state );
                 }
 
                 // Throws an error (pushes a formatted string onto the stack and uses it)
-                inline int FormattedError( const char* fmt, ... )
+                [[noreturn]]
+                inline void FormattedError( const char* fmt, ... )
                 {
                     va_list args;
                     va_start( args, fmt );
                     PushFormattedString( fmt, args );
                     va_end( args );
-                    return Error( );
+                    Error( );
                 }
 
                 // Throws an error related to type differences
-                inline int TypeError( int iStackPos, const char* tname )
+                [[noreturn]]
+                inline void TypeError( int iStackPos, const char* tname )
                 {
-                    return luaL_typerror( state, iStackPos, tname );
+                    luaL_typerror( state, iStackPos, tname );
                 }
 
                 // Converts the value at the given index to a generic C pointer (void*)
