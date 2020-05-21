@@ -8,7 +8,7 @@ newoption({
 
 newoption({
 	trigger = "macosx_sdkroot",
-	description = "Sets the path for the MacOSX SDK directory (the SDKROOT environment variable is a better alternative)",
+	description = "Sets the path for the MacOSX SDK directory (the SDKROOT environment variable is a better alternative when running make)",
 	value = "path for MacOSX SDK directory"
 })
 
