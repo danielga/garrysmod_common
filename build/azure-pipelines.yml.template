@@ -105,6 +105,7 @@ jobs:
     PREMAKE5_URL: https://github.com/premake/premake-core/releases/download/v5.0.0-alpha15/premake-5.0.0-alpha15-macosx.tar.gz
     MACOSX_SDK_URL: https://github.com/phracker/MacOSX-SDKs/releases/download/10.15/MacOSX10.7.sdk.tar.xz
     MACOSX_SDK_DIRECTORY: $(System.DefaultWorkingDirectory)/dependencies/macosx/MacOSX10.7.sdk
+    SDKROOT: $(System.DefaultWorkingDirectory)/dependencies/macosx/MacOSX10.7.sdk
   steps:
   - bash: 'curl -s -L "$BOOTSTRAP_URL" | bash'
     displayName: Bootstrap
