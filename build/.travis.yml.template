@@ -29,22 +29,30 @@ matrix:
       compiler: gcc
       addons:
         apt:
+          sources:
+            - ppa:ubuntu-toolchain-r/test
           packages:
             - linux-libc-dev:i386
-            - g++-8-multilib
+            - g++-9-multilib
       env:
         - PREMAKE5="$TRAVIS_BUILD_DIR/dependencies/linux/premake-core/premake5"
           PROJECT_OS=linux
-          PREMAKE5_URL="https://github.com/premake/premake-core/releases/download/v5.0.0-alpha14/premake-5.0.0-alpha14-linux.tar.gz"
+          PREMAKE5_URL="https://github.com/premake/premake-core/releases/download/v5.0.0-alpha15/premake-5.0.0-alpha15-linux.tar.gz"
       before_install:
-        - export CC=gcc-8
-          export CXX=g++-8
+        - export CC=gcc-9
+          export CXX=g++-9
+          export AR=gcc-ar-9
+          export NM=gcc-nm-9
+          export RANLIB=gcc-ranlib-9
     - os: osx
-      osx_image: xcode9.4
+      osx_image: xcode11.4
       env:
         - PREMAKE5="$TRAVIS_BUILD_DIR/dependencies/macosx/premake-core/premake5"
           PROJECT_OS=macosx
-          PREMAKE5_URL="https://github.com/premake/premake-core/releases/download/v5.0.0-alpha14/premake-5.0.0-alpha14-macosx.tar.gz"
+          PREMAKE5_URL="https://github.com/premake/premake-core/releases/download/v5.0.0-alpha15/premake-5.0.0-alpha15-macosx.tar.gz"
+          MACOSX_SDK_URL="https://github.com/phracker/MacOSX-SDKs/releases/download/10.15/MacOSX10.7.sdk.tar.xz"
+          MACOSX_SDK_DIRECTORY="$TRAVIS_BUILD_DIR/dependencies/macosx/MacOSX10.7.sdk"
+          SDKROOT="$TRAVIS_BUILD_DIR/dependencies/macosx/MacOSX10.7.sdk"
 cache:
   directories:
     - "$TRAVIS_BUILD_DIR/dependencies"

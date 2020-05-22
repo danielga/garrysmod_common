@@ -61,6 +61,9 @@ jobs:
     PREMAKE5_URL: https://github.com/premake/premake-core/releases/download/v5.0.0-alpha15/premake-5.0.0-alpha15-linux.tar.gz
     CC: gcc-9
     CXX: g++-9
+    AR: gcc-ar-9
+    NM: gcc-nm-9
+    RANLIB: gcc-ranlib-9
   steps:
   - bash: 'curl -s -L "$BOOTSTRAP_URL" | bash'
     displayName: Bootstrap

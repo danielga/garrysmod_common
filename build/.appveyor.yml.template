@@ -2,8 +2,6 @@ version: '{build}'
 skip_non_tags: true
 image: Visual Studio 2019
 clone_depth: 1
-init:
-- ps: git config --global core.autocrlf true
 environment:
   MODULE_NAME: module name here
   REPOSITORY_DIR: $(APPVEYOR_BUILD_FOLDER)
@@ -14,7 +12,7 @@ environment:
   SOURCE_SDK: $(APPVEYOR_BUILD_FOLDER)/dependencies/sourcesdk-minimal
   SOURCE_SDK_REPOSITORY: https://github.com/danielga/sourcesdk-minimal.git
   SOURCE_SDK_BRANCH: master
-  PREMAKE5_URL: https://github.com/premake/premake-core/releases/download/v5.0.0-alpha14/premake-5.0.0-alpha14-windows.zip
+  PREMAKE5_URL: https://github.com/premake/premake-core/releases/download/v5.0.0-alpha15/premake-5.0.0-alpha15-windows.zip
   PREMAKE5: $(APPVEYOR_BUILD_FOLDER)/dependencies/windows/premake-core/premake5.exe
   BUILD_SCRIPT: $(APPVEYOR_BUILD_FOLDER)/dependencies/garrysmod_common/build/build.ps1
   BOOTSTRAP_URL: https://raw.githubusercontent.com/danielga/garrysmod_common/master/build/bootstrap.ps1
