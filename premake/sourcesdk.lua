@@ -540,13 +540,59 @@ function IncludeSDKLZMA(directory)
 			objdir(path.join("!%{prj.location}", "%{cfg.architecture}", "%{cfg.buildcfg}", "intermediate", "%{prj.name}"))
 			sysincludedirs(path.join(directory, "utils", "lzma", "C"))
 			files({
-				path.join(directory, "utils", "lzma", "C", "*.h"),
-				path.join(directory, "utils", "lzma", "C", "*.c")
+				path.join(directory, "utils", "lzma", "C", "7zAlloc.c"),
+				path.join(directory, "utils", "lzma", "C", "7zArcIn.c"),
+				path.join(directory, "utils", "lzma", "C", "7zBuf.c"),
+				path.join(directory, "utils", "lzma", "C", "7zBuf2.c"),
+				path.join(directory, "utils", "lzma", "C", "7zCrc.c"),
+				path.join(directory, "utils", "lzma", "C", "7zCrcOpt.c"),
+				path.join(directory, "utils", "lzma", "C", "7zDec.c"),
+				path.join(directory, "utils", "lzma", "C", "7zFile.c"),
+				path.join(directory, "utils", "lzma", "C", "7zStream.c"),
+				path.join(directory, "utils", "lzma", "C", "Aes.c"),
+				path.join(directory, "utils", "lzma", "C", "AesOpt.c"),
+				path.join(directory, "utils", "lzma", "C", "Alloc.c"),
+				path.join(directory, "utils", "lzma", "C", "Bcj2.c"),
+				path.join(directory, "utils", "lzma", "C", "Bcj2Enc.c"),
+				path.join(directory, "utils", "lzma", "C", "Bra.c"),
+				path.join(directory, "utils", "lzma", "C", "Bra86.c"),
+				path.join(directory, "utils", "lzma", "C", "BraIA64.c"),
+				path.join(directory, "utils", "lzma", "C", "CpuArch.c"),
+				path.join(directory, "utils", "lzma", "C", "Delta.c"),
+				path.join(directory, "utils", "lzma", "C", "DllSecur.c"),
+				path.join(directory, "utils", "lzma", "C", "LzFind.c"),
+				path.join(directory, "utils", "lzma", "C", "LzFindMt.c"),
+				path.join(directory, "utils", "lzma", "C", "Lzma2Dec.c"),
+				path.join(directory, "utils", "lzma", "C", "Lzma2DecMt.c"),
+				path.join(directory, "utils", "lzma", "C", "Lzma2Enc.c"),
+				path.join(directory, "utils", "lzma", "C", "Lzma86Dec.c"),
+				path.join(directory, "utils", "lzma", "C", "Lzma86Enc.c"),
+				path.join(directory, "utils", "lzma", "C", "LzmaDec.c"),
+				path.join(directory, "utils", "lzma", "C", "LzmaEnc.c"),
+				path.join(directory, "utils", "lzma", "C", "LzmaLib.c"),
+				path.join(directory, "utils", "lzma", "C", "Ppmd7.c"),
+				path.join(directory, "utils", "lzma", "C", "Ppmd7Dec.c"),
+				path.join(directory, "utils", "lzma", "C", "Ppmd7Enc.c"),
+				path.join(directory, "utils", "lzma", "C", "Sha256.c"),
+				path.join(directory, "utils", "lzma", "C", "Sort.c"),
+				path.join(directory, "utils", "lzma", "C", "Xz.c"),
+				path.join(directory, "utils", "lzma", "C", "XzCrc64.c"),
+				path.join(directory, "utils", "lzma", "C", "XzCrc64Opt.c"),
+				path.join(directory, "utils", "lzma", "C", "XzDec.c"),
+				path.join(directory, "utils", "lzma", "C", "XzEnc.c"),
+				path.join(directory, "utils", "lzma", "C", "XzIn.c")
 			})
 			vpaths({
 				["Header files/*"] = path.join(directory, "utils", "lzma", "C", "*.h"),
 				["Source files/*"] = path.join(directory, "utils", "lzma", "C", "*.c"),
 			})
+
+			filter("system:windows")
+				files({
+					path.join(directory, "utils", "lzma", "C", "MtCoder.c"),
+					path.join(directory, "utils", "lzma", "C", "MtDec.c"),
+					path.join(directory, "utils", "lzma", "C", "Threads.c")
+				})
 
 	group("")
 	project(_project.name)
