@@ -23,6 +23,7 @@ local function IncludeSDKCommonInternal(directory)
 
 	filter("system:windows")
 		defines("WIN32")
+		disablewarnings("4324")
 		libdirs(path.join(directory, "lib", "public"))
 
 		filter({"system:windows", "configurations:Debug"})
@@ -34,11 +35,13 @@ local function IncludeSDKCommonInternal(directory)
 			"unused-parameter",
 			"strict-aliasing",
 			"unknown-pragmas",
-			"invalid-offsetof",
 			"undef"
 		})
 		defines({"COMPILER_GCC", "POSIX", "_POSIX", "LINUX", "_LINUX", "GNUC", "NO_MALLOC_OVERRIDE"})
 		libdirs(path.join(path.getabsolute(directory), "lib", "public", "linux32"))
+
+		filter({"system:linux", "files:**.cpp or **.cxx"})
+			disablewarnings("invalid-offsetof")
 
 	filter("system:macosx")
 		disablewarnings({
@@ -49,11 +52,13 @@ local function IncludeSDKCommonInternal(directory)
 			"unknown-pragmas",
 			"unused-variable",
 			"unknown-warning-option",
-			"invalid-offsetof",
 			"undef"
 		})
 		defines({"COMPILER_GCC", "POSIX", "_POSIX", "OSX", "GNUC", "NO_MALLOC_OVERRIDE"})
 		libdirs(path.join(path.getabsolute(directory), "lib", "public", "osx32"))
+
+		filter({"system:macosx", "files:**.cpp or **.cxx"})
+			disablewarnings("invalid-offsetof")
 
 	filter({})
 end
