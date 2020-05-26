@@ -19,10 +19,10 @@ local function IncludeSDKCommonInternal(directory)
 	local _project = project()
 	local _workspace = _project.workspace
 
-	defines(_project.serverside and "GAME_DLL" or "CLIENT_DLL")
+	defines({_project.serverside and "GAME_DLL" or "CLIENT_DLL", "RAD_TELEMETRY_DISABLED"})
 
 	filter("system:windows")
-		defines({"WIN32", "RAD_TELEMETRY_DISABLED"})
+		defines("WIN32")
 		disablewarnings("4324")
 		libdirs(path.join(directory, "lib", "public"))
 
