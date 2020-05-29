@@ -179,6 +179,11 @@ extern "C"
 	CreateLoader( void *, lua_upvalueid, ( lua_State *a, int b, int c ), ( a, b, c ) );
 	CreateLoader( void, lua_upvaluejoin, ( lua_State *a, int b, int c, int d, int e ), ( a, b, c, d, e ) );
 	CreateLoader( int, lua_loadx, ( lua_State *a, lua_Reader b, void *c, const char *d, const char *e ), ( a, b, c, d, e ) );
+	CreateLoader( const lua_Number *, lua_version, ( lua_State *a ), ( a ) );
+	CreateLoader( void, lua_copy, ( lua_State *a, int b, int c ), ( a, b, c ) );
+	CreateLoader( lua_Number, lua_tonumberx, (lua_State *a, int b, int *c ), ( a, b, c ) );
+	CreateLoader( lua_Integer, lua_tointegerx, ( lua_State* a, int b, int *c ), ( a, b, c ) );
+	CreateLoader( int, lua_isyieldable, ( lua_State *a ), ( a ) );
 
 	CreateLoader( int, luaL_typerror, ( lua_State *a, int b, const char *c ), ( a, b, c ) );
 	CreateLoader( void, luaL_openlib, ( lua_State *a, const char *b, const luaL_Reg *c, int d ), ( a, b, c, d ) );
@@ -213,6 +218,10 @@ extern "C"
 	CreateLoader( int, luaL_loadfilex, ( lua_State *a, const char *b, const char *c ), ( a, b, c ) );
 	CreateLoader( int, luaL_loadbufferx, ( lua_State *a, const char *b, size_t c, const char *d, const char *e ), ( a, b, c, d, e ) );
 	CreateLoader( void, luaL_traceback, ( lua_State *a, lua_State *b, const char *c, int d ), ( a, b, c, d ) );
+	CreateLoader( void, luaL_setfuncs, ( lua_State *a, const luaL_Reg *b, int c ), ( a, b, c ) );
+	CreateLoader( void, luaL_pushmodule, ( lua_State *a, const char *b, int c ), ( a, b, c ) );
+	CreateLoader( void *, luaL_testudata, ( lua_State *a, int b, const char *c ), ( a, b, c ) );
+	CreateLoader( void, luaL_setmetatable, ( lua_State *a, const char *b ), ( a, b ) );
 	CreateLoader( void, luaL_buffinit, ( lua_State *a, luaL_Buffer *b ), ( a, b ) );
 	CreateLoader( char *, luaL_prepbuffer, ( luaL_Buffer *a ), ( a ) );
 	CreateLoader( void, luaL_addlstring, ( luaL_Buffer *a, const char *b, size_t c ), ( a, b, c ) );
@@ -268,4 +277,8 @@ extern "C"
 
 	CreateLoader( int, luaJIT_setmode, ( lua_State *a, int b, int c ), ( a, b, c ) );
 	CreateLoader( void, LUAJIT_VERSION_SYM, ( ), ( ) );
+	typedef void ( *luaJIT_profile_callback )( void *data, lua_State *L, int samples, int vmstate );
+	CreateLoader( void, luaJIT_profile_start, ( lua_State *a, const char *b, luaJIT_profile_callback c, void *d ), ( a, b, c, d ) );
+	CreateLoader( void, luaJIT_profile_stop, ( lua_State *a ), ( a ) );
+	CreateLoader( const char *, luaJIT_profile_dumpstack, ( lua_State* a, const char *b, int c, size_t *d ), ( a, b, c, d ) );
 }
