@@ -26,10 +26,12 @@ include("../scanning")
 include("pkg_config.lua")
 
 local function GetSourceSDKPath()
-	-- All of these but the last path are now deprecated, sourcesdk-minimal is provided as a git submodule
-	local directory = _OPTIONS["sourcesdk"] or os.getenv("SOURCE_SDK") or SOURCESDK_DIRECTORY or DEFAULT_SOURCESDK_DIRECTORY or "../sourcesdk-minimal"
-	if not directory then
-		return
+	-- All of these are deprecated, sourcesdk-minimal is provided as a git submodule
+	local directory = _OPTIONS["sourcesdk"] or os.getenv("SOURCE_SDK") or SOURCESDK_DIRECTORY or DEFAULT_SOURCESDK_DIRECTORY
+	if directory then
+		print("WARNING: Environment variables for the Source SDK path are deprecated!")
+	else
+		directory = "../sourcesdk-minimal"
 	end
 
 	local dir = path.getabsolute(directory)

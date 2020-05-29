@@ -15,10 +15,7 @@ group("garrysmod_common")
 			"../source/ModuleLoader.cpp"
 		})
 		vpaths({
-			["Header files/*"] = {
-				"../include/**.h",
-				"../include/**.hpp"
-			},
+			["Header files/*"] = {"../include/**.h", "../include/**.hpp"},
 			["Source files/*"] = "../source/**.cpp"
 		})
 
