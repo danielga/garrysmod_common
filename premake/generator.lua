@@ -128,7 +128,7 @@ function CreateWorkspace(config)
 			cdialect("GNU11")
 			cppdialect("GNU++17")
 			pic("On")
-			staticruntime("On")
+			staticruntime("Off")
 			defaultplatform("x86")
 			linkoptions("-Wl,--no-undefined")
 
