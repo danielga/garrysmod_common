@@ -12,13 +12,37 @@ newoption({
 	value = "path for MacOSX SDK directory"
 })
 
+newoption({
+	trigger = "sourcesdk",
+	description = "Sets the path to the SourceSDK directory",
+	value = "path to SourceSDK directory"
+})
+
 _GARRYSMOD_COMMON_DIRECTORY = path.getabsolute("..")
 
-includeexternal("lua_shared.lua")
-includeexternal("detouring.lua")
-includeexternal("scanning.lua")
-includeexternal("sourcesdk.lua")
-includeexternal("pkg_config.lua")
+include("../lua_shared")
+include("../detouring")
+include("../scanning")
+include("pkg_config.lua")
+
+local function GetSourceSDKPath()
+	local directory = _OPTIONS["sourcesdk"] or os.getenv("SOURCE_SDK") or SOURCESDK_DIRECTORY or --[[deprecated]] DEFAULT_SOURCESDK_DIRECTORY
+	if not directory then
+		return
+	end
+
+	local dir = path.getabsolute(directory)
+	if not os.isdir(dir) then
+		return
+	end
+
+	return path.getrelative(_SCRIPT_DIR, directory)
+end
+
+local sourcesdk_path = GetSourceSDKPath()
+if sourcesdk_path then
+	include(sourcesdk_path)
+end
 
 function CreateWorkspace(config)
 	assert(type(config) == "table", "supplied argument is not a table!")
@@ -59,9 +83,9 @@ function CreateWorkspace(config)
 		vectorextensions("SSE2")
 		pic("On")
 		platforms({"x86_64", "x86"})
-		targetdir(path.join("%{wks.location}", "%{cfg.architecture}", "%{cfg.buildcfg}"))
-		debugdir(path.join("%{wks.location}", "%{cfg.architecture}", "%{cfg.buildcfg}"))
-		objdir(path.join("!%{wks.location}", "%{cfg.architecture}", "%{cfg.buildcfg}", "intermediate", "%{prj.name}"))
+		targetdir("%{wks.location}/%{cfg.architecture}/%{cfg.buildcfg}")
+		debugdir("%{wks.location}/%{cfg.architecture}/%{cfg.buildcfg}")
+		objdir("!%{wks.location}/%{cfg.architecture}/%{cfg.buildcfg}/intermediate/%{prj.name}")
 
 		if abi_compatible then
 			configurations({"ReleaseWithSymbols", "Release"})
@@ -279,35 +303,35 @@ function CreateProject(config)
 			string.upper(string.gsub(_workspace.name, "%.", "_")) .. (_project.serverside and "_SERVER" or "_CLIENT"),
 			"IS_SERVERSIDE=" .. tostring(is_server)
 		})
-		sysincludedirs(path.join(_GARRYSMOD_COMMON_DIRECTORY, "include"))
+		sysincludedirs(_GARRYSMOD_COMMON_DIRECTORY .. "/include")
 		includedirs(_project.directory)
 
 		if not manual_files then
 			files({
-				path.join(_project.directory, "*.h"),
-				path.join(_project.directory, "*.hpp"),
-				path.join(_project.directory, "*.hxx"),
-				path.join(_project.directory, "*.c"),
-				path.join(_project.directory, "*.cpp"),
-				path.join(_project.directory, "*.cxx")
+				_project.directory .. "/*.h",
+				_project.directory .. "/*.hpp",
+				_project.directory .. "/*.hxx",
+				_project.directory .. "/*.c",
+				_project.directory .. "/*.cpp",
+				_project.directory .. "/*.cxx"
 			})
 		end
 
 		vpaths({
 			["Header files/*"] = {
-				path.join(_project.directory, "**.h"),
-				path.join(_project.directory, "**.hpp"),
-				path.join(_project.directory, "**.hxx")
+				_project.directory .. "/**.h",
+				_project.directory .. "/**.hpp",
+				_project.directory .. "/**.hxx"
 			},
 			["Source files/*"] = {
-				path.join(_project.directory, "**.c"),
-				path.join(_project.directory, "**.cpp"),
-				path.join(_project.directory, "**.cxx")
+				_project.directory .. "/**.c",
+				_project.directory .. "/**.cpp",
+				_project.directory .. "/**.cxx"
 			}
 		})
 
 		if abi_compatible then
-			local filepath = path.join(_GARRYSMOD_COMMON_DIRECTORY, "source", "ABICompatibility.cpp")
+			local filepath = _GARRYSMOD_COMMON_DIRECTORY .. "/source/ABICompatibility.cpp"
 			files(filepath)
 			vpaths({["garrysmod_common"] = filepath})
 		end
@@ -350,6 +374,8 @@ function CreateProject(config)
 		filter({})
 end
 
+local included_count = {}
+
 function HasIncludedPackage(name)
 	local _project = project()
 	_project.packages = _project.packages or {}
@@ -359,4 +385,8 @@ end
 function IncludePackage(name)
 	assert(not HasIncludedPackage(name), "a project with the name '" .. name .. "' already exists!")
 	project().packages[name] = true
+
+	local refcount = (included_count[name] or 0) + 1
+	included_count[name] = refcount
+	return refcount
 end

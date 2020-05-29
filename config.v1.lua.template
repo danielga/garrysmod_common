@@ -6,7 +6,7 @@
 WORKSPACE_DIRECTORY = path.join(os.target(), _ACTION)
 
 -- Path for the source files (beware this will be used by all projects)
-SOURCE_DIRECTORY = "../source"
+SOURCE_DIRECTORY = path.join("..", "source")
 
 -- Path for the SourceSDK files (root of the source code)
 SOURCESDK_DIRECTORY = nil

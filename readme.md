@@ -25,7 +25,7 @@ newoption({
 
 local gmcommon = assert(_OPTIONS.gmcommon or os.getenv("GARRYSMOD_COMMON"),
     "you didn't provide a path to your garrysmod_common (https://github.com/danielga/garrysmod_common) directory")
-include(path.join(gmcommon, "generator.v2.lua"))
+include(gmcommon .. "/generator.v2.lua")
 ```
 
 Creates the workspace with the provided `workspace_name`, optional `workspace_add_debug` for including a debug compilation mode (default is `true`) and optional `workspace_path` for files (can also be set by premake option (`--workspace=path`) and by default uses the value in the config file). Must be called at least once before the next functions.
