@@ -23,7 +23,7 @@ namespace InterfacePointers
 	static const char filesystem_name[] = "VFileSystem022";
 	static const char vengineserver_name[] = "VEngineServer021";
 	static const char vengineclient_name[] = "VEngineClient015";
-	static const char cvar_name[] = "VEngineCvar004";
+	static const char cvar_name[] = "VEngineCvar007";
 	static const char servergamedll_name[] = "ServerGameDLL009";
 	static const char networkstringtableserver_name[] = "VEngineServerStringTable001";
 	static const char networkstringtableclient_name[] = "VEngineClientStringTable001";
