@@ -23,7 +23,7 @@ namespace InterfacePointers
 	static const char filesystem_name[] = "VFileSystem022";
 	static const char vengineserver_name[] = "VEngineServer021";
 	static const char vengineclient_name[] = "VEngineClient015";
-	static const char cvar_name[] = "VEngineCvar004";
+	static const char cvar_name[] = "VEngineCvar007";
 	static const char servergamedll_name[] = "ServerGameDLL009";
 	static const char networkstringtableserver_name[] = "VEngineServerStringTable001";
 	static const char networkstringtableclient_name[] = "VEngineClientStringTable001";
@@ -63,6 +63,35 @@ namespace InterfacePointers
 		for( const auto &symbol : symbols )
 		{
 			iface_pointer = ResolveSymbol<T>( loader, symbol );
+			if( iface_pointer != nullptr )
+				break;
+		}
+
+		return iface_pointer;
+	}
+
+	template<class T>
+	static inline T *ResolveSymbolNoDereference(
+		SourceSDK::FactoryLoader &loader, const Symbol &symbol
+	)
+	{
+		if( symbol.type == Symbol::Type::None )
+			return nullptr;
+
+		return reinterpret_cast<T *>( symbol_finder.Resolve(
+			loader.GetModule( ), symbol.name.c_str( ), symbol.length
+		) );
+	}
+
+	template<class T>
+	static inline T *ResolveSymbolsNoDereference(
+		SourceSDK::FactoryLoader &loader, const std::vector<Symbol> &symbols
+	)
+	{
+		T *iface_pointer = nullptr;
+		for( const auto &symbol : symbols )
+		{
+			iface_pointer = ResolveSymbolNoDereference<T>( loader, symbol );
 			if( iface_pointer != nullptr )
 				break;
 		}
@@ -249,7 +278,7 @@ namespace InterfacePointers
 		if( iface_pointer == nullptr )
 		{
 			SourceSDK::FactoryLoader engine_loader( "engine" );
-			iface_pointer = ResolveSymbols<IServer>( engine_loader, Symbols::IServer );
+			iface_pointer = ResolveSymbolsNoDereference<IServer>( engine_loader, Symbols::IServer );
 		}
 
 		return iface_pointer;
