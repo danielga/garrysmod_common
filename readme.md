@@ -49,6 +49,7 @@ CreateProject({
 ```
 
 Call the next functions as needed. `[directory]` means it's optional because you can also use premake options, environment variables or the config file in this repo.  
+The Source SDK based projects do not need a path to the SDK anymore, as it is provided through this git repository as a submodule.
 
 ```lua
 IncludeLuaShared() -- uses this repo path

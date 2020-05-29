@@ -14,8 +14,8 @@ newoption({
 
 newoption({
 	trigger = "sourcesdk",
-	description = "Sets the path to the SourceSDK directory",
-	value = "path to SourceSDK directory"
+	description = "Sets the path to the SourceSDK directory (deprecated)",
+	value = "path to SourceSDK directory (deprecated)"
 })
 
 _GARRYSMOD_COMMON_DIRECTORY = path.getabsolute("..")
@@ -26,7 +26,8 @@ include("../scanning")
 include("pkg_config.lua")
 
 local function GetSourceSDKPath()
-	local directory = _OPTIONS["sourcesdk"] or os.getenv("SOURCE_SDK") or SOURCESDK_DIRECTORY or --[[deprecated]] DEFAULT_SOURCESDK_DIRECTORY
+	-- All of these but the last path are now deprecated, sourcesdk-minimal is provided as a git submodule
+	local directory = _OPTIONS["sourcesdk"] or os.getenv("SOURCE_SDK") or SOURCESDK_DIRECTORY or DEFAULT_SOURCESDK_DIRECTORY or "../sourcesdk-minimal"
 	if not directory then
 		return
 	end

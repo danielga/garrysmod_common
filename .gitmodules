@@ -1,6 +1,9 @@
 [submodule "detouring"]
-	path = include/detouring
+	path = detouring
 	url = https://github.com/danielga/detouring.git
 [submodule "scanning"]
-	path = include/scanning
+	path = scanning
 	url = https://github.com/danielga/scanning.git
+[submodule "sourcesdk-minimal"]
+	path = sourcesdk-minimal
+	url = https://github.com/danielga/sourcesdk-minimal.git

@@ -3,12 +3,12 @@
 -- These paths are relative to the premake5.lua file (or whatever you named it) of your project
 -- They can be absolute paths too if you so desire
 -- Path for the workspace files
-WORKSPACE_DIRECTORY = path.join(os.target(), _ACTION)
+WORKSPACE_DIRECTORY = os.target() .. "/" .. _ACTION
 
 -- Path for the source files (beware this will be used by all projects)
-SOURCE_DIRECTORY = path.join("..", "source")
+SOURCE_DIRECTORY = "../source"
 
--- Path for the SourceSDK files (root of the source code)
+-- Path for the SourceSDK files (root of the source code, deprecated)
 SOURCESDK_DIRECTORY = nil
 
 -- Path for the garrysmod/lua/bin directory (where the compiled files will be copied to)
