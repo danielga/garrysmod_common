@@ -7,9 +7,6 @@ variables:
   PROJECT_GENERATOR_VERSION: 2
   REPOSITORY_DIR: $(System.DefaultWorkingDirectory)
   DISABLE_X86_64_BUILD: true
-  SOURCE_SDK: $(System.DefaultWorkingDirectory)/dependencies/sourcesdk-minimal
-  SOURCE_SDK_BRANCH: master
-  SOURCE_SDK_REPOSITORY: https://github.com/danielga/sourcesdk-minimal.git
 trigger:
   tags:
     include:

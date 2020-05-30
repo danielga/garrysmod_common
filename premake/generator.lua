@@ -27,13 +27,11 @@ include("pkg_config.lua")
 
 local function GetSourceSDKPath()
 	-- All of these are deprecated, sourcesdk-minimal is provided as a git submodule
-	local directory = _OPTIONS["sourcesdk"] or os.getenv("SOURCE_SDK") or SOURCESDK_DIRECTORY or DEFAULT_SOURCESDK_DIRECTORY
-	if directory then
-		print("WARNING: Environment variables for the Source SDK path are deprecated!")
-	else
-		directory = "../sourcesdk-minimal"
+	if _OPTIONS["sourcesdk"] or os.getenv("SOURCE_SDK") or SOURCESDK_DIRECTORY then
+		print("WARNING: Setting the Source SDK path is deprecated!")
 	end
 
+	local directory = "../sourcesdk-minimal"
 	local dir = path.getabsolute(directory)
 	if not os.isdir(dir) then
 		return
@@ -53,7 +51,7 @@ function CreateWorkspace(config)
 	local name = config.name
 	assert(type(name) == "string", "'name' is not a string!")
 
-	local directory = config.path or _OPTIONS["workspace"] or WORKSPACE_DIRECTORY or --[[deprecated]] DEFAULT_WORKSPACE_DIRECTORY
+	local directory = config.path or _OPTIONS["workspace"] or WORKSPACE_DIRECTORY
 	assert(type(directory) == "string", "workspace path is not a string!")
 
 	local _workspace = workspace(name)
@@ -257,7 +255,7 @@ function CreateProject(config)
 	local is_server = config.serverside
 	assert(type(is_server) == "boolean", "'serverside' option is not a boolean!")
 
-	local sourcepath = config.source_path or _OPTIONS["source"] or SOURCE_DIRECTORY or --[[deprecated]] DEFAULT_SOURCE_DIRECTORY
+	local sourcepath = config.source_path or _OPTIONS["source"] or SOURCE_DIRECTORY
 	assert(type(sourcepath) == "string", "source code path is not a string!")
 
 	local manual_files = config.manual_files
@@ -364,7 +362,7 @@ function CreateProject(config)
 			targetsuffix("_osx64")
 
 		if _OPTIONS["autoinstall"] then
-			local binDir = _OPTIONS["autoinstall"] ~= "" and _OPTIONS["autoinstall"] or os.getenv("GARRYSMOD_LUA_BIN") or FindGarrysModLuaBinDirectory() or GARRYSMOD_LUA_BIN_DIRECTORY or --[[deprecated]] DEFAULT_GARRYSMOD_LUA_BIN_DIRECTORY
+			local binDir = _OPTIONS["autoinstall"] ~= "" and _OPTIONS["autoinstall"] or os.getenv("GARRYSMOD_LUA_BIN") or FindGarrysModLuaBinDirectory() or GARRYSMOD_LUA_BIN_DIRECTORY
 			assert(type(binDir) == "string", "The path to garrysmod/lua/bin is not a string!")
 
 			filter("system:windows")

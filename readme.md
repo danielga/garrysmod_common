@@ -48,22 +48,21 @@ CreateProject({
 })
 ```
 
-Call the next functions as needed. `[directory]` means it's optional because you can also use premake options, environment variables or the config file in this repo.  
-The Source SDK based projects do not need a path to the SDK anymore, as it is provided through this git repository as a submodule.
+Call the next functions as needed. The Source SDK based projects do not need a path to the SDK anymore, as it is provided through this git repository as a submodule.
 
 ```lua
 IncludeLuaShared() -- uses this repo path
 IncludeDetouring() -- uses this repo detouring submodule
 IncludeScanning() -- uses this repo scanning submodule
 
-IncludeSDKCommon([directory]) -- premake option: --sourcesdk=directory - env var: SOURCE_SDK
-IncludeSDKTier0([directory]) -- premake option: --sourcesdk=directory - env var: SOURCE_SDK
-IncludeSDKTier1([directory]) -- premake option: --sourcesdk=directory - env var: SOURCE_SDK
-IncludeSDKTier2([directory]) -- premake option: --sourcesdk=directory - env var: SOURCE_SDK
-IncludeSDKTier3([directory]) -- premake option: --sourcesdk=directory - env var: SOURCE_SDK
-IncludeSDKMathlib([directory]) -- premake option: --sourcesdk=directory - env var: SOURCE_SDK
-IncludeSDKRaytrace([directory]) -- premake option: --sourcesdk=directory - env var: SOURCE_SDK
-IncludeSteamAPI([directory]) -- premake option: --sourcesdk=directory - env var: SOURCE_SDK
+IncludeSDKCommon()
+IncludeSDKTier0()
+IncludeSDKTier1()
+IncludeSDKTier2()
+IncludeSDKTier3()
+IncludeSDKMathlib()
+IncludeSDKRaytrace()
+IncludeSteamAPI()
 ```
 
 You can also request the project to auto-install the compiled files to a directory selected by you or automatically found on your system. Use one of the following:

@@ -6,8 +6,5 @@ WORKSPACE_DIRECTORY = os.target() .. "/" .. _ACTION
 -- Default path for the source files (beware this will be used by all projects)
 SOURCE_DIRECTORY = "../source"
 
--- Default path for the SourceSDK files (root of the source code, deprecated)
-SOURCESDK_DIRECTORY = nil
-
 -- Default path for the garrysmod/lua/bin directory (where the compiled files will be copied to)
 GARRYSMOD_LUA_BIN_DIRECTORY = nil
