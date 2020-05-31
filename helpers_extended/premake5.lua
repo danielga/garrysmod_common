@@ -1,11 +1,12 @@
 local current_dir = _SCRIPT_DIR
 
-function IncludeLuaShared()
-	local refcount = IncludePackage("lua_shared")
+function IncludeHelpersExtended()
+	local refcount = IncludePackage("helpers_extended")
 
 	local _project = project()
 
-	links("lua_shared")
+	sysincludedirs(current_dir .. "/include")
+	links("helpers_extended")
 
 	if refcount == 1 then
 		include(current_dir .. "/premake5_create_project.lua")

@@ -23,6 +23,8 @@ _GARRYSMOD_COMMON_DIRECTORY = path.getabsolute("..")
 include("../lua_shared")
 include("../detouring")
 include("../scanning")
+include("../helpers")
+include("../helpers_extended")
 include("pkg_config.lua")
 
 local function GetSourceSDKPath()
@@ -371,6 +373,8 @@ function CreateProject(config)
 			filter("system:not windows")
 				postbuildcommands({"{COPY} %{cfg.buildtarget.abspath} \"" .. binDir .. "%{cfg.buildtarget.name}\""})
 		end
+
+		IncludeHelpers()
 
 		filter({})
 end

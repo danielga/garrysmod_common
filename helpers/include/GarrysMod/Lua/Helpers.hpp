@@ -4,9 +4,10 @@
 #include <cstring>
 #include <string>
 #include <sstream>
-#include "LuaInterface.h"
-#include "Interface.h"
-#include "lua.hpp"
+
+#include <GarrysMod/Lua/LuaInterface.h>
+#include <GarrysMod/Lua/Interface.h>
+#include <lua.hpp>
 
 namespace LuaHelpers
 {

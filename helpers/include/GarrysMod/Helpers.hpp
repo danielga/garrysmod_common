@@ -1,5 +1,7 @@
 #pragma once
 
+#pragma message( "GarrysMod/Helpers.hpp: Deprecated header, please include GarrysMod/ModuleLoader.hpp and use the ModuleLoader class instead." )
+
 #include <string>
 #include "Platform.hpp"
 

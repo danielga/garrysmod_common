@@ -3,7 +3,7 @@
 * A C++ header that defines macros depending on the compilation
 * environment and targets.
 *------------------------------------------------------------------------
-* Copyright (c) 2017-2019, Daniel Almeida
+* Copyright (c) 2017-2020, Daniel Almeida
 * All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
@@ -40,13 +40,25 @@
 
 #define COMPILER_CLANG 1
 
+#define COMPILER_IS_CLANG 1
+#define COMPILER_IS_GNUC 0
+#define COMPILER_IS_VC 0
+
 #elif defined __GNUC__
 
 #define COMPILER_GNUC 1
 
+#define COMPILER_IS_CLANG 0
+#define COMPILER_IS_GNUC 1
+#define COMPILER_IS_VC 0
+
 #elif defined _MSC_VER
 
 #define COMPILER_VC 1
+
+#define COMPILER_IS_CLANG 0
+#define COMPILER_IS_GNUC 0
+#define COMPILER_IS_VC 1
 
 #else
 
@@ -76,21 +88,42 @@
 
 #define SYSTEM_WINDOWS 1
 
+#define SYSTEM_IS_WINDOWS 1
+#define SYSTEM_IS_LINUX 0
+#define SYSTEM_IS_MACOSX 0
+#define SYSTEM_IS_POSIX 0
+
 #elif defined __linux
 
 #define SYSTEM_LINUX 1
 #define SYSTEM_POSIX 1
+
+#define SYSTEM_IS_WINDOWS 0
+#define SYSTEM_IS_LINUX 1
+#define SYSTEM_IS_MACOSX 0
+#define SYSTEM_IS_POSIX 1
 
 #elif defined __APPLE__
 
 #define SYSTEM_MACOSX 1
 #define SYSTEM_POSIX 1
 
+#define SYSTEM_IS_WINDOWS 0
+#define SYSTEM_IS_LINUX 0
+#define SYSTEM_IS_MACOSX 1
+#define SYSTEM_IS_POSIX 1
+
 #include <AvailabilityMacros.h>
 
 #if MAC_OS_X_VERSION_MIN_REQUIRED < 1090
 
 #define SYSTEM_MACOSX_BAD 1
+
+#define SYSTEM_IS_MACOSX_BAD 1
+
+#else
+
+#define SYSTEM_IS_MACOSX_BAD 0
 
 #endif
 
@@ -104,9 +137,15 @@
 
 #define ARCHITECTURE_X86 1
 
+#define ARCHITECTURE_IS_X86 1
+#define ARCHITECTURE_IS_X86_64 0
+
 #elif defined _M_X64 || defined __amd64__ || defined __amd64 || defined __x86_64__ || defined __x86_64
 
 #define ARCHITECTURE_X86_64 1
+
+#define ARCHITECTURE_IS_X86 0
+#define ARCHITECTURE_IS_X86_64 1
 
 #else
 

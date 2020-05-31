@@ -1,7 +1,8 @@
 #pragma once
 
-#include "LuaObject.h"
 #include <stdexcept>
+
+#include <GarrysMod/Lua/LuaObject.h>
 
 namespace GarrysMod
 {
