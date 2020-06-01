@@ -97,5 +97,39 @@ namespace GarrysMod
 			virtual void *CreateConVar( const char *, const char *, const char *, int ) = 0;
 			virtual void *CreateConCommand( const char *, const char *, int, void ( * )( const CCommand & ), int ( * )( const char *, char ( * )[128] ) ) = 0;
 		};
+
+		class CLuaInterface : public ILuaInterface
+		{
+		public:
+			inline ILuaGameCallback *GetLuaGameCallback( ) const
+			{
+				return gamecallback;
+			}
+
+			inline void SetLuaGameCallback( ILuaGameCallback *callback )
+			{
+				gamecallback = callback;
+			}
+
+		private:
+			// vtable: 1 * sizeof(void **) = 4 (x86) or 8 (x86-64) bytes
+			// luabase: 1 * sizeof(LuaBase *) = 4 (x86) or 8 (x86-64) bytes
+
+			// These members represent nothing in particular
+			// They've been selected to fill the required space between the vtable and the callback object
+			uint64_t _1; // 8 bytes
+			size_t _2[43]; // 43 * sizeof(size_t) = 172 (x86) or 344 (x86-64) bytes
+
+#ifdef __APPLE__
+
+			size_t _3; // 1 * sizeof(size_t) = 4 (x86) or 8 (x86-64) bytes
+
+#endif
+
+			// x86: offset of 188 bytes
+			// x86-64: offset of 368 bytes
+			// macOS adds an offset of 4 bytes (total 192) on x86 and 8 bytes (total 376) on x86-64
+			ILuaGameCallback *gamecallback;
+		};
 	}
 }
