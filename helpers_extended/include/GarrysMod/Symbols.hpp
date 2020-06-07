@@ -7,7 +7,7 @@
 namespace Symbols
 {
 
-#ifdef IS_SERVERSIDE
+#if IS_SERVERSIDE
 
 extern const std::vector<Symbol> HandleClientLuaError;
 extern const std::vector<Symbol> FileSystemFactory;

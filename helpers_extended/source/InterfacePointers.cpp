@@ -1,5 +1,3 @@
-#define IS_SERVERSIDE
-
 #include "InterfacePointers.hpp"
 #include "FunctionPointers.hpp"
 #include "Symbols.hpp"
@@ -14,7 +12,7 @@ namespace InterfacePointers
 	static SourceSDK::FactoryLoader server_loader( "server" );
 	static SourceSDK::FactoryLoader engine_loader( "engine" );
 	static SourceSDK::FactoryLoader dedicated_loader( "dedicated" );
-	static SourceSDK::FactoryLoader filesystem_loader( "filesystem" );
+	static SourceSDK::FactoryLoader filesystem_loader( "filesystem_stdio" );
 	static SourceSDK::FactoryLoader lua_shared_loader( "lua_shared" );
 
 	static SymbolFinder symbol_finder;

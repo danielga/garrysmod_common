@@ -5,7 +5,7 @@ class CBasePlayer;
 namespace FunctionPointers
 {
 
-#ifdef IS_SERVERSIDE
+#if IS_SERVERSIDE
 
 typedef void ( *HandleClientLuaError_t )( CBasePlayer *player, const char *error );
 HandleClientLuaError_t HandleClientLuaError( );

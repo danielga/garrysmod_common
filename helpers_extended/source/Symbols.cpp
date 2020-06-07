@@ -1,5 +1,3 @@
-#define IS_SERVERSIDE
-
 #include "Symbols.hpp"
 #include "Symbol.hpp"
 #include "Platform.hpp"
@@ -25,7 +23,7 @@ namespace Symbols
 
 		Symbol::FromName( "@_Z20HandleClientLuaErrorP11CBasePlayerPKc" ),
 
-#if defined SYSTEM_LINUX && ARCHITECTURE_X86
+#if defined SYSTEM_LINUX && defined ARCHITECTURE_X86
 
 		Symbol::FromSignature( "\x55\x89\xE5\x57\x56\x53\x83\xEC\x4C\x65\xA1\x2A\x2A\x2A\x2A\x89\x45\xE4" )
 

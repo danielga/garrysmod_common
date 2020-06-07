@@ -24,7 +24,7 @@ IFileSystem *FileSystem( );
 inline IFileSystem *FileSystem( )
 {
 
-#if defined IS_SERVERSIDE
+#if IS_SERVERSIDE
 
 	return Server::FileSystem( );
 

@@ -5,6 +5,7 @@ group("garrysmod_common")
 		targetdir("%{prj.location}/%{cfg.architecture}/%{cfg.buildcfg}")
 		debugdir("%{prj.location}/%{cfg.architecture}/%{cfg.buildcfg}")
 		objdir("!%{prj.location}/%{cfg.architecture}/%{cfg.buildcfg}/intermediate/%{prj.name}")
+		defines("IS_SERVERSIDE=true")
 		includedirs({"../include", "include", "include/GarrysMod"})
 		files({
 			"../include/Platform.hpp",
