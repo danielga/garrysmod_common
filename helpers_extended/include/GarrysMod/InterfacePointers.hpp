@@ -3,8 +3,13 @@
 class IFileSystem;
 class IVEngineServer;
 class IVEngineClient;
+class IServer;
+class CSteamGameServerAPIContext;
 
 namespace InterfacePointers
+{
+
+namespace Internal
 {
 
 namespace Client
@@ -21,16 +26,18 @@ IFileSystem *FileSystem( );
 
 }
 
+}
+
 inline IFileSystem *FileSystem( )
 {
 
 #if IS_SERVERSIDE
 
-	return Server::FileSystem( );
+	return Internal::Server::FileSystem( );
 
 #else
 
-	return Client::FileSystem( );
+	return Internal::Client::FileSystem( );
 
 #endif
 
@@ -38,5 +45,9 @@ inline IFileSystem *FileSystem( )
 
 IVEngineServer *VEngineServer( );
 IVEngineClient *VEngineClient( );
+
+IServer *Server( );
+
+CSteamGameServerAPIContext *SteamGameServerAPIContext( );
 
 }

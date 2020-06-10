@@ -5,19 +5,26 @@
 
 struct Symbol
 {
-	std::string name;
-	size_t length;
+	enum class Type
+	{
+		Signature,
+		Name
+	};
 
-	inline Symbol( const std::string &nam, size_t len = 0 ) :
-		name( nam ), length( len ) { }
+	const Type type;
+	const std::string name;
+	const size_t length;
+
+	inline Symbol( Type typ, const std::string &nam, size_t len = 0 ) :
+		type( typ ), name( nam ), length( len ) { }
 
 	static inline Symbol FromSignature( const std::string &signature )
 	{
-		return Symbol( signature, signature.size( ) );
+		return Symbol( Type::Signature, signature, signature.size( ) );
 	}
 
 	static inline Symbol FromName( const std::string &name )
 	{
-		return Symbol( "@" + name );
+		return Symbol( Type::Name, "@" + name );
 	}
 };
