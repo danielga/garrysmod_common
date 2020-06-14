@@ -251,6 +251,7 @@ local function FindGarrysModLuaBinDirectory()
 	return gluabinPath
 end
 
+local startproject_defined = false
 function CreateProject(config)
 	assert(type(config) == "table", "supplied argument is not a table!")
 
@@ -283,6 +284,11 @@ function CreateProject(config)
 
 	if abi_compatible and os.istarget("windows") and _ACTION ~= "vs2015" and _ACTION ~= "vs2017" and _ACTION ~= "vs2019" then
 		error("The only supported compilation platforms for this project (" .. name .. ") on Windows are Visual Studio 2015, 2017 and 2019.")
+	end
+
+	if not startproject_defined then
+		startproject(name)
+		startproject_defined = true
 	end
 
 	local _project = project(name)
