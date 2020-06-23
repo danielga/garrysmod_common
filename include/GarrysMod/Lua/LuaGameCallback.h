@@ -1,6 +1,5 @@
 #pragma once
 
-#include <stdint.h>
 #include <string>
 #include <vector>
 
@@ -22,7 +21,7 @@ namespace GarrysMod
 				{
 					std::string source;
 					std::string function;
-					int32_t line;
+					int line;
 				};
 
 				std::string message;

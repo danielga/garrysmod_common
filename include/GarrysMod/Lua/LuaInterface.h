@@ -1,8 +1,9 @@
 #pragma once
 
+#include <string>
+
 #include "LuaBase.h"
 #include "SourceCompat.h"
-#include <string>
 
 namespace Bootil
 {
@@ -11,6 +12,7 @@ namespace Bootil
 
 struct lua_Debug;
 class CCommand;
+class Color;
 
 namespace GarrysMod
 {
