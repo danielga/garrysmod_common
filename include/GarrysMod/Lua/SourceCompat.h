@@ -2,14 +2,7 @@
 #define GARRYSMOD_LUA_SOURCECOMPAT_H
 
 #ifdef GMOD_USE_SOURCESDK
-    #include <mathlib/vector.h>
-
-#if defined __has_include && __has_include(<color.h>)
-    #include <color.h>
-#else
-    #include <Color.h>
-#endif
-
+#include <mathlib/vector.h>
 #else
     struct Vector
     {
@@ -19,32 +12,24 @@
             , z( 0.f )
         {}
 
+        Vector( const Vector& src )
+            : x( src.x )
+            , y( src.y )
+            , z( src.z )
+        {}
+
+        Vector& operator=( const Vector& src )
+        {
+            x = src.x;
+            y = src.y;
+            z = src.z;
+            return *this;
+        }
+
         float x, y, z;
     };
 
-    struct QAngle
-    {
-        QAngle()
-            : x( 0.f )
-            , y( 0.f )
-            , z( 0.f )
-        {}
-
-        float x, y, z;
-    };
-
-    class Color
-    {
-    public:
-        Color( )
-            : r( 0 )
-            , g( 0 )
-            , b( 0 )
-            , a( 0 )
-        {}
-
-        unsigned char r, g, b, a;
-    };
+    using QAngle = Vector;
 #endif
 
 #endif

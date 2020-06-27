@@ -20,7 +20,7 @@ static int32_t LuaErrorTraceback( lua_State *state )
 	std::string spaces( "\n  " );
 	std::ostringstream stream;
 
-	if( lua->IsType( 1, GarrysMod::Lua::Type::STRING ) )
+	if( lua->IsType( 1, GarrysMod::Lua::Type::String ) )
 		stream << lua->GetString( 1 );
 
 	lua_Debug dbg;
@@ -54,14 +54,14 @@ static int32_t PushHookRun( GarrysMod::Lua::ILuaBase *lua, const char *hook_name
 	lua->PushCFunction( LuaErrorTraceback );
 
 	lua->GetField( GarrysMod::Lua::INDEX_GLOBAL, "hook" );
-	if( !lua->IsType( -1, GarrysMod::Lua::Type::TABLE ) )
+	if( !lua->IsType( -1, GarrysMod::Lua::Type::Table ) )
 	{
 		lua->Pop( 2 );
 		return 0;
 	}
 
 	lua->GetField( -1, "Run" );
-	if( !lua->IsType( -1, GarrysMod::Lua::Type::FUNCTION ) )
+	if( !lua->IsType( -1, GarrysMod::Lua::Type::Function ) )
 	{
 		lua->Pop( 3 );
 		return 0;

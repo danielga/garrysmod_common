@@ -1,5 +1,8 @@
 #pragma once
 
+#include "LuaBase.h"
+#include "SourceCompat.h"
+
 #if IS_SERVERSIDE
 
 class CBaseEntity;
@@ -11,6 +14,8 @@ class C_BaseEntity;
 typedef C_BaseEntity BaseEntity;
 
 #endif
+
+class IPhysicsObject;
 
 namespace GarrysMod
 {

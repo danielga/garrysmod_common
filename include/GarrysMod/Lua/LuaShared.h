@@ -14,9 +14,9 @@ namespace Bootil
 	struct AutoBuffer
 	{
 		void *m_pData;
-		uint32_t m_iSize;
-		uint32_t m_iPos;
-		uint32_t m_iWritten;
+		unsigned int m_iSize;
+		unsigned int m_iPos;
+		unsigned int m_iWritten;
 	};
 }
 
@@ -39,20 +39,19 @@ namespace GarrysMod
 				"client",
 				"server",
 				"menu",
-
-				0
+				nullptr
 			};
 		}
 
 		struct File
 		{
-			int32_t time;
+			int time;
 			std::string name;
 			std::string source;
 			std::string contents;
 			Bootil::AutoBuffer compressed;
-			uint32_t timesloadedserver;
-			uint32_t timesloadedclient;
+			unsigned int timesloadedserver;
+			unsigned int timesloadedclient;
 		};
 
 		class ILuaShared
