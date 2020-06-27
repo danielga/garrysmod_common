@@ -173,7 +173,7 @@ namespace GarrysMod
             // returns NULL upon failure
             virtual CFunc       GetCFunction( int iStackPos = -1 ) = 0;
 
-#ifndef GMOD_ALLOW_DEPRECATED
+#if !defined( GMOD_ALLOW_DEPRECATED ) && !defined( GMOD_ALLOW_LIGHTUSERDATA )
         protected:
 #endif
                 // Deprecated: You should probably be using the UserType functions instead of this
@@ -201,7 +201,7 @@ namespace GarrysMod
             virtual void        PushCClosure( CFunc val, int iVars ) = 0;
 
 
-#ifndef GMOD_ALLOW_DEPRECATED
+#if !defined( GMOD_ALLOW_DEPRECATED ) && !defined( GMOD_ALLOW_LIGHTUSERDATA )
         protected:
 #endif
                 // Deprecated: Don't use light userdata in GMod
@@ -398,19 +398,6 @@ namespace GarrysMod
             inline int CallMeta( int iStackPos, const char* e )
             {
                 return luaL_callmeta( state, iStackPos, e );
-            }
-
-            // Gets light userdata
-            inline void *GetLightUserdata( int iStackPos = -1 )
-            {
-                CheckType( iStackPos, Type::LightUserData );
-                return GetUserdata( iStackPos );
-            }
-
-            // Pushes light userdata
-            inline void PushLightUserdata( void *udata )
-            {
-                PushUserdata( udata );
             }
 
         private:

@@ -1,7 +1,7 @@
 #ifndef GARRYSMOD_LUA_TYPES_H
 #define GARRYSMOD_LUA_TYPES_H
 
-#ifndef GMOD_NO_OLD_TYPES
+#ifdef GMOD_ALLOW_OLD_TYPES
 #ifdef ENTITY
 #undef ENTITY
 #endif
@@ -75,7 +75,7 @@ namespace GarrysMod
 
                 Type_Count,
 
-#ifndef GMOD_NO_OLD_TYPES
+#ifdef GMOD_ALLOW_OLD_TYPES
 #ifdef GMOD_ALLOW_DEPRECATED
                 // Deprecated: Use NONE instead of INVALID
                 INVALID = Invalid,
