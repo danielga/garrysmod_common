@@ -9,11 +9,12 @@ group("garrysmod_common")
 		includedirs({"../include", "include", "include/GarrysMod"})
 		files({
 			"../include/Platform.hpp",
+			"include/**.h",
 			"include/**.hpp",
 			"source/*.cpp"
 		})
 		vpaths({
-			["Header files/*"] = {"../include/**.hpp", "include/**.hpp"},
+			["Header files/*"] = {"../include/**.hpp", "include/**.h", "include/**.hpp"},
 			["Source files/*"] = "source/*.cpp"
 		})
 
