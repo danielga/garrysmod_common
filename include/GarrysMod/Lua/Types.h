@@ -1,6 +1,16 @@
 #ifndef GARRYSMOD_LUA_TYPES_H
 #define GARRYSMOD_LUA_TYPES_H
 
+#ifndef GMOD_NO_OLD_TYPES
+#ifdef ENTITY
+#undef ENTITY
+#endif
+
+#ifdef VECTOR
+#undef VECTOR
+#endif
+#endif
+
 namespace GarrysMod
 {
     namespace Lua
@@ -63,7 +73,64 @@ namespace GarrysMod
                 PhysCollide,
                 SurfaceInfo,
 
-                Type_Count
+                Type_Count,
+
+#ifndef GMOD_NO_OLD_TYPES
+#ifdef GMOD_ALLOW_DEPRECATED
+                // Deprecated: Use NONE instead of INVALID
+                INVALID = Invalid,
+#endif
+
+                // Lua Types
+                NONE = None,
+                NIL = Nil,
+                BOOL = Bool,
+                LIGHTUSERDATA = LightUserData,
+                NUMBER = Number,
+                STRING = String,
+                TABLE = Table,
+                FUNCTION = Function,
+                USERDATA = UserData,
+                THREAD = Thread,
+
+                // GMod Types
+                ENTITY = Entity,
+                VECTOR = Vector,
+                ANGLE = Angle,
+                PHYSOBJ = PhysObj,
+                SAVE = Save,
+                RESTORE = Restore,
+                DAMAGEINFO = DamageInfo,
+                EFFECTDATA = EffectData,
+                MOVEDATA = MoveData,
+                RECIPIENTFILTER = RecipientFilter,
+                USERCMD = UserCmd,
+                SCRIPTEDVEHICLE = ScriptedVehicle,
+                MATERIAL = Material,
+                PANEL = Panel,
+                PARTICLE = Particle,
+                PARTICLEEMITTER = ParticleEmitter,
+                TEXTURE = Texture,
+                USERMSG = UserMsg,
+                CONVAR = ConVar,
+                IMESH = IMesh,
+                MATRIX = Matrix,
+                SOUND = Sound,
+                PIXELVISHANDLE = PixelVisHandle,
+                DLIGHT = DLight,
+                VIDEO = Video,
+                FILE = File,
+                LOCOMOTION = Locomotion,
+                PATH = Path,
+                NAVAREA = NavArea,
+                SOUNDHANDLE = SoundHandle,
+                NAVLADDER = NavLadder,
+                PARTICLESYSTEM = ParticleSystem,
+                PROJECTEDTEXTURE = ProjectedTexture,
+                PHYSCOLLIDE = PhysCollide,
+
+                COUNT = Type_Count
+#endif
             };
 
 #if ( defined( GMOD ) || defined( GMOD_ALLOW_DEPRECATED ) )
