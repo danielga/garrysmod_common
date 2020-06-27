@@ -47,6 +47,14 @@ namespace Symbols
 		Symbol::FromName( "?SendFileToClient@GModDataPack@@QEAAXHH@Z" )
 	};
 
+	const std::vector<Symbol> CNetChan_IsValidFileForTransfer = {
+		Symbol::FromName( "?IsValidFileForTransfer@CNetChan@@SA_NPEBD@Z" )
+	};
+
+	const Symbol net_sockets;
+
+	const Symbol GMOD_GetNetSocket = Symbol::FromName( "?GMOD_GetNetSocket@@YAPEAUnetsocket_t@@H@Z" );
+
 #elif defined ARCHITECTURE_X86
 
 	const std::vector<Symbol> CBasePlayer_HandleClientLuaError = {
@@ -95,6 +103,16 @@ namespace Symbols
 		Symbol::FromName( "?SendFileToClient@GModDataPack@@QAEXHH@Z" ),
 		Symbol::FromSignature( "\x55\x8B\xEC\x83\xEC\x40\x53\x57\x8B\x7D\x0C" )
 	};
+
+	const std::vector<Symbol> CNetChan_IsValidFileForTransfer = {
+		Symbol::FromName( "?IsValidFileForTransfer@CNetChan@@SA_NPBD@Z" ),
+		Symbol::FromSignature( "\x55\x8B\xEC\x53\x8B\x5D\x08\x56\x57\x85\xDB\x0F\x84" )
+	};
+
+	const Symbol net_sockets = Symbol::FromSignature(
+		"\x2A\x2A\x2A\x2A\x56\x57\x8B\x7D\x08\x8B\xF7\x03\xF6\x8B\x44\xF3\x0C\x85\xC0\x74\x0A\x57\x50" );
+
+	const Symbol GMOD_GetNetSocket = Symbol::FromName( "?GMOD_GetNetSocket@@YAPAUnetsocket_t@@H@Z" );
 
 #endif
 
@@ -164,6 +182,14 @@ namespace Symbols
 		Symbol::FromName( "_ZN12GModDataPack16SendFileToClientEii" )
 	};
 
+	const std::vector<Symbol> CNetChan_IsValidFileForTransfer = {
+		Symbol::FromName( "_ZN8CNetChan22IsValidFileForTransferEPKc" )
+	};
+
+	const Symbol net_sockets = Symbol::FromName( "_ZL11net_sockets" );
+
+	const Symbol GMOD_GetNetSocket = Symbol::FromName( "_Z17GMOD_GetNetSocketi" );
+
 #elif defined SYSTEM_MACOSX
 
 	const std::vector<Symbol> CBasePlayer_HandleClientLuaError = {
@@ -208,6 +234,14 @@ namespace Symbols
 	const std::vector<Symbol> GModDataPack_SendFileToClient = {
 		Symbol::FromName( "_ZN12GModDataPack16SendFileToClientEii" )
 	};
+
+	const std::vector<Symbol> CNetChan_IsValidFileForTransfer = {
+		Symbol::FromName( "_ZN8CNetChan22IsValidFileForTransferEPKc" )
+	};
+
+	const Symbol net_sockets = Symbol::FromName( "_ZL11net_sockets" );
+
+	const Symbol GMOD_GetNetSocket = Symbol::FromName( "_Z17GMOD_GetNetSocketi" );
 
 #endif
 

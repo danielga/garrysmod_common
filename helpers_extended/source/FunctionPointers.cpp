@@ -5,6 +5,14 @@
 
 #include <scanning/symbolfinder.hpp>
 
+struct netsocket_t
+{
+	int32_t nPort;
+	bool bListening;
+	int32_t hUDP;
+	int32_t hTCP;
+};
+
 namespace FunctionPointers
 {
 	static SourceSDK::FactoryLoader client_loader( "client" );
@@ -157,6 +165,82 @@ namespace FunctionPointers
 			if( func_pointer != nullptr )
 				break;
 		}
+
+		return func_pointer;
+	}
+
+	CNetChan_IsValidFileForTransfer_t CNetChan_IsValidFileForTransfer( )
+	{
+		static CNetChan_IsValidFileForTransfer_t func_pointer = nullptr;
+		if( func_pointer != nullptr )
+			return func_pointer;
+
+		for( const auto &symbol : Symbols::CNetChan_IsValidFileForTransfer )
+		{
+			func_pointer = reinterpret_cast<CNetChan_IsValidFileForTransfer_t>( symbol_finder.Resolve(
+				engine_loader.GetModule( ),
+				symbol.name.c_str( ),
+				symbol.length
+			) );
+			if( func_pointer != nullptr )
+				break;
+		}
+
+		return func_pointer;
+	}
+
+	struct netsockets_t // basic representation of CUtlVector<netsocket_t>
+	{
+		netsocket_t *buffer;
+		int buffer_count;
+		int buffer_size;
+		int elements_count;
+		netsocket_t *elements;
+	};
+	static netsockets_t *net_sockets = nullptr;
+	static netsocket_t *GetNetSocket( int idx )
+	{
+		return idx >= 0 && idx < net_sockets->elements_count ? &net_sockets->elements[idx] : nullptr;
+	}
+
+	GMOD_GetNetSocket_t GMOD_GetNetSocket( )
+	{
+		static GMOD_GetNetSocket_t func_pointer = nullptr;
+		if( func_pointer != nullptr )
+			return func_pointer;
+
+		func_pointer = reinterpret_cast<GMOD_GetNetSocket_t>( symbol_finder.Resolve(
+			engine_loader.GetModule( ),
+			Symbols::GMOD_GetNetSocket.name.c_str( ),
+			Symbols::GMOD_GetNetSocket.length
+		) );
+		if( func_pointer != nullptr )
+			return func_pointer;
+
+		void *net_sockets_ptr = symbol_finder.Resolve(
+			engine_loader.GetModule( ),
+			Symbols::net_sockets.name.c_str( ),
+			Symbols::net_sockets.length
+		);
+		if( net_sockets_ptr != nullptr )
+		{
+			net_sockets =
+
+#if defined SYSTEM_POSIX
+
+				reinterpret_cast<netsockets_t *>
+
+#else
+
+				*reinterpret_cast<netsockets_t **>
+
+#endif
+
+				( net_sockets_ptr );
+		}
+
+		if( net_sockets != nullptr )
+			func_pointer = GetNetSocket;
 
 		return func_pointer;
 	}

@@ -14,12 +14,17 @@ namespace InterfacePointers
 	static SourceSDK::FactoryLoader dedicated_loader( "dedicated" );
 	static SourceSDK::FactoryLoader filesystem_loader( "filesystem_stdio" );
 	static SourceSDK::FactoryLoader lua_shared_loader( "lua_shared" );
+	static SourceSDK::FactoryLoader vstdlib_loader( "vstdlib" );
 
 	static SymbolFinder symbol_finder;
 
 	static const char filesystem_name[] = "VFileSystem022";
 	static const char vengineserver_name[] = "VEngineServer021";
 	static const char vengineclient_name[] = "VEngineClient015";
+	static const char cvar_name[] = "VEngineCvar007";
+	static const char servergamedll_name[] = "ServerGameDLL009";
+	static const char networkstringtableserver_name[] = "VEngineServerStringTable001";
+	static const char networkstringtableclient_name[] = "VEngineClientStringTable001";
 
 	namespace Internal
 	{
@@ -96,6 +101,42 @@ namespace InterfacePointers
 		static IVEngineClient *iface_pointer = nullptr;
 		if( iface_pointer == nullptr )
 			iface_pointer = engine_loader.GetInterface<IVEngineClient>( vengineclient_name );
+
+		return iface_pointer;
+	}
+
+	ICvar *Cvar( )
+	{
+		static ICvar *iface_pointer = nullptr;
+		if( iface_pointer == nullptr )
+			iface_pointer = vstdlib_loader.GetInterface<ICvar>( cvar_name );
+
+		return iface_pointer;
+	}
+
+	IServerGameDLL *ServerGameDLL( )
+	{
+		static IServerGameDLL *iface_pointer = nullptr;
+		if( iface_pointer == nullptr )
+			iface_pointer = server_loader.GetInterface<IServerGameDLL>( servergamedll_name );
+
+		return iface_pointer;
+	}
+
+	INetworkStringTableContainer *NetworkStringTableContainerServer( )
+	{
+		static INetworkStringTableContainer *iface_pointer = nullptr;
+		if( iface_pointer == nullptr )
+			iface_pointer = engine_loader.GetInterface<INetworkStringTableContainer>( networkstringtableserver_name );
+
+		return iface_pointer;
+	}
+
+	INetworkStringTableContainer *NetworkStringTableContainerClient( )
+	{
+		static INetworkStringTableContainer *iface_pointer = nullptr;
+		if( iface_pointer == nullptr )
+			iface_pointer = engine_loader.GetInterface<INetworkStringTableContainer>( networkstringtableclient_name );
 
 		return iface_pointer;
 	}

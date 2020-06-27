@@ -5,6 +5,9 @@ class IVEngineServer;
 class IVEngineClient;
 class IServer;
 class CSteamGameServerAPIContext;
+class ICvar;
+class IServerGameDLL;
+class INetworkStringTableContainer;
 
 namespace InterfacePointers
 {
@@ -49,5 +52,12 @@ IVEngineClient *VEngineClient( );
 IServer *Server( );
 
 CSteamGameServerAPIContext *SteamGameServerAPIContext( );
+
+ICvar *Cvar( );
+
+IServerGameDLL *ServerGameDLL( );
+
+INetworkStringTableContainer *NetworkStringTableContainerServer( );
+INetworkStringTableContainer *NetworkStringTableContainerClient( );
 
 }
