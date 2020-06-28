@@ -24,20 +24,44 @@ namespace FunctionPointers
 
 	static SymbolFinder symbol_finder;
 
-	CBasePlayer_HandleClientLuaError_t CBasePlayer_HandleClientLuaError( )
+	template<class T>
+	static inline T ResolveSymbol(
+		SourceSDK::FactoryLoader &loader, const Symbol &symbol,
+		const void *starting_point = nullptr
+	)
 	{
-		static CBasePlayer_HandleClientLuaError_t func_pointer = nullptr;
-		if( func_pointer != nullptr )
-			return func_pointer;
+		if( symbol.type == Symbol::Type::None )
+			return nullptr;
 
-		for( const auto &symbol : Symbols::CBasePlayer_HandleClientLuaError )
+		return reinterpret_cast<T>( symbol_finder.Resolve(
+			loader.GetModule( ), symbol.name.c_str( ), symbol.length, starting_point
+		) );
+	}
+
+	template<class T>
+	static inline T ResolveSymbols(
+		SourceSDK::FactoryLoader &loader, const std::vector<Symbol> &symbols,
+		const void *starting_point = nullptr
+	)
+	{
+		T func_pointer = nullptr;
+		for( const auto &symbol : symbols )
 		{
-			func_pointer = reinterpret_cast<CBasePlayer_HandleClientLuaError_t>( symbol_finder.Resolve(
-				server_loader.GetModule( ), symbol.name.c_str( ), symbol.length
-			) );
+			func_pointer = ResolveSymbol<T>( loader, symbol, starting_point );
 			if( func_pointer != nullptr )
 				break;
 		}
+
+		return func_pointer;
+	}
+
+	CBasePlayer_HandleClientLuaError_t CBasePlayer_HandleClientLuaError( )
+	{
+		static CBasePlayer_HandleClientLuaError_t func_pointer = nullptr;
+		if( func_pointer == nullptr )
+			func_pointer = ResolveSymbols<CBasePlayer_HandleClientLuaError_t>(
+				server_loader, Symbols::CBasePlayer_HandleClientLuaError
+			);
 
 		return func_pointer;
 	}
@@ -45,19 +69,10 @@ namespace FunctionPointers
 	CreateInterfaceFn FileSystemFactory( )
 	{
 		static CreateInterfaceFn func_pointer = nullptr;
-		if( func_pointer != nullptr )
-			return func_pointer;
-
-		for( const auto &symbol : Symbols::FileSystemFactory )
-		{
-			func_pointer = reinterpret_cast<CreateInterfaceFn>( symbol_finder.Resolve(
-				dedicated_loader.GetModule( ),
-				symbol.name.c_str( ),
-				symbol.length
-			) );
-			if( func_pointer != nullptr )
-				break;
-		}
+		if( func_pointer == nullptr )
+			func_pointer = ResolveSymbols<CreateInterfaceFn>(
+				dedicated_loader, Symbols::FileSystemFactory
+			);
 
 		return func_pointer;
 	}
@@ -65,19 +80,10 @@ namespace FunctionPointers
 	CNetChan_ProcessMessages_t CNetChan_ProcessMessages( )
 	{
 		static CNetChan_ProcessMessages_t func_pointer = nullptr;
-		if( func_pointer != nullptr )
-			return func_pointer;
-
-		for( const auto &symbol : Symbols::CNetChan_ProcessMessages )
-		{
-			func_pointer = reinterpret_cast<CNetChan_ProcessMessages_t>( symbol_finder.Resolve(
-				engine_loader.GetModule( ),
-				symbol.name.c_str( ),
-				symbol.length
-			) );
-			if( func_pointer != nullptr )
-				break;
-		}
+		if( func_pointer == nullptr )
+			func_pointer = ResolveSymbols<CNetChan_ProcessMessages_t>(
+				engine_loader, Symbols::CNetChan_ProcessMessages
+			);
 
 		return func_pointer;
 	}
@@ -85,19 +91,10 @@ namespace FunctionPointers
 	CBaseClient_ConnectionStart_t CBaseClient_ConnectionStart( )
 	{
 		static CBaseClient_ConnectionStart_t func_pointer = nullptr;
-		if( func_pointer != nullptr )
-			return func_pointer;
-
-		for( const auto &symbol : Symbols::CBaseClient_ConnectionStart )
-		{
-			func_pointer = reinterpret_cast<CBaseClient_ConnectionStart_t>( symbol_finder.Resolve(
-				engine_loader.GetModule( ),
-				symbol.name.c_str( ),
-				symbol.length
-			) );
-			if( func_pointer != nullptr )
-				break;
-		}
+		if( func_pointer == nullptr )
+			func_pointer = ResolveSymbols<CBaseClient_ConnectionStart_t>(
+				engine_loader, Symbols::CBaseClient_ConnectionStart
+			);
 
 		return func_pointer;
 	}
@@ -105,26 +102,15 @@ namespace FunctionPointers
 	CBaseClientState_ConnectionStart_t CBaseClientState_ConnectionStart( )
 	{
 		static CBaseClientState_ConnectionStart_t func_pointer = nullptr;
-		if( func_pointer != nullptr )
-			return func_pointer;
-
-		const auto starting_point = reinterpret_cast<const uint8_t *>( CBaseClient_ConnectionStart( ) );
-		for( const auto &symbol : Symbols::CBaseClientState_ConnectionStart )
-		{
-			func_pointer = reinterpret_cast<CBaseClientState_ConnectionStart_t>( symbol_finder.Resolve(
-				engine_loader.GetModule( ),
-				symbol.name.c_str( ),
-				symbol.length,
-				// starting point for sigscan
-				// we use an offset because, on Linux, CBaseClient::ConnectionStart and
-				// CBaseClientState::ConnectionStart have the same signature
-				// this code expects CBaseClient::ConnectionStart to appear before
-				// CBaseClientState::ConnectionStart
-				starting_point + 16
-			) );
-			if( func_pointer != nullptr )
-				break;
-		}
+		if( func_pointer == nullptr )
+			// we use a starting point for sigscan because, on Linux, CBaseClient::ConnectionStart
+			// and CBaseClientState::ConnectionStart have the same signature
+			// this code expects CBaseClient::ConnectionStart to appear before
+			// CBaseClientState::ConnectionStart
+			func_pointer = ResolveSymbols<CBaseClientState_ConnectionStart_t>(
+				engine_loader, Symbols::CBaseClientState_ConnectionStart,
+				reinterpret_cast<const uint8_t *>( CBaseClient_ConnectionStart( ) ) + 16
+			);
 
 		return func_pointer;
 	}
@@ -132,19 +118,10 @@ namespace FunctionPointers
 	CBaseServer_RecalculateTags_t CBaseServer_RecalculateTags( )
 	{
 		static CBaseServer_RecalculateTags_t func_pointer = nullptr;
-		if( func_pointer != nullptr )
-			return func_pointer;
-
-		for( const auto &symbol : Symbols::CBaseServer_RecalculateTags )
-		{
-			func_pointer = reinterpret_cast<CBaseServer_RecalculateTags_t>( symbol_finder.Resolve(
-				engine_loader.GetModule( ),
-				symbol.name.c_str( ),
-				symbol.length
-			) );
-			if( func_pointer != nullptr )
-				break;
-		}
+		if( func_pointer == nullptr )
+			func_pointer = ResolveSymbols<CBaseServer_RecalculateTags_t>(
+				engine_loader, Symbols::CBaseServer_RecalculateTags
+			);
 
 		return func_pointer;
 	}
@@ -152,19 +129,10 @@ namespace FunctionPointers
 	GModDataPack_SendFileToClient_t GModDataPack_SendFileToClient( )
 	{
 		static GModDataPack_SendFileToClient_t func_pointer = nullptr;
-		if( func_pointer != nullptr )
-			return func_pointer;
-
-		for( const auto &symbol : Symbols::GModDataPack_SendFileToClient )
-		{
-			func_pointer = reinterpret_cast<GModDataPack_SendFileToClient_t>( symbol_finder.Resolve(
-				server_loader.GetModule( ),
-				symbol.name.c_str( ),
-				symbol.length
-			) );
-			if( func_pointer != nullptr )
-				break;
-		}
+		if( func_pointer == nullptr )
+			func_pointer = ResolveSymbols<GModDataPack_SendFileToClient_t>(
+				server_loader, Symbols::GModDataPack_SendFileToClient
+			);
 
 		return func_pointer;
 	}
@@ -172,19 +140,10 @@ namespace FunctionPointers
 	CNetChan_IsValidFileForTransfer_t CNetChan_IsValidFileForTransfer( )
 	{
 		static CNetChan_IsValidFileForTransfer_t func_pointer = nullptr;
-		if( func_pointer != nullptr )
-			return func_pointer;
-
-		for( const auto &symbol : Symbols::CNetChan_IsValidFileForTransfer )
-		{
-			func_pointer = reinterpret_cast<CNetChan_IsValidFileForTransfer_t>( symbol_finder.Resolve(
-				engine_loader.GetModule( ),
-				symbol.name.c_str( ),
-				symbol.length
-			) );
-			if( func_pointer != nullptr )
-				break;
-		}
+		if( func_pointer == nullptr )
+			func_pointer = ResolveSymbols<CNetChan_IsValidFileForTransfer_t>(
+				engine_loader, Symbols::CNetChan_IsValidFileForTransfer
+			);
 
 		return func_pointer;
 	}
@@ -209,19 +168,11 @@ namespace FunctionPointers
 		if( func_pointer != nullptr )
 			return func_pointer;
 
-		func_pointer = reinterpret_cast<GMOD_GetNetSocket_t>( symbol_finder.Resolve(
-			engine_loader.GetModule( ),
-			Symbols::GMOD_GetNetSocket.name.c_str( ),
-			Symbols::GMOD_GetNetSocket.length
-		) );
+		func_pointer = ResolveSymbol<GMOD_GetNetSocket_t>( engine_loader, Symbols::GMOD_GetNetSocket );
 		if( func_pointer != nullptr )
 			return func_pointer;
 
-		void *net_sockets_ptr = symbol_finder.Resolve(
-			engine_loader.GetModule( ),
-			Symbols::net_sockets.name.c_str( ),
-			Symbols::net_sockets.length
-		);
+		void *net_sockets_ptr = ResolveSymbol<void *>( engine_loader, Symbols::net_sockets );
 		if( net_sockets_ptr != nullptr )
 		{
 			net_sockets =
@@ -237,10 +188,9 @@ namespace FunctionPointers
 #endif
 
 				( net_sockets_ptr );
+			if( net_sockets != nullptr )
+				func_pointer = GetNetSocket;
 		}
-
-		if( net_sockets != nullptr )
-			func_pointer = GetNetSocket;
 
 		return func_pointer;
 	}

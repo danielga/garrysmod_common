@@ -26,6 +26,36 @@ namespace InterfacePointers
 	static const char networkstringtableserver_name[] = "VEngineServerStringTable001";
 	static const char networkstringtableclient_name[] = "VEngineClientStringTable001";
 
+	template<class T>
+	static inline T *ResolveSymbol(
+		SourceSDK::FactoryLoader &loader, const Symbol &symbol
+	)
+	{
+		if( symbol.type == Symbol::Type::None )
+			return nullptr;
+
+		auto iface = reinterpret_cast<T **>( symbol_finder.Resolve(
+			loader.GetModule( ), symbol.name.c_str( ), symbol.length
+		) );
+		return iface != nullptr ? *iface : nullptr;
+	}
+
+	template<class T>
+	static inline T *ResolveSymbols(
+		SourceSDK::FactoryLoader &loader, const std::vector<Symbol> &symbols
+	)
+	{
+		T *iface_pointer = nullptr;
+		for( const auto &symbol : symbols )
+		{
+			iface_pointer = ResolveSymbol<T>( loader, symbol );
+			if( iface_pointer != nullptr )
+				break;
+		}
+
+		return iface_pointer;
+	}
+
 	namespace Internal
 	{
 		namespace Client
@@ -34,8 +64,8 @@ namespace InterfacePointers
 			{
 				static IFileSystem *iface_pointer = nullptr;
 				if( iface_pointer == nullptr )
-					iface_pointer = reinterpret_cast<IFileSystem *>(
-						client_loader.GetSymbol( Symbols::g_pFullFileSystem.name )
+					iface_pointer = ResolveSymbol<IFileSystem>(
+						client_loader, Symbols::g_pFullFileSystem
 					);
 
 				if( iface_pointer == nullptr )
@@ -56,22 +86,13 @@ namespace InterfacePointers
 				auto factory = FunctionPointers::FileSystemFactory( );
 				if( factory == nullptr )
 				{
-					IFileSystem **filesystem_ptr =
-						reinterpret_cast<IFileSystem **>( symbol_finder.Resolve(
-							dedicated_loader.GetModule( ),
-							Symbols::g_pFullFileSystem.name.c_str( ),
-							Symbols::g_pFullFileSystem.length
-						) );
-					if( filesystem_ptr == nullptr )
-						filesystem_ptr =
-						reinterpret_cast<IFileSystem **>( symbol_finder.Resolve(
-							server_loader.GetModule( ),
-							Symbols::g_pFullFileSystem.name.c_str( ),
-							Symbols::g_pFullFileSystem.length
-						) );
-
-					if( filesystem_ptr != nullptr )
-						iface_pointer = *filesystem_ptr;
+					iface_pointer = ResolveSymbol<IFileSystem>(
+						dedicated_loader, Symbols::g_pFullFileSystem
+					);
+					if( iface_pointer == nullptr )
+						iface_pointer = ResolveSymbol<IFileSystem>(
+							server_loader, Symbols::g_pFullFileSystem
+						);
 				}
 				else
 				{
@@ -127,7 +148,9 @@ namespace InterfacePointers
 	{
 		static INetworkStringTableContainer *iface_pointer = nullptr;
 		if( iface_pointer == nullptr )
-			iface_pointer = engine_loader.GetInterface<INetworkStringTableContainer>( networkstringtableserver_name );
+			iface_pointer = engine_loader.GetInterface<INetworkStringTableContainer>(
+				networkstringtableserver_name
+			);
 
 		return iface_pointer;
 	}
@@ -136,28 +159,9 @@ namespace InterfacePointers
 	{
 		static INetworkStringTableContainer *iface_pointer = nullptr;
 		if( iface_pointer == nullptr )
-			iface_pointer = engine_loader.GetInterface<INetworkStringTableContainer>( networkstringtableclient_name );
-
-		return iface_pointer;
-	}
-
-	template<class T>
-	static inline T *ResolveSymbols(
-		SourceSDK::FactoryLoader &loader, const std::vector<Symbol> &symbols
-	)
-	{
-		T *iface_pointer = nullptr;
-		for( const auto &symbol : symbols )
-		{
-			auto iface = reinterpret_cast<T **>( symbol_finder.Resolve(
-				loader.GetModule( ), symbol.name.c_str( ), symbol.length
-			) );
-			if( iface != nullptr )
-			{
-				iface_pointer = *iface;
-				break;
-			}
-		}
+			iface_pointer = engine_loader.GetInterface<INetworkStringTableContainer>(
+				networkstringtableclient_name
+			);
 
 		return iface_pointer;
 	}
