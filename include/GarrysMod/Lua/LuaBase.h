@@ -159,7 +159,7 @@ namespace GarrysMod
             // Returns the string at iStackPos. iOutLen is set to the length of the string if it is not NULL
             // If the value at iStackPos is a number, it will be converted in to a string
             // Returns NULL upon failure
-            virtual const char* GetString( int iStackPos = -1, unsigned int* iOutLen = NULL ) = 0;
+            virtual const char* GetString( int iStackPos = -1, unsigned int* iOutLen = nullptr ) = 0;
 
             // Returns the number at iStackPos
             // Returns 0 upon failure
@@ -299,9 +299,9 @@ namespace GarrysMod
                 if( ud == nullptr )
                     return nullptr;
 
-                T* data = reinterpret_cast<T*>( reinterpret_cast<uintptr_t>( ud ) + sizeof( UserData ) );
+                T* data = reinterpret_cast<T*>( reinterpret_cast<unsigned char *>( ud ) + sizeof( UserData ) );
                 ud->data = new( data ) T;
-                ud->type = static_cast<uint8_t>( iType );
+                ud->type = static_cast<unsigned char>( iType );
 
                 return data;
             }
