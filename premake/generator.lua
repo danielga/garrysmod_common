@@ -386,8 +386,6 @@ function CreateProject(config)
 		filter({})
 end
 
-local included_count = {}
-
 function HasIncludedPackage(name)
 	local _project = project()
 	_project.packages = _project.packages or {}
@@ -396,9 +394,17 @@ end
 
 function IncludePackage(name)
 	assert(not HasIncludedPackage(name), "a project with the name '" .. name .. "' already exists!")
-	project().packages[name] = true
 
-	local refcount = (included_count[name] or 0) + 1
-	included_count[name] = refcount
+	local _project = project()
+	local _workspace = _project.workspace
+
+	_project.packages[name] = true
+
+	if _workspace.packages == nil then
+		_workspace.packages = {}
+	end
+
+	local refcount = (_workspace.packages[name] or 0) + 1
+	_workspace.packages[name] = refcount
 	return refcount
 end
