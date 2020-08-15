@@ -19,7 +19,7 @@ Write-Output "Building module..."
 Invoke-Call { & "$MSBuild" "$MODULE_NAME.sln" /p:Configuration=Release /p:Platform=Win32 /m } -ErrorAction Stop
 Pop-Location
 
-if ($PROJECT_GENERATOR_VERSION -eq 2 -and -not $DISABLE_X86_64_BUILD) {
+if ($PROJECT_GENERATOR_VERSION -ge 3) {
 	Push-Location "$REPOSITORY_DIR/projects/$PROJECT_OS/$COMPILER_PLATFORM" -ErrorAction Stop
 	Write-Output "Building module..."
 	Invoke-Call { & "$MSBuild" "$MODULE_NAME.sln" /p:Configuration=Release /p:Platform=x64 /m } -ErrorAction Stop

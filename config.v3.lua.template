@@ -1,0 +1,12 @@
+-- Copy this file to config.v2.lua to override the defaults on premake/config.v2.default.lua
+
+-- These paths are relative to the premake5.lua file (or whatever you named it) of your project
+-- They can be absolute paths too if you so desire
+-- Path for the workspace files
+WORKSPACE_DIRECTORY = "projects/" .. os.target() .. "/" .. _ACTION
+
+-- Path for the source files (beware this will be used by all projects)
+SOURCE_DIRECTORY = "source"
+
+-- Path for the garrysmod/lua/bin directory (where the compiled files will be copied to)
+GARRYSMOD_LUA_BIN_DIRECTORY = nil
