@@ -6,7 +6,6 @@ variables:
   GARRYSMOD_COMMON_REPOSITORY: https://github.com/danielga/garrysmod_common.git
   PROJECT_GENERATOR_VERSION: 2
   REPOSITORY_DIR: $(System.DefaultWorkingDirectory)
-  DISABLE_X86_64_BUILD: true
 trigger:
   tags:
     include:

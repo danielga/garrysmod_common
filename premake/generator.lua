@@ -1,5 +1,3 @@
-assert(_ACTION ~= nil, "no action (vs20**, gmake or xcode for example) provided!")
-
 newoption({
 	trigger = "workspace",
 	description = "Sets the path for the workspace directory",
@@ -86,10 +84,15 @@ function CreateWorkspace(config)
 		strictaliasing("Level3")
 		vectorextensions("SSE2")
 		pic("On")
-		platforms({"x86_64", "x86"})
 		targetdir("%{wks.location}/%{cfg.architecture}/%{cfg.buildcfg}")
 		debugdir("%{wks.location}/%{cfg.architecture}/%{cfg.buildcfg}")
 		objdir("!%{wks.location}/%{cfg.architecture}/%{cfg.buildcfg}/intermediate/%{prj.name}")
+
+		if PROJECT_GENERATOR_VERSION < 3 then
+			platforms("x86")
+		else
+			platforms({"x86_64", "x86"})
+		end
 
 		if abi_compatible then
 			configurations({"ReleaseWithSymbols", "Release"})

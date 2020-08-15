@@ -15,8 +15,4 @@ ValidateVariableOrSetDefault "PREMAKE5" -Default "$DEPENDENCIES/windows/premake-
 ValidateVariableOrSetDefault "PROJECT_OS" -Default "windows"
 ValidateVariableOrSetDefault "PROJECT_GENERATOR_VERSION" -Default "1"
 
-if (Test-Path env:DISABLE_X86_64_BUILD) {
-	Set-Variable DISABLE_X86_64_BUILD -Value (Get-Item env:DISABLE_X86_64_BUILD).Value -Scope Global -ErrorAction Stop -Confirm:$false
-}
-
 CreateDirectoryForcefully $DEPENDENCIES

@@ -18,14 +18,14 @@ echo "Running premake5..."
 "$PREMAKE5" "$COMPILER_PLATFORM"
 popd
 
-if [ ! "$(uname -s)" = "Darwin" ]; then
+if [ "$PROJECT_GENERATOR_VERSION" -le "2" ] || [ ! "$(uname -s)" = "Darwin" ]; then
 	pushd "$REPOSITORY_DIR/projects/$PROJECT_OS/$COMPILER_PLATFORM"
 	echo "Building module with ${JOBS} job(s)..."
 	make -j "$JOBS" config=release_x86
 	popd
 fi
 
-if [ "$PROJECT_GENERATOR_VERSION" = "2" ] && [ -z "${DISABLE_X86_64_BUILD+x}" ]; then
+if [ "$PROJECT_GENERATOR_VERSION" -ge "3" ]; then
 	pushd "$REPOSITORY_DIR/projects/$PROJECT_OS/$COMPILER_PLATFORM"
 	echo "Building module with ${JOBS} job(s)..."
 	make -j "$JOBS" config=release_x86_64

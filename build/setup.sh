@@ -15,7 +15,6 @@ validate_variable_or_set_default "GARRYSMOD_COMMON_BRANCH" "master"
 validate_variable_or_set_default "GARRYSMOD_COMMON" "$DEPENDENCIES/garrysmod_common"
 validate_variable_or_set_default "COMPILER_PLATFORM" "gmake"
 validate_variable_or_set_default "PROJECT_GENERATOR_VERSION" "1"
-validate_variable_or_set_default "DISABLE_X86_64_BUILD" "true"
 
 case "$(uname -s)" in
     Linux*)
