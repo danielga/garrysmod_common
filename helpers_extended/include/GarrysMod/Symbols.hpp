@@ -20,5 +20,6 @@ extern const std::vector<Symbol> GModDataPack_SendFileToClient;
 extern const std::vector<Symbol> CNetChan_IsValidFileForTransfer;
 extern const Symbol net_sockets;
 extern const Symbol GMOD_GetNetSocket;
+extern const std::vector<Symbol> GModDataPack_AddOrUpdateFile;
 
 }

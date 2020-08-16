@@ -55,6 +55,10 @@ namespace Symbols
 
 	const Symbol GMOD_GetNetSocket = Symbol::FromName( "?GMOD_GetNetSocket@@YAPEAUnetsocket_t@@H@Z" );
 
+	const std::vector<Symbol> GModDataPack_AddOrUpdateFile = {
+		Symbol::FromName( "?AddOrUpdateFile@GModDataPack@@QEAAXPEAULuaFile@@_N@Z" )
+	};
+
 #elif defined ARCHITECTURE_X86
 
 	const std::vector<Symbol> CBasePlayer_HandleClientLuaError = {
@@ -113,6 +117,11 @@ namespace Symbols
 		"\x2A\x2A\x2A\x2A\x56\x57\x8B\x7D\x08\x8B\xF7\x03\xF6\x8B\x44\xF3\x0C\x85\xC0\x74\x0A\x57\x50" );
 
 	const Symbol GMOD_GetNetSocket = Symbol::FromName( "?GMOD_GetNetSocket@@YAPAUnetsocket_t@@H@Z" );
+
+	const std::vector<Symbol> GModDataPack_AddOrUpdateFile = {
+		Symbol::FromName( "?AddOrUpdateFile@GModDataPack@@QAEXPAULuaFile@@_N@Z" ),
+		Symbol::FromSignature( "\x55\x8B\xEC\x83\xEC\x20\x53\x56\x57\x8B\x7D\x08\x8B\xD9\x83\x7F" )
+	};
 
 #endif
 
@@ -190,6 +199,17 @@ namespace Symbols
 
 	const Symbol GMOD_GetNetSocket = Symbol::FromName( "_Z17GMOD_GetNetSocketi" );
 
+	const std::vector<Symbol> GModDataPack_AddOrUpdateFile = {
+		Symbol::FromName( "_ZN12GModDataPack15AddOrUpdateFileEP7LuaFileb" ),
+		
+#if defined ARCHITECTURE_X86
+
+		Symbol::FromSignature( "\x55\x89\xE5\x57\x56\x53\x83\xEC\x4C\x8B\x45\x10\x8B\x5D\x08\x8B" )
+
+#endif
+
+	};
+
 #elif defined SYSTEM_MACOSX
 
 	const std::vector<Symbol> CBasePlayer_HandleClientLuaError = {
@@ -242,6 +262,10 @@ namespace Symbols
 	const Symbol net_sockets = Symbol::FromName( "_ZL11net_sockets" );
 
 	const Symbol GMOD_GetNetSocket = Symbol::FromName( "_Z17GMOD_GetNetSocketi" );
+
+	const std::vector<Symbol> GModDataPack_AddOrUpdateFile = {
+		Symbol::FromName( "_ZN12GModDataPack15AddOrUpdateFileEP7LuaFileb" )
+	};
 
 #endif
 

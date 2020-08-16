@@ -29,6 +29,7 @@ class CBaseClientState;
 class CBaseServer;
 class GModDataPack;
 struct netsocket_t;
+class LuaFile;
 
 namespace FunctionPointers
 {
@@ -59,5 +60,8 @@ CNetChan_IsValidFileForTransfer_t CNetChan_IsValidFileForTransfer( );
 
 typedef netsocket_t *( *GMOD_GetNetSocket_t )( int idx );
 GMOD_GetNetSocket_t GMOD_GetNetSocket( );
+
+typedef void ( GMCOMMON_CALLING_CONVENTION *GModDataPack_AddOrUpdateFile_t )( GModDataPack *pack, LuaFile *file, bool force );
+GModDataPack_AddOrUpdateFile_t GModDataPack_AddOrUpdateFile( );
 
 }
