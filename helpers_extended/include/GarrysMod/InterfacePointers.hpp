@@ -19,6 +19,7 @@ namespace Client
 {
 
 IFileSystem *FileSystem( );
+INetworkStringTableContainer *NetworkStringTableContainer( );
 
 }
 
@@ -26,6 +27,7 @@ namespace Server
 {
 
 IFileSystem *FileSystem( );
+INetworkStringTableContainer *NetworkStringTableContainer( );
 
 }
 
@@ -46,6 +48,16 @@ inline IFileSystem *FileSystem( )
 
 }
 
+inline IFileSystem *FileSystemServer( )
+{
+	return Internal::Server::FileSystem( );
+}
+
+inline IFileSystem *FileSystemClient( )
+{
+	return Internal::Client::FileSystem( );
+}
+
 IVEngineServer *VEngineServer( );
 IVEngineClient *VEngineClient( );
 
@@ -57,7 +69,29 @@ ICvar *Cvar( );
 
 IServerGameDLL *ServerGameDLL( );
 
-INetworkStringTableContainer *NetworkStringTableContainerServer( );
-INetworkStringTableContainer *NetworkStringTableContainerClient( );
+inline INetworkStringTableContainer *NetworkStringTableContainer( )
+{
+
+#if IS_SERVERSIDE
+
+	return Internal::Server::NetworkStringTableContainer( );
+
+#else
+
+	return Internal::Client::NetworkStringTableContainer( );
+
+#endif
+
+}
+
+inline INetworkStringTableContainer *NetworkStringTableContainerServer( )
+{
+	return Internal::Server::NetworkStringTableContainer( );
+}
+
+inline INetworkStringTableContainer *NetworkStringTableContainerClient( )
+{
+	return Internal::Client::NetworkStringTableContainer( );
+}
 
 }

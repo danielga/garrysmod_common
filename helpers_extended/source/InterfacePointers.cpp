@@ -73,6 +73,17 @@ namespace InterfacePointers
 
 				return iface_pointer;
 			}
+
+			INetworkStringTableContainer *NetworkStringTableContainer( )
+			{
+				static INetworkStringTableContainer *iface_pointer = nullptr;
+				if( iface_pointer == nullptr )
+					iface_pointer = engine_loader.GetInterface<INetworkStringTableContainer>(
+						networkstringtableclient_name
+					);
+
+				return iface_pointer;
+			}
 		}
 
 		namespace Server
@@ -102,6 +113,17 @@ namespace InterfacePointers
 
 				if( iface_pointer == nullptr )
 					iface_pointer = filesystem_loader.GetInterface<IFileSystem>( filesystem_name );
+
+				return iface_pointer;
+			}
+
+			INetworkStringTableContainer *NetworkStringTableContainer( )
+			{
+				static INetworkStringTableContainer *iface_pointer = nullptr;
+				if( iface_pointer == nullptr )
+					iface_pointer = engine_loader.GetInterface<INetworkStringTableContainer>(
+						networkstringtableserver_name
+					);
 
 				return iface_pointer;
 			}
@@ -140,28 +162,6 @@ namespace InterfacePointers
 		static IServerGameDLL *iface_pointer = nullptr;
 		if( iface_pointer == nullptr )
 			iface_pointer = server_loader.GetInterface<IServerGameDLL>( servergamedll_name );
-
-		return iface_pointer;
-	}
-
-	INetworkStringTableContainer *NetworkStringTableContainerServer( )
-	{
-		static INetworkStringTableContainer *iface_pointer = nullptr;
-		if( iface_pointer == nullptr )
-			iface_pointer = engine_loader.GetInterface<INetworkStringTableContainer>(
-				networkstringtableserver_name
-			);
-
-		return iface_pointer;
-	}
-
-	INetworkStringTableContainer *NetworkStringTableContainerClient( )
-	{
-		static INetworkStringTableContainer *iface_pointer = nullptr;
-		if( iface_pointer == nullptr )
-			iface_pointer = engine_loader.GetInterface<INetworkStringTableContainer>(
-				networkstringtableclient_name
-			);
 
 		return iface_pointer;
 	}
