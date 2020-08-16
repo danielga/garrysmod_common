@@ -194,4 +194,15 @@ namespace FunctionPointers
 
 		return func_pointer;
 	}
+
+	GModDataPack_AddOrUpdateFile_t GModDataPack_AddOrUpdateFile( )
+	{
+		static GModDataPack_AddOrUpdateFile_t func_pointer = nullptr;
+		if( func_pointer == nullptr )
+			func_pointer = ResolveSymbols<GModDataPack_AddOrUpdateFile_t>(
+				server_loader, Symbols::GModDataPack_AddOrUpdateFile
+			);
+
+		return func_pointer;
+	}
 }
