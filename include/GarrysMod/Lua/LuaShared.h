@@ -65,13 +65,16 @@ namespace GarrysMod
 			virtual void CloseLuaInterface( ILuaInterface * ) = 0;
 			virtual ILuaInterface *GetLuaInterface( unsigned char ) = 0;
 			virtual File *LoadFile( const std::string &path, const std::string &pathId, bool fromDatatable, bool fromFile ) = 0;
-			virtual void GetCache( const std::string & );
+			virtual File *GetCache( const std::string & );
 			virtual void MountLua( const char * ) = 0;
 			virtual void MountLuaAdd( const char *, const char * ) = 0;
 			virtual void UnMountLua( const char * ) = 0;
 			virtual void SetFileContents( const char *, const char * ) = 0;	
 			virtual void SetLuaFindHook( LuaClientDatatableHook * ) = 0;
 			virtual void FindScripts( const std::string &, const std::string &, std::vector<std::string> & ) = 0;
+			virtual const char *GetStackTraces( ) = 0;
+			virtual void InvalidateCache( const std::string & ) = 0;
+			virtual void EmptyCache( ) = 0;
 		};
 	}
 }

@@ -18,7 +18,7 @@ namespace GarrysMod
 {
 	namespace Lua
 	{
-		class IThreadedCall;
+		class ILuaThreadedCall;
 		class ILuaGameCallback;
 		class ILuaObject;
 
@@ -94,7 +94,7 @@ namespace GarrysMod
 			virtual void PreCreateTable( int arrelems, int nonarrelems ) = 0;
 			virtual void PushPooledString( int index ) = 0;
 			virtual const char *GetPooledString( int index ) = 0;
-			virtual void *AddThreadedCall( IThreadedCall * ) = 0;
+			virtual void *AddThreadedCall( ILuaThreadedCall * ) = 0;
 			virtual void AppendStackTrace( char *, unsigned long ) = 0;
 			virtual void *CreateConVar( const char *, const char *, const char *, int ) = 0;
 			virtual void *CreateConCommand( const char *, const char *, int, void ( * )( const CCommand & ), int ( * )( const char *, char ( * )[128] ) ) = 0;

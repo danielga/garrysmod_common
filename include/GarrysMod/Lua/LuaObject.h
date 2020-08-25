@@ -99,11 +99,16 @@ namespace GarrysMod
 			virtual void SetMemberNil( const char * ) = 0;
 			virtual void SetMemberNil( float ) = 0;
 
-			virtual bool Debug_IsUnreferenced( ) = 0;
+			virtual bool RemoveMe( ) = 0;
 
 			virtual void Init( ) = 0;
 
 			virtual void SetFromGlobal( const char * ) = 0;
+
+			virtual int GetStringLen( unsigned int * ) = 0;
+
+			virtual unsigned int GetMemberUInt( const char *, unsigned int ) = 0;
+
 			virtual void SetMember( const char *, unsigned long long ) = 0;
 			virtual void SetReference( int ) = 0;
 
@@ -115,23 +120,27 @@ namespace GarrysMod
 			virtual void SetMemberDouble( float, double ) = 0;
 			virtual double GetMemberDouble( const char *, double ) = 0;
 
-			virtual BaseEntity *GetMemberEntity( const char *, BaseEntity * );
-			virtual void SetMemberEntity( float, BaseEntity * );
-			virtual void SetMemberEntity( const char *, BaseEntity * );
-			virtual bool isEntity( );
-			virtual BaseEntity *GetEntity( );
-			virtual void SetEntity( BaseEntity * );
-			virtual void SetMemberVector( const char *, Vector * );
-			virtual void SetMemberVector( const char *, Vector & );
-			virtual Vector *GetMemberVector( const char *, const Vector * );
-			virtual Vector *GetMemberVector( int );
-			virtual Vector *GetVector( );
-			virtual bool isVector( );
-			virtual void SetMemberAngle( const char *, QAngle * );
-			virtual QAngle *GetMemberAngle( const char *, QAngle * );
-			virtual QAngle *GetAngle( );
-			virtual bool isAngle( );
-			virtual void SetMemberPhysObject( const char *, IPhysicsObject * );
+			virtual BaseEntity *GetMemberEntity( const char *, BaseEntity * ) = 0;
+			virtual void SetMemberEntity( float, BaseEntity * ) = 0;
+			virtual void SetMemberEntity( const char *, BaseEntity * ) = 0;
+			virtual bool isEntity( ) = 0;
+			virtual BaseEntity *GetEntity( ) = 0;
+			virtual void SetEntity( BaseEntity * ) = 0;
+
+			virtual void SetMemberVector( const char *, Vector * ) = 0;
+			virtual void SetMemberVector( const char *, Vector & ) = 0;
+			virtual void SetMemberVector( float, Vector * ) = 0;
+			virtual Vector *GetMemberVector( const char *, const Vector * ) = 0;
+			virtual Vector *GetMemberVector( int ) = 0;
+			virtual Vector *GetVector( ) = 0;
+			virtual bool isVector( ) = 0;
+
+			virtual void SetMemberAngle( const char *, QAngle * ) = 0;
+			virtual QAngle *GetMemberAngle( const char *, QAngle * ) = 0;
+			virtual QAngle *GetAngle( ) = 0;
+			virtual bool isAngle( ) = 0;
+
+			virtual void SetMemberPhysObject( const char *, IPhysicsObject * ) = 0;
 		};
 	}
 }
