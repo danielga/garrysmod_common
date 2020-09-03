@@ -110,22 +110,23 @@ function CreateWorkspace(config)
 			architecture("x86")
 
 		filter("configurations:ReleaseWithSymbols")
+			flags("LinkTimeOptimization")
 			optimize("Debug")
-			symbols("Full")
+			symbols("On")
 			defines("NDEBUG")
 			runtime("Release")
 
 		filter("configurations:Release")
 			flags("LinkTimeOptimization")
 			optimize("Full")
-			symbols("Full")
+			symbols("Off")
 			defines("NDEBUG")
 			runtime("Release")
 
 		if not abi_compatible then
 			filter("configurations:Debug")
 				optimize("Off")
-				symbols("Full")
+				symbols("On")
 				defines({"DEBUG", "_DEBUG"})
 				runtime("Debug")
 		end
