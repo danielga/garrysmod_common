@@ -110,7 +110,6 @@ function CreateWorkspace(config)
 			architecture("x86")
 
 		filter("configurations:ReleaseWithSymbols")
-			flags("LinkTimeOptimization")
 			optimize("Debug")
 			symbols("On")
 			defines("NDEBUG")
