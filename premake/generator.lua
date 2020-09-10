@@ -75,7 +75,7 @@ function CreateWorkspace(config)
 		language("C++")
 		location(_workspace.directory)
 		warnings("Extra")
-		flags({"NoPCH", "MultiProcessorCompile", "ShadowedVariables", "UndefinedIdentifiers"})
+		flags({"MultiProcessorCompile", "ShadowedVariables", "UndefinedIdentifiers"})
 		defines({"GMOD_ALLOW_OLD_TYPES", "GMOD_ALLOW_LIGHTUSERDATA"})
 		characterset("MBCS")
 		intrinsics("On")
@@ -262,6 +262,8 @@ function CreateProject(config)
 	local is_server = config.serverside
 	assert(type(is_server) == "boolean", "'serverside' option is not a boolean!")
 
+	local is_vs = string.find(_ACTION, "^vs20%d%d$") ~= nil
+
 	local sourcepath = config.source_path or _OPTIONS["source"] or SOURCE_DIRECTORY
 	assert(type(sourcepath) == "string", "source code path is not a string!")
 
@@ -282,6 +284,22 @@ function CreateProject(config)
 		else
 			abi_compatible = false
 		end
+	end
+
+	local pch_enabled = false
+	if config.pch_header ~= nil or config.pch_source ~= nil then
+		assert(config.pch_header ~= nil, "'phc_header' must be supplied when 'pch_source' is supplied!")
+		assert(type(config.pch_header) == "string", "'pch_header' is not a string!")	
+
+		if is_vs then	
+			assert(config.pch_source ~= nil, "'pch_source' must be supplied when 'phc_header' is supplied under Visual Studio!")
+			assert(type(config.pch_source) == "string", "'pch_source' is not a string!")
+
+			config.pch_source = sourcepath .. "/" .. config.pch_source			
+			assert(os.isfile(config.pch_source), "'pch_source' file " .. config.pch_source .. " could not be found!")
+		end
+
+		pch_enabled = true
 	end
 
 	local name = (is_server and "gmsv_" or "gmcl_") .. _workspace.name
@@ -307,6 +325,15 @@ function CreateProject(config)
 			configurations({"ReleaseWithSymbols", "Release"})
 		else
 			configurations({"ReleaseWithSymbols", "Release", "Debug"})
+		end
+
+		if pch_enabled then
+			pchheader(config.pch_header)
+			if is_vs then
+				pchsource(config.pch_source)
+			end
+		else
+			flags("NoPCH")
 		end
 
 		kind("SharedLib")
