@@ -7,8 +7,10 @@ function IncludeHelpersExtended()
 
 	sysincludedirs(current_dir .. "/include")
 	-- GCC requires manual ordering of links, where libraries on the left depend on libraries on the right
-	-- Since helpers_extended depends on helpers, the latter must appear after
+	-- Since helpers_extended depends on helpers and scanning, the latter must appear after
 	links({"helpers_extended", "helpers"})
+
+	IncludeScanning()
 
 	if refcount == 1 then
 		dofile(current_dir .. "/premake5_create_project.lua")
