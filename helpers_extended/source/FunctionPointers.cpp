@@ -172,7 +172,7 @@ namespace FunctionPointers
 		if( func_pointer != nullptr )
 			return func_pointer;
 
-		void *net_sockets_ptr = ResolveSymbol<void *>( engine_loader, Symbols::net_sockets );
+		void *net_sockets_ptr = ResolveSymbols<void *>( engine_loader, Symbols::net_sockets );
 		if( net_sockets_ptr != nullptr )
 		{
 			net_sockets =

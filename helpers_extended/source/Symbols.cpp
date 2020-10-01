@@ -51,7 +51,7 @@ namespace Symbols
 		Symbol::FromName( "?IsValidFileForTransfer@CNetChan@@SA_NPEBD@Z" )
 	};
 
-	const Symbol net_sockets;
+	const std::vector<Symbol> net_sockets;
 
 	const Symbol GMOD_GetNetSocket = Symbol::FromName( "?GMOD_GetNetSocket@@YAPEAUnetsocket_t@@H@Z" );
 
@@ -113,8 +113,9 @@ namespace Symbols
 		Symbol::FromSignature( "\x55\x8B\xEC\x53\x8B\x5D\x08\x56\x57\x85\xDB\x0F\x84" )
 	};
 
-	const Symbol net_sockets = Symbol::FromSignature(
-		"\x2A\x2A\x2A\x2A\x56\x57\x8B\x7D\x08\x8B\xF7\x03\xF6\x8B\x44\xF3\x0C\x85\xC0\x74\x0A\x57\x50" );
+	const std::vector<Symbol> net_sockets = {
+		Symbol::FromSignature( "\x2A\x2A\x2A\x2A\x56\x57\x8B\x7D\x08\x8B\xF7\x03\xF6\x8B\x44\xF3\x0C\x85\xC0\x74\x0A\x57\x50" )
+	};
 
 	const Symbol GMOD_GetNetSocket = Symbol::FromName( "?GMOD_GetNetSocket@@YAPAUnetsocket_t@@H@Z" );
 
@@ -239,7 +240,16 @@ namespace Symbols
 
 	};
 
-	const Symbol net_sockets = Symbol::FromName( "_ZL11net_sockets" );
+	const std::vector<Symbol> net_sockets = {
+		Symbol::FromName( "_ZL11net_sockets" ),
+
+#if defined ARCHITECTURE_X86
+
+		Symbol::FromSignature( "\x2A\x2A\x2A\x2A\x29\xF7\x89\x7C\x24\x04\xE8\x2A\x2A\x2A\x2A\x89\x7C\x24\x08\x89\x74\x24\x04" )
+
+#endif
+
+	};
 
 	const Symbol GMOD_GetNetSocket = Symbol::FromName( "_Z17GMOD_GetNetSocketi" );
 
@@ -303,7 +313,7 @@ namespace Symbols
 		Symbol::FromName( "_ZN8CNetChan22IsValidFileForTransferEPKc" )
 	};
 
-	const Symbol net_sockets = Symbol::FromName( "_ZL11net_sockets" );
+	const std::vector<Symbol> net_sockets = { Symbol::FromName( "_ZL11net_sockets" ) };
 
 	const Symbol GMOD_GetNetSocket = Symbol::FromName( "_Z17GMOD_GetNetSocketi" );
 
