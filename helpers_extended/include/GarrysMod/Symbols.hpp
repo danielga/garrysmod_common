@@ -18,7 +18,7 @@ extern const std::vector<Symbol> CBaseServer_RecalculateTags;
 extern const std::vector<Symbol> SteamGameServerAPIContext;
 extern const std::vector<Symbol> GModDataPack_SendFileToClient;
 extern const std::vector<Symbol> CNetChan_IsValidFileForTransfer;
-extern const Symbol net_sockets;
+extern const std::vector<Symbol> net_sockets;
 extern const Symbol GMOD_GetNetSocket;
 extern const std::vector<Symbol> GModDataPack_AddOrUpdateFile;
 
