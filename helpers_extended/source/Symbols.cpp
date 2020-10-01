@@ -129,9 +129,25 @@ namespace Symbols
 
 	const std::vector<Symbol> CBasePlayer_HandleClientLuaError = {
 		Symbol::FromName( "_Z20HandleClientLuaErrorP11CBasePlayerPKc" ),
+
+#if defined ARCHITECTURE_X86
+
+		Symbol::FromSignature( "\x55\x89\xE5\x57\x56\x53\x83\xEC\x4C\x65\xA1\x2A\x2A\x2A\x2A\x89" )
+
+#endif
+
 	};
 
-	const std::vector<Symbol> FileSystemFactory = { Symbol::FromName( "_Z17FileSystemFactoryPKcPi" ) };
+	const std::vector<Symbol> FileSystemFactory = {
+		Symbol::FromName( "_Z17FileSystemFactoryPKcPi" ),
+
+#if defined ARCHITECTURE_X86
+
+		Symbol::FromSignature( "\x55\x89\xE5\x83\xEC\x18\x89\x75\xFC\x8B\x75\x08\x89\x5D\xF8\x8B" )
+
+#endif
+
+	};
 
 	const Symbol g_pFullFileSystem = Symbol::FromName( "g_pFullFileSystem" );
 
@@ -180,19 +196,47 @@ namespace Symbols
 	};
 
 	const std::vector<Symbol> CBaseServer_RecalculateTags = {
-		Symbol::FromName( "_ZN11CBaseServer15RecalculateTagsEv" )
+		Symbol::FromName( "_ZN11CBaseServer15RecalculateTagsEv" ),
+
+#if defined ARCHITECTURE_X86
+
+		Symbol::FromSignature( "\x55\x89\xE5\x57\x56\x53\x83\xEC\x6C\x8B\x75\x10\x85\xF6\x0F\x88" )
+
+#endif
+
 	};
 
 	const std::vector<Symbol> SteamGameServerAPIContext = {
-		Symbol::FromName( "_ZL27s_SteamGameServerAPIContext" )
+		Symbol::FromName( "_ZL27s_SteamGameServerAPIContext" ),
+
+#if defined ARCHITECTURE_X86
+
+		Symbol::FromSignature( "\x2A\x2A\x2A\x2A\x0F\x84\x2A\x2A\x2A\x2A\xC7\x04\x24\x2A\x2A\x2A\x2A\xE8\x2A\x2A\x2A\x2A\x8B\x00\xC7\x04\x24" )
+
+#endif
+
 	};
 
 	const std::vector<Symbol> GModDataPack_SendFileToClient = {
-		Symbol::FromName( "_ZN12GModDataPack16SendFileToClientEii" )
+		Symbol::FromName( "_ZN12GModDataPack16SendFileToClientEii" ),
+
+#if defined ARCHITECTURE_X86
+
+		Symbol::FromSignature( "\x55\x89\xE5\x57\x56\x53\x83\xEC\x6C\x8B\x75\x10\x85\xF6\x0F\x88" )
+
+#endif
+
 	};
 
 	const std::vector<Symbol> CNetChan_IsValidFileForTransfer = {
-		Symbol::FromName( "_ZN8CNetChan22IsValidFileForTransferEPKc" )
+		Symbol::FromName( "_ZN8CNetChan22IsValidFileForTransferEPKc" ),
+
+#if defined ARCHITECTURE_X86
+
+		Symbol::FromSignature( "\x55\x89\xC1\x89\xE5\x57\x31\xFF\x56\x89\xC6\x53\x83\xEC\x1C\xEB" )
+
+#endif
+
 	};
 
 	const Symbol net_sockets = Symbol::FromName( "_ZL11net_sockets" );
