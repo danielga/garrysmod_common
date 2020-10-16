@@ -1,15 +1,26 @@
 # garrysmod\_common
 
-A repository of common bits for compilation projects based on Garry's Mod.  
-The include folder has all the required headers for building modules for Garry's Mod (LuaJIT and Garry's Mod headers) with C++.  
-There's common code for premake on the premake folder for faster development. premake5 is required to generate projects.
+A repository of common bits for compilation projects based on Garry's Mod.
+
+The `include` directory has all the required headers for building modules for Garry's Mod (LuaJIT and Garry's Mod headers) with C++.
+
+There's common code for premake on the `premake` directory for faster development. premake5 is required to generate projects.
 
 ## Warning
 
-Do not use internal classes/structures (like the `GameDepot::System` class or the `IGamemodeSystem::Information` structure) unless you compile with **Visual Studio 2015**, **Visual Studio 2017** or **Visual Studio 2019** on **release** mode, for Windows.  
-On Linux, everything should work fine as is, on **release** mode.  
-For Mac OSX, any **Xcode (using the GCC compiler)** version *MIGHT* work as long as the **Mac OSX 10.7 SDK** is used, on **release** mode.  
-These restrictions are not random; they exist because of ABI compatibility reasons.  
+As a rule of thumb, avoid diverging too much from these rules:
+
+* On Windows, compile with **Visual Studio 2015**, **Visual Studio 2017** or **Visual Studio 2019**.
+* On Linux, use **GCC** (the more up to date, the better, tested up to **GCC 9**, older versions like **GCC 4** and **GCC 5** might throw C++ compilation errors).
+* On macOS, any **Xcode (using the GCC compiler)** version *MIGHT* work.
+
+Do not use internal classes/structures (like the `GameDepot::System` class or the `IGamemodeSystem::Information` structure) unless **(these rules are in addition to the previous ones)**:
+
+* On Windows and Linux, compile in **release** mode.
+* On macOS, use the **Mac OSX 10.7 SDK**, in **release** mode.
+
+These restrictions are not random; they exist because of ABI compatibility reasons.
+
 If stuff starts erroring or fails to work, be sure to check the correct line endings (`\n` and such) are present in the files for each OS.
 
 ## Usage
@@ -17,6 +28,8 @@ If stuff starts erroring or fails to work, be sure to check the correct line end
 In your project's `premake5.lua` (or whatever you named it) you should include your local copy of this repository, for example:
 
 ```lua
+PROJECT_GENERATOR_VERSION = 2
+
 newoption({
     trigger = "gmcommon",
     description = "Sets the path to the garrysmod_common (https://github.com/danielga/garrysmod_common) directory",
@@ -24,11 +37,11 @@ newoption({
 })
 
 local gmcommon = assert(_OPTIONS.gmcommon or os.getenv("GARRYSMOD_COMMON"),
-    "you didn't provide a path to your garrysmod_common (https://github.com/danielga/garrysmod_common) directory")
-include(gmcommon .. "/generator.v2.lua")
+	"you didn't provide a path to your garrysmod_common (https://github.com/danielga/garrysmod_common) directory")
+include(gmcommon)
 ```
 
-Creates the workspace with the provided `workspace_name`, optional `workspace_add_debug` for including a debug compilation mode (default is `true`) and optional `workspace_path` for files (can also be set by premake option (`--workspace=path`) and by default uses the value in the config file). Must be called at least once before the next functions.
+Creates the workspace with the provided `workspace_name`, optional `workspace_add_debug` for including a debug compilation mode (default is `true`) and optional `workspace_path` for files (can also be set by premake option (`--workspace=path`) and by default uses the value in the config file). Must be called at least once before the following functions.
 
 ```lua
 CreateWorkspace({
@@ -48,7 +61,7 @@ CreateProject({
 })
 ```
 
-Call the next functions as needed. The Source SDK based projects do not need a path to the SDK anymore, as it is provided through this git repository as a submodule.
+Call the following functions as needed. The Source SDK based projects do not need a path to the SDK anymore, as it is provided through this git repository as a submodule.
 
 ```lua
 IncludeLuaShared() -- uses this repo path
