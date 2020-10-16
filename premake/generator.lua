@@ -81,7 +81,6 @@ function CreateWorkspace(config)
 		intrinsics("On")
 		inlining("Auto")
 		rtti("On")
-		strictaliasing("Level3")
 		vectorextensions("SSE2")
 		pic("On")
 		targetdir("%{wks.location}/%{cfg.architecture}/%{cfg.buildcfg}")
@@ -157,6 +156,9 @@ function CreateWorkspace(config)
 				buildoptions("-isysroot " .. macosx_sdkroot)
 				linkoptions("-isysroot " .. macosx_sdkroot)
 			end
+
+		filter("files:**.cpp or **.cxx")
+			strictaliasing("Level3")
 
 		filter({})
 end
