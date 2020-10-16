@@ -30,6 +30,7 @@ class CBaseServer;
 class GModDataPack;
 struct netsocket_t;
 class LuaFile;
+class CSteam3Server;
 
 namespace FunctionPointers
 {
@@ -63,5 +64,8 @@ GMOD_GetNetSocket_t GMOD_GetNetSocket( );
 
 typedef void ( GMCOMMON_CALLING_CONVENTION *GModDataPack_AddOrUpdateFile_t )( GModDataPack *pack, LuaFile *file, bool force );
 GModDataPack_AddOrUpdateFile_t GModDataPack_AddOrUpdateFile( );
+
+typedef CSteam3Server *( *Steam3Server_t )( );
+Steam3Server_t Steam3Server( );
 
 }

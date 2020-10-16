@@ -179,9 +179,11 @@ namespace InterfacePointers
 	{
 		static CSteamGameServerAPIContext *iface_pointer = nullptr;
 		if( iface_pointer == nullptr )
-			iface_pointer = ResolveSymbols<CSteamGameServerAPIContext>(
-				engine_loader, Symbols::SteamGameServerAPIContext
-			);
+		{
+			auto Steam3Server = FunctionPointers::Steam3Server( );
+			if( Steam3Server != nullptr )
+				iface_pointer = reinterpret_cast<CSteamGameServerAPIContext *>( Steam3Server( ) );
+		}
 
 		return iface_pointer;
 	}
