@@ -24,7 +24,7 @@ namespace Symbols
 	};
 
 	const std::vector<Symbol> CNetChan_ProcessMessages = {
-		Symbol::FromName( "?ProcessMessages@CNetChan@@AAE_NAAVbf_read@@@Z" )
+		Symbol::FromName( "?ProcessMessages@CNetChan@@AEAA_NAEAVbf_read@@@Z" )
 	};
 
 	const std::vector<Symbol> CBaseClient_ConnectionStart = {
@@ -59,6 +59,9 @@ namespace Symbols
 		Symbol::FromName( "?AddOrUpdateFile@GModDataPack@@QEAAXPEAULuaFile@@_N@Z" )
 	};
 
+	const Symbol Steam3Server =
+		Symbol::FromSignature( "\x48\x8D\x05\x2A\x2A\x2A\x2A\xC3\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\x40\x53\x48\x83\xEC\x20\x48\x8B\xD9\xFF\x15" );
+
 #elif defined ARCHITECTURE_X86
 
 	const std::vector<Symbol> CBasePlayer_HandleClientLuaError = {
@@ -79,7 +82,7 @@ namespace Symbols
 	};
 
 	const std::vector<Symbol> CNetChan_ProcessMessages = {
-		Symbol::FromName( "?ProcessMessages@CNetChan@@AEAA_NAEAVbf_read@@@Z" ),
+		Symbol::FromName( "?ProcessMessages@CNetChan@@AAE_NAAVbf_read@@@Z" ),
 		Symbol::FromSignature( "\x55\x8B\xEC\x83\xEC\x2C\xF7\x05" )
 	};
 
@@ -123,6 +126,9 @@ namespace Symbols
 		Symbol::FromName( "?AddOrUpdateFile@GModDataPack@@QAEXPAULuaFile@@_N@Z" ),
 		Symbol::FromSignature( "\x55\x8B\xEC\x83\xEC\x20\x53\x56\x57\x8B\x7D\x08\x8B\xD9\x83\x7F" )
 	};
+
+	const Symbol Steam3Server =
+		Symbol::FromSignature( "\xB8\x2A\x2A\x2A\x2A\xC3\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\xCC\x55\x8B\xEC\x68\x2A\x2A\x2A\x2A\xFF\x15\x2A\x2A\x2A\x2A\x50\xFF\x15" );
 
 #endif
 
@@ -264,6 +270,18 @@ namespace Symbols
 
 	};
 
+#if defined ARCHITECTURE_X86
+
+	const Symbol Steam3Server =
+		Symbol::FromSignature( "\x55\xB8\x2A\x2A\x2A\x2A\x89\xE5\x5D\xC3\x8D\xB6\x00\x00\x00\x00\x55\x31\xC0\xB9\x09\x00\x00\x00\x89\xE5\x57\x56\x53\x83\xEC\x2C" );
+
+#elif defined ARCHITECTURE_X86_64
+
+	const Symbol Steam3Server =
+		Symbol::FromSignature( "\x55\x48\x8D\x05\x2A\x2A\x2A\x2A\x48\x89\xE5\x5D\xC3\x90\x66\x90\x55\x31\xC0\xB9\x09\x00\x00\x00\x48\x89\xE5\x41\x57\xBE" );
+
+#endif
+
 #elif defined SYSTEM_MACOSX
 
 	const std::vector<Symbol> CBasePlayer_HandleClientLuaError = {
@@ -320,6 +338,16 @@ namespace Symbols
 	const std::vector<Symbol> GModDataPack_AddOrUpdateFile = {
 		Symbol::FromName( "_ZN12GModDataPack15AddOrUpdateFileEP7LuaFileb" )
 	};
+
+#if defined ARCHITECTURE_X86
+
+	const Symbol Steam3Server = Symbol::FromName( "_Z12Steam3Serverv" );
+
+#elif ARCHITECTURE_X86_64
+
+	const Symbol Steam3Server = Symbol::FromSignature( "\x55\x48\x89\xE5\x48\x8D\x05\x2A\x2A\x2A\x2A\x5D\xC3\x0F\x1F\x00" );
+
+#endif
 
 #endif
 

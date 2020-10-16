@@ -205,4 +205,15 @@ namespace FunctionPointers
 
 		return func_pointer;
 	}
+
+	Steam3Server_t Steam3Server( )
+	{
+		static Steam3Server_t func_pointer = nullptr;
+		if( func_pointer == nullptr )
+			func_pointer = ResolveSymbol<Steam3Server_t>(
+				engine_loader, Symbols::Steam3Server
+			);
+
+		return func_pointer;
+	}
 }

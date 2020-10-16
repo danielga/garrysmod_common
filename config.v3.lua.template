@@ -1,4 +1,4 @@
--- Copy this file to config.v2.lua to override the defaults on premake/config.v2.default.lua
+-- Copy this file to config.v3.lua to override the defaults on premake/config.v3.default.lua
 
 -- These paths are relative to the premake5.lua file (or whatever you named it) of your project
 -- They can be absolute paths too if you so desire

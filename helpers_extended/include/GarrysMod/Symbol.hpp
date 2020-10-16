@@ -5,6 +5,7 @@
 
 struct Symbol
 {
+public:
 	enum class Type
 	{
 		None,
@@ -16,18 +17,20 @@ struct Symbol
 	const std::string name;
 	const size_t length = 0;
 
-	inline Symbol( ) { }
+	inline Symbol( ) = default;
 
-	inline Symbol( Type typ, const std::string &nam, size_t len = 0 ) :
-		type( typ ), name( nam ), length( len ) { }
-
-	static inline Symbol FromSignature( const std::string &signature )
+	template<std::size_t Size>
+	static inline Symbol FromSignature( const char ( &signature )[Size] )
 	{
-		return Symbol( Type::Signature, signature, signature.size( ) );
+		return Symbol( Type::Signature, std::string( signature, Size - 1 ) );
 	}
 
 	static inline Symbol FromName( const std::string &name )
 	{
 		return Symbol( Type::Name, "@" + name );
 	}
+
+private:
+	inline Symbol( Type _type, std::string &&_name ) :
+		type( _type ), name( std::move( _name ) ), length( type == Type::Signature ? name.size( ) : 0 ) { }
 };
