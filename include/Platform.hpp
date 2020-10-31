@@ -136,6 +136,7 @@
 #if defined _M_IX86 || defined ___i386__ || defined __i386 || defined __X86__ || defined _X86_ || defined __I86__
 
 #define ARCHITECTURE_X86 1
+#define ARCHITECTURE_X86_OLD 1 // Should disappear when the x86-64 Garry's Mod branch is merged
 
 #define ARCHITECTURE_IS_X86 1
 #define ARCHITECTURE_IS_X86_64 0
