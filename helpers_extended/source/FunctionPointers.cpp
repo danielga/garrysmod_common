@@ -150,14 +150,14 @@ namespace FunctionPointers
 
 	struct netsockets_t // basic representation of CUtlVector<netsocket_t>
 	{
-		netsocket_t *buffer;
-		int buffer_count;
-		int buffer_size;
-		int elements_count;
-		netsocket_t *elements;
+		const netsocket_t *buffer;
+		const int buffer_count;
+		const int buffer_size;
+		const int elements_count;
+		const netsocket_t *elements;
 	};
-	static netsockets_t *net_sockets = nullptr;
-	static netsocket_t *GetNetSocket( int idx )
+	static const netsockets_t *net_sockets = nullptr;
+	static const netsocket_t *GetNetSocket( int idx )
 	{
 		return idx >= 0 && idx < net_sockets->elements_count ? &net_sockets->elements[idx] : nullptr;
 	}
@@ -172,25 +172,24 @@ namespace FunctionPointers
 		if( func_pointer != nullptr )
 			return func_pointer;
 
-		void *net_sockets_ptr = ResolveSymbols<void *>( engine_loader, Symbols::net_sockets );
+#if defined SYSTEM_WINDOWS
+
+		const netsockets_t **net_sockets_ptr = ResolveSymbols<const netsockets_t **>( engine_loader, Symbols::net_sockets );
 		if( net_sockets_ptr != nullptr )
 		{
-			net_sockets =
+			net_sockets = *net_sockets_ptr;
 
-#if defined SYSTEM_POSIX
-
-				reinterpret_cast<netsockets_t *>
-
-#else
-
-				*reinterpret_cast<netsockets_t **>
-
-#endif
-
-				( net_sockets_ptr );
 			if( net_sockets != nullptr )
 				func_pointer = GetNetSocket;
-		}
+	}
+		
+#elif defined SYSTEM_POSIX
+
+		net_sockets = ResolveSymbols<netsockets_t *>( engine_loader, Symbols::net_sockets );
+		if( net_sockets != nullptr )
+			func_pointer = GetNetSocket;
+
+#endif
 
 		return func_pointer;
 	}

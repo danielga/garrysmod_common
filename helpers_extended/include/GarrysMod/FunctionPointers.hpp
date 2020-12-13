@@ -59,7 +59,7 @@ GModDataPack_SendFileToClient_t GModDataPack_SendFileToClient( );
 typedef bool ( *CNetChan_IsValidFileForTransfer_t )( const char *filepath );
 CNetChan_IsValidFileForTransfer_t CNetChan_IsValidFileForTransfer( );
 
-typedef netsocket_t *( *GMOD_GetNetSocket_t )( int idx );
+typedef const netsocket_t *( *GMOD_GetNetSocket_t )( int idx );
 GMOD_GetNetSocket_t GMOD_GetNetSocket( );
 
 typedef void ( GMCOMMON_CALLING_CONVENTION *GModDataPack_AddOrUpdateFile_t )( GModDataPack *pack, LuaFile *file, bool force );

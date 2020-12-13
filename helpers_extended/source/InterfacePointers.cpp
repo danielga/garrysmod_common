@@ -34,10 +34,21 @@ namespace InterfacePointers
 		if( symbol.type == Symbol::Type::None )
 			return nullptr;
 
+#if defined SYSTEM_WINDOWS
+
 		auto iface = reinterpret_cast<T **>( symbol_finder.Resolve(
 			loader.GetModule( ), symbol.name.c_str( ), symbol.length
 		) );
 		return iface != nullptr ? *iface : nullptr;
+
+#elif defined SYSTEM_POSIX
+
+		return reinterpret_cast<T *>( symbol_finder.Resolve(
+			loader.GetModule( ), symbol.name.c_str( ), symbol.length
+		) );
+
+#endif
+
 	}
 
 	template<class T>
