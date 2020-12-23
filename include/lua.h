@@ -213,7 +213,6 @@ LUA_API int (*lua_dump) (lua_State *L, lua_Writer writer, void *data);
 #define lua_resume(L,narg) lua_resume_real(L, narg)
 LUA_API int  (*lua_resume_real) (lua_State *L, int narg);
 LUA_API int  (*lua_yield) (lua_State *L, int nresults);
-LUA_API int  (*lua_resume) (lua_State *L, int narg);
 LUA_API int  (*lua_status) (lua_State *L);
 
 /*

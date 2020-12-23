@@ -252,7 +252,6 @@ extern "C"
 	CreateLoader( int, lua_dump, ( lua_State *, lua_Writer, void * ) );
 	CreateLoader( int, lua_resume_real, ( lua_State *, int ) );
 	CreateLoader( int, lua_yield, ( lua_State *, int ) );
-	CreateLoader( int, lua_resume, ( lua_State *, int ) );
 	CreateLoader( int, lua_status, ( lua_State * ) );
 	CreateLoader( int, lua_gc, ( lua_State *, int, int ) );
 	CreateLoader( int, lua_next, ( lua_State *, int ) );
