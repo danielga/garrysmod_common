@@ -291,20 +291,20 @@ function CreateProject(config)
 	local pch_enabled = false
 	if config.pch_header ~= nil or config.pch_source ~= nil then
 		assert(config.pch_header ~= nil, "'phc_header' must be supplied when 'pch_source' is supplied!")
-		assert(type(config.pch_header) == "string", "'pch_header' is not a string!")	
+		assert(type(config.pch_header) == "string", "'pch_header' is not a string!")
 
-		if is_vs then	
+		if is_vs then
 			assert(config.pch_source ~= nil, "'pch_source' must be supplied when 'phc_header' is supplied under Visual Studio!")
 			assert(type(config.pch_source) == "string", "'pch_source' is not a string!")
 
-			config.pch_source = sourcepath .. "/" .. config.pch_source			
+			config.pch_source = sourcepath .. "/" .. config.pch_source
 			assert(os.isfile(config.pch_source), "'pch_source' file " .. config.pch_source .. " could not be found!")
 		end
 
 		pch_enabled = true
 	end
 
-	local name = (is_server and "gmsv_" or "gmcl_") .. _workspace.name
+	local name = (is_server and "gmsv_" or "gmcl_") .. (config.name or _workspace.name)
 
 	if abi_compatible and os.istarget("windows") and _ACTION ~= "vs2015" and _ACTION ~= "vs2017" and _ACTION ~= "vs2019" then
 		error("The only supported compilation platforms for this project (" .. name .. ") on Windows are Visual Studio 2015, 2017 and 2019.")
@@ -425,7 +425,7 @@ function HasIncludedPackage(name)
 end
 
 function IncludePackage(name)
-	assert(not HasIncludedPackage(name), "a project with the name '" .. name .. "' already exists!")
+	assert(not HasIncludedPackage(name), "a package with the name '" .. name .. "' already exists!")
 
 	local _project = project()
 	local _workspace = _project.workspace

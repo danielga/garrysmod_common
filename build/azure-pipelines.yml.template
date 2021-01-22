@@ -25,6 +25,10 @@ jobs:
     PREMAKE5: $(System.DefaultWorkingDirectory)/dependencies/windows/premake-core/premake5.exe
     PREMAKE5_URL: https://github.com/premake/premake-core/releases/download/v5.0.0-alpha15/premake-5.0.0-alpha15-windows.zip
   steps:
+  - checkout: self
+    clean: true
+    fetchDepth: 1
+    submodules: recursive
   - powershell: 'Invoke-Expression ((New-Object System.Net.WebClient).DownloadString("$env:BOOTSTRAP_URL"))'
     displayName: Bootstrap
   - powershell: '& "$env:BUILD_SCRIPT"'
@@ -61,6 +65,10 @@ jobs:
     NM: gcc-nm-9
     RANLIB: gcc-ranlib-9
   steps:
+  - checkout: self
+    clean: true
+    fetchDepth: 1
+    submodules: recursive
   - bash: 'curl -s -L "$BOOTSTRAP_URL" | bash'
     displayName: Bootstrap
   - bash: |
@@ -97,6 +105,10 @@ jobs:
     MACOSX_SDK_DIRECTORY: $(System.DefaultWorkingDirectory)/dependencies/macosx/MacOSX10.7.sdk
     SDKROOT: $(System.DefaultWorkingDirectory)/dependencies/macosx/MacOSX10.7.sdk
   steps:
+  - checkout: self
+    clean: true
+    fetchDepth: 1
+    submodules: recursive
   - bash: 'curl -s -L "$BOOTSTRAP_URL" | bash'
     displayName: Bootstrap
   - bash: |
