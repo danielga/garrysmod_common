@@ -76,7 +76,6 @@ function CreateWorkspace(config)
 		location(_workspace.directory)
 		warnings("Extra")
 		flags({"MultiProcessorCompile", "ShadowedVariables", "UndefinedIdentifiers"})
-		defines({"GMOD_ALLOW_OLD_TYPES", "GMOD_ALLOW_LIGHTUSERDATA"})
 		characterset("MBCS")
 		intrinsics("On")
 		inlining("Auto")
@@ -343,7 +342,9 @@ function CreateProject(config)
 		defines({
 			"GMMODULE",
 			string.upper(string.gsub(_workspace.name, "%.", "_")) .. (_project.serverside and "_SERVER" or "_CLIENT"),
-			"IS_SERVERSIDE=" .. tostring(is_server)
+			"IS_SERVERSIDE=" .. tostring(is_server),
+			"GMOD_ALLOW_OLD_TYPES",
+			"GMOD_ALLOW_LIGHTUSERDATA"
 		})
 		sysincludedirs(_GARRYSMOD_COMMON_DIRECTORY .. "/include")
 		includedirs(_project.directory)

@@ -62,9 +62,9 @@ enum {
 /* LuaJIT public C API. */
 
 /* Control the JIT engine. */
-LUA_API int (*luaJIT_setmode) (lua_State *L, int idx, int mode);
+LUA_API int luaJIT_setmode(lua_State *L, int idx, int mode);
 
 /* Enforce (dynamic) linker error for version mismatches. Call from main. */
-LUA_API void (*LUAJIT_VERSION_SYM) (void);
+LUA_API void LUAJIT_VERSION_SYM(void);
 
 #endif
