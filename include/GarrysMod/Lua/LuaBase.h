@@ -12,13 +12,13 @@ struct lua_State;
 
 extern "C"
 {
-    extern void ( *lua_getfenv )( lua_State* L, int idx );
-    extern int ( *lua_setfenv )( lua_State* L, int idx );
-    extern const char *( *lua_pushvfstring )( lua_State* L, const char* fmt, va_list argp );
-    extern int ( *lua_error )( lua_State* L );
-    extern int ( *luaL_typerror )( lua_State* L, int narg, const char* tname );
-    extern const void* ( *lua_topointer )( lua_State* L, int idx );
-    extern int ( *luaL_callmeta )( lua_State* L, int idx, const char* e );
+    void lua_getfenv( lua_State *L, int idx );
+    int lua_setfenv( lua_State *L, int idx );
+    const char *lua_pushvfstring( lua_State *L, const char *fmt, va_list argp );
+    int lua_error( lua_State *L );
+    int luaL_typerror( lua_State *L, int narg, const char *tname );
+    const void *lua_topointer( lua_State *L, int idx );
+    int luaL_callmeta( lua_State *L, int idx, const char *e );
 }
 
 namespace GarrysMod

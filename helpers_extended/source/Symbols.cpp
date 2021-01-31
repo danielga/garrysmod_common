@@ -101,10 +101,19 @@ namespace Symbols
 		Symbol::FromSignature( "\x55\x8B\xEC\x83\xEC\x60\x56\x6A\x00\x68\x2A\x2A\x2A\x2A\x8D\x4D\xE8" )
 	};
 
+#ifdef _MSC_VER
+#pragma warning( push )
+#pragma warning( disable : 4996 )
+#endif
+
 	const std::vector<Symbol> SteamGameServerAPIContext = {
 		Symbol::FromName( "?s_SteamGameServerAPIContext@@3VCSteamGameServerAPIContext@@A" ),
 		Symbol::FromSignature( "\x2A\x2A\x2A\x2A\xE8\x2A\x2A\x2A\x2A\x6A\x00\x68\x2A\x2A\x2A\x2A\xFF\x55\x08\x83\xC4\x08\xA" )
 	};
+
+#ifdef _MSC_VER
+#pragma warning( pop )
+#endif
 
 	const std::vector<Symbol> GModDataPack_SendFileToClient = {
 		Symbol::FromName( "?SendFileToClient@GModDataPack@@QAEXHH@Z" ),

@@ -156,7 +156,7 @@ function CreateWorkspace(config)
 				linkoptions("-isysroot " .. macosx_sdkroot)
 			end
 
-		filter("files:**.cpp or **.cxx")
+		filter("files:**.cpp or **.cxx or **.cc")
 			strictaliasing("Level3")
 
 		filter({})
