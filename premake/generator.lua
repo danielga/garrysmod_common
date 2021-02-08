@@ -129,6 +129,7 @@ function CreateWorkspace(config)
 		end
 
 		filter("system:windows")
+			cdialect("C11")
 			cppdialect("C++17")
 			staticruntime("On")
 			defaultplatform("x86")
@@ -139,11 +140,13 @@ function CreateWorkspace(config)
 			})
 
 		filter("system:linux")
+			cdialect("GNU11")
 			cppdialect("GNU++17")
 			staticruntime("On")
 			defaultplatform("x86")
 
 		filter("system:macosx")
+			cdialect("GNU11")
 			cppdialect("GNU++17")
 			staticruntime("Off")
 			defaultplatform("x86_64")
@@ -403,15 +406,13 @@ function CreateProject(config)
 		filter({"system:macosx", "platforms:x86_64"})
 			targetsuffix("_osx64")
 
-		if _OPTIONS["autoinstall"] then
-			local binDir = _OPTIONS["autoinstall"] ~= "" and _OPTIONS["autoinstall"] or os.getenv("GARRYSMOD_LUA_BIN") or FindGarrysModLuaBinDirectory() or GARRYSMOD_LUA_BIN_DIRECTORY
+		local autoinstall = _OPTIONS["autoinstall"]
+		if autoinstall ~= nil then
+			local binDir = #autoinstall ~= 0 and autoinstall or os.getenv("GARRYSMOD_LUA_BIN") or FindGarrysModLuaBinDirectory() or GARRYSMOD_LUA_BIN_DIRECTORY
 			assert(type(binDir) == "string", "The path to garrysmod/lua/bin is not a string!")
 
-			filter("system:windows")
-				postbuildcommands({"{COPY} %{cfg.buildtarget.abspath} \"" .. binDir .. "\""})
-
-			filter("system:not windows")
-				postbuildcommands({"{COPY} %{cfg.buildtarget.abspath} \"" .. binDir .. "%{cfg.buildtarget.name}\""})
+			filter({})
+				postbuildcommands({"{COPY} \"%{cfg.buildtarget.abspath}\" \"" .. binDir .. "\""})
 		end
 
 		IncludeHelpers()

@@ -39,9 +39,18 @@ namespace Symbols
 		Symbol::FromName( "?RecalculateTags@CBaseServer@@QEAAXXZ" )
 	};
 
+#ifdef _MSC_VER
+#pragma warning( push )
+#pragma warning( disable : 4996 )
+#endif
+
 	const std::vector<Symbol> SteamGameServerAPIContext = {
 		Symbol::FromName( "?s_SteamGameServerAPIContext@@3VCSteamGameServerAPIContext@@A" )
 	};
+
+#ifdef _MSC_VER
+#pragma warning( pop )
+#endif
 
 	const std::vector<Symbol> GModDataPack_SendFileToClient = {
 		Symbol::FromName( "?SendFileToClient@GModDataPack@@QEAAXHH@Z" )
@@ -222,6 +231,9 @@ namespace Symbols
 
 	};
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+
 	const std::vector<Symbol> SteamGameServerAPIContext = {
 		Symbol::FromName( "_ZL27s_SteamGameServerAPIContext" ),
 
@@ -232,6 +244,8 @@ namespace Symbols
 #endif
 
 	};
+
+#pragma GCC diagnostic pop
 
 	const std::vector<Symbol> GModDataPack_SendFileToClient = {
 		Symbol::FromName( "_ZN12GModDataPack16SendFileToClientEii" ),
