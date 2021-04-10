@@ -142,7 +142,7 @@ namespace Symbols
 
 	const std::vector<Symbol> GModDataPack_AddOrUpdateFile = {
 		Symbol::FromName( "?AddOrUpdateFile@GModDataPack@@QAEXPAULuaFile@@_N@Z" ),
-		Symbol::FromSignature( "\x55\x8B\xEC\x83\xEC\x20\x53\x56\x57\x8B\x7D\x08\x8B\xD9\x83\x7F" )
+		Symbol::FromSignature( "\x55\x8B\xEC\x83\xEC\x28\x53\x8B\x5D\x08\x83\x7B\x18\x10\x56\x8D" )
 	};
 
 	const Symbol Steam3Server =
