@@ -7,9 +7,18 @@ variables:
   PROJECT_GENERATOR_VERSION: 2
   REPOSITORY_DIR: $(System.DefaultWorkingDirectory)
 trigger:
+  batch: true
+  branches:
+    include:
+    - '*'
   tags:
     include:
     - '*'
+  paths:
+    include:
+    - azure-pipelines.yml
+    - premake5.lua
+    - source
 jobs:
 - job: windows
   displayName: Windows
@@ -138,6 +147,7 @@ jobs:
     - windows
     - linux
     - macosx
+  condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
   steps:
   - task: DownloadBuildArtifacts@0
     displayName: 'Download build artifacts'
