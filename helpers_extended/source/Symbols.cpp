@@ -107,7 +107,7 @@ namespace Symbols
 
 	const std::vector<Symbol> CBaseServer_RecalculateTags = {
 		Symbol::FromName( "?RecalculateTags@CBaseServer@@QAEXXZ" ),
-		Symbol::FromSignature( "\x55\x8B\xEC\x83\xEC\x60\x56\x6A\x00\x68\x2A\x2A\x2A\x2A\x8D\x4D\xE8" )
+		Symbol::FromSignature( "\x55\x8B\xEC\x83\xEC\x78\x56\x57" )
 	};
 
 #ifdef _MSC_VER
@@ -225,7 +225,7 @@ namespace Symbols
 
 #if defined ARCHITECTURE_X86
 
-		Symbol::FromSignature( "\x55\x89\xE5\x57\x56\x53\x83\xEC\x6C\x8B\x75\x10\x85\xF6\x0F\x88" )
+		Symbol::FromSignature( "\x55\x89\xE5\x57\x56\x8D\x85\x2A\x2A\x2A\x2A\x53\x8D\x5D" )
 
 #endif
 
