@@ -27,13 +27,11 @@ void *ModuleLoader::LoadModule( const std::string &name )
 
 #if defined ARCHITECTURE_X86_64
 
-		"bin/win64/%s_s.dll",
 		"bin/win64/%s.dll",
 
 #elif defined ARCHITECTURE_X86
 
 		"garrysmod/bin/%s.dll",
-		"bin/%s_s.dll",
 		"bin/%s.dll"
 
 #endif
