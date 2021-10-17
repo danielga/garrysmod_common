@@ -1,0 +1,56 @@
+trigger:
+  batch: true
+  branches:
+    include:
+    - 'gcc-build'
+  tags:
+    include:
+    - 'gcc-build/*'
+jobs:
+- job: gcc_build
+  displayName: Build GCC 11.4.0 compiler for steam-runtime scout
+  pool:
+    name: Azure Pipelines
+    vmImage: ubuntu-22.04
+  container:
+    image: danielga/steamrt-scout:latest
+    options: -v /home
+  timeoutInMinutes: 180
+  steps:
+  - checkout: self
+    clean: true
+    fetchDepth: 1
+    submodules: recursive
+  - bash: 'build/gcc_build.sh 11.4.0'
+    displayName: Build
+  - task: CopyFiles@2
+    displayName: 'Copy files to $(Build.ArtifactStagingDirectory)'
+    inputs:
+      SourceFolder: '$(System.DefaultWorkingDirectory)'
+      Contents: 'gcc-*.tar.xz'
+      TargetFolder: '$(Build.ArtifactStagingDirectory)'
+      CleanTargetFolder: true
+      flattenFolders: true
+      preserveTimestamp: true
+  - publish: '$(Build.ArtifactStagingDirectory)'
+    displayName: 'Publish build artifacts'
+    artifact: gcc_build
+- job: publish
+  displayName: Publish to GitHub Releases
+  pool:
+    name: Azure Pipelines
+    vmImage: ubuntu-22.04
+  timeoutInMinutes: 10
+  dependsOn:
+    - gcc_build
+  condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
+  steps:
+  - download: current
+    patterns: 'gcc-*.tar.xz'
+  - task: GitHubRelease@1
+    displayName: 'Publish GitHub release $(build.sourceBranchName)'
+    inputs:
+      gitHubConnection: 'GitHub danielga'
+      releaseNotesSource: inline
+      assets: '$(Pipeline.Workspace)/gcc-*.tar.xz'
+      addChangeLog: false
