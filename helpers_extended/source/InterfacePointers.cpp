@@ -8,14 +8,6 @@
 
 namespace InterfacePointers
 {
-	static SourceSDK::FactoryLoader client_loader( "client" );
-	static SourceSDK::FactoryLoader server_loader( "server" );
-	static SourceSDK::FactoryLoader engine_loader( "engine" );
-	static SourceSDK::FactoryLoader dedicated_loader( "dedicated" );
-	static SourceSDK::FactoryLoader filesystem_loader( "filesystem_stdio" );
-	static SourceSDK::FactoryLoader lua_shared_loader( "lua_shared" );
-	static SourceSDK::FactoryLoader vstdlib_loader( "vstdlib" );
-
 	static SymbolFinder symbol_finder;
 
 	static const char filesystem_name[] = "VFileSystem022";
@@ -75,12 +67,18 @@ namespace InterfacePointers
 			{
 				static IFileSystem *iface_pointer = nullptr;
 				if( iface_pointer == nullptr )
+				{
+					SourceSDK::FactoryLoader client_loader( "client" );
 					iface_pointer = ResolveSymbol<IFileSystem>(
 						client_loader, Symbols::g_pFullFileSystem
 					);
+				}
 
 				if( iface_pointer == nullptr )
+				{
+					SourceSDK::FactoryLoader filesystem_loader( "filesystem_stdio" );
 					iface_pointer = filesystem_loader.GetInterface<IFileSystem>( filesystem_name );
+				}
 
 				return iface_pointer;
 			}
@@ -89,9 +87,12 @@ namespace InterfacePointers
 			{
 				static INetworkStringTableContainer *iface_pointer = nullptr;
 				if( iface_pointer == nullptr )
+				{
+					SourceSDK::FactoryLoader engine_loader( "engine" );
 					iface_pointer = engine_loader.GetInterface<INetworkStringTableContainer>(
 						networkstringtableclient_name
 					);
+				}
 
 				return iface_pointer;
 			}
@@ -108,13 +109,17 @@ namespace InterfacePointers
 				auto factory = FunctionPointers::FileSystemFactory( );
 				if( factory == nullptr )
 				{
+					SourceSDK::FactoryLoader dedicated_loader( "dedicated" );
 					iface_pointer = ResolveSymbol<IFileSystem>(
 						dedicated_loader, Symbols::g_pFullFileSystem
 					);
 					if( iface_pointer == nullptr )
+					{
+						SourceSDK::FactoryLoader server_loader( "server" );
 						iface_pointer = ResolveSymbol<IFileSystem>(
 							server_loader, Symbols::g_pFullFileSystem
 						);
+					}
 				}
 				else
 				{
@@ -123,7 +128,10 @@ namespace InterfacePointers
 				}
 
 				if( iface_pointer == nullptr )
+				{
+					SourceSDK::FactoryLoader filesystem_loader( "filesystem_stdio" );
 					iface_pointer = filesystem_loader.GetInterface<IFileSystem>( filesystem_name );
+				}
 
 				return iface_pointer;
 			}
@@ -132,9 +140,12 @@ namespace InterfacePointers
 			{
 				static INetworkStringTableContainer *iface_pointer = nullptr;
 				if( iface_pointer == nullptr )
+				{
+					SourceSDK::FactoryLoader engine_loader( "engine" );
 					iface_pointer = engine_loader.GetInterface<INetworkStringTableContainer>(
 						networkstringtableserver_name
 					);
+				}
 
 				return iface_pointer;
 			}
@@ -145,7 +156,10 @@ namespace InterfacePointers
 	{
 		static IVEngineServer *iface_pointer = nullptr;
 		if( iface_pointer == nullptr )
+		{
+			SourceSDK::FactoryLoader engine_loader( "engine" );
 			iface_pointer = engine_loader.GetInterface<IVEngineServer>( vengineserver_name );
+		}
 
 		return iface_pointer;
 	}
@@ -154,7 +168,10 @@ namespace InterfacePointers
 	{
 		static IVEngineClient *iface_pointer = nullptr;
 		if( iface_pointer == nullptr )
+		{
+			SourceSDK::FactoryLoader engine_loader( "engine" );
 			iface_pointer = engine_loader.GetInterface<IVEngineClient>( vengineclient_name );
+		}
 
 		return iface_pointer;
 	}
@@ -163,7 +180,10 @@ namespace InterfacePointers
 	{
 		static ICvar *iface_pointer = nullptr;
 		if( iface_pointer == nullptr )
+		{
+			SourceSDK::FactoryLoader vstdlib_loader( "vstdlib" );
 			iface_pointer = vstdlib_loader.GetInterface<ICvar>( cvar_name );
+		}
 
 		return iface_pointer;
 	}
@@ -172,7 +192,10 @@ namespace InterfacePointers
 	{
 		static IServerGameDLL *iface_pointer = nullptr;
 		if( iface_pointer == nullptr )
+		{
+			SourceSDK::FactoryLoader server_loader( "server" );
 			iface_pointer = server_loader.GetInterface<IServerGameDLL>( servergamedll_name );
+		}
 
 		return iface_pointer;
 	}
@@ -181,7 +204,10 @@ namespace InterfacePointers
 	{
 		static IServer *iface_pointer = nullptr;
 		if( iface_pointer == nullptr )
+		{
+			SourceSDK::FactoryLoader engine_loader( "engine" );
 			iface_pointer = ResolveSymbols<IServer>( engine_loader, Symbols::IServer );
+		}
 
 		return iface_pointer;
 	}
