@@ -348,7 +348,8 @@ function CreateProject(config)
 			string.upper(string.gsub(_workspace.name, "%.", "_")) .. (_project.serverside and "_SERVER" or "_CLIENT"),
 			"IS_SERVERSIDE=" .. tostring(is_server),
 			"GMOD_ALLOW_OLD_TYPES",
-			"GMOD_ALLOW_LIGHTUSERDATA"
+			"GMOD_ALLOW_LIGHTUSERDATA",
+			"GMOD_MODULE_NAME=\"" .. _workspace.name .. "\""
 		})
 		sysincludedirs(_GARRYSMOD_COMMON_DIRECTORY .. "/include")
 		includedirs(_project.directory)
