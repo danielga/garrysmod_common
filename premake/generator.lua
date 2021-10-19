@@ -144,6 +144,7 @@ function CreateWorkspace(config)
 			cppdialect("GNU++17")
 			staticruntime("On")
 			defaultplatform("x86")
+			linkoptions("-Wl,--no-undefined")
 
 		filter("system:macosx")
 			cdialect("GNU11")
@@ -151,7 +152,7 @@ function CreateWorkspace(config)
 			staticruntime("Off")
 			defaultplatform("x86_64")
 			buildoptions({"-mmacosx-version-min=10.7", "-stdlib=libc++"})
-			linkoptions({"-mmacosx-version-min=10.7", "-stdlib=libc++"})
+			linkoptions({"-mmacosx-version-min=10.7", "-stdlib=libc++", "-Wl,--no-undefined"})
 
 			local macosx_sdkroot = _OPTIONS["macosx_sdkroot"]
 			if macosx_sdkroot ~= nil then
