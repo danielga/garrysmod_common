@@ -2,6 +2,7 @@
 #define GARRYSMOD_LUA_LUABASE_H
 
 #include <cstdarg>
+#include <cstdlib>
 #include <type_traits>
 
 #include "Types.h"
@@ -368,6 +369,9 @@ namespace GarrysMod
             inline void Error( )
             {
                 lua_error( state );
+
+                // Should never be reached since 'lua_error' never returns.
+                std::abort( );
             }
 
             // Throws an error (pushes a formatted string onto the stack and uses it)
@@ -386,6 +390,9 @@ namespace GarrysMod
             inline void TypeError( int iStackPos, const char* tname )
             {
                 luaL_typerror( state, iStackPos, tname );
+
+                // Should never be reached since 'luaL_typerror' never returns.
+                std::abort( );
             }
 
             // Converts the value at the given index to a generic C pointer (void*)
