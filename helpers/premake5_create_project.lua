@@ -16,3 +16,6 @@ group("garrysmod_common")
 			["Header files/*"] = {"../include/**.hpp", "include/**.h", "include/**.hpp"},
 			["Source files/*"] = "source/*.cpp"
 		})
+
+		filter("system:linux or macosx")
+			links("dl")

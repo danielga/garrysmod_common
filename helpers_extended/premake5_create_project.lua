@@ -18,5 +18,8 @@ group("garrysmod_common")
 			["Source files/*"] = "source/*.cpp"
 		})
 
+		filter("system:linux or macosx")
+			links("dl")
+
 		IncludeHelpers()
 		IncludeScanning()
