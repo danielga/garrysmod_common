@@ -10,6 +10,7 @@
 #include "SourceCompat.h"
 
 struct lua_State;
+struct lua_Debug;
 
 namespace GarrysMod
 {
@@ -24,6 +25,8 @@ namespace GarrysMod
             int luaL_typerror( lua_State *L, int narg, const char *tname );
             const void *lua_topointer( lua_State *L, int idx );
             int luaL_callmeta( lua_State *L, int idx, const char *e );
+            int lua_getstack( lua_State *L, int level, lua_Debug *ar );
+            int lua_getinfo( lua_State *L, const char *what, lua_Debug *ar );
         }
 
         typedef int ( *CFunc )( lua_State* L );
@@ -428,6 +431,18 @@ namespace GarrysMod
             static inline int GetUpvalueIndex( int iPos )
             {
                 return static_cast<int>( INDEX_GLOBAL ) - iPos;
+            }
+
+            // Get information about the interpreter runtime stack
+            inline int GetStack( int level, lua_Debug *ar )
+            {
+                return lua_getstack( state, level, ar );
+            }
+
+            // Returns information about a specific function or function invocation
+            inline int GetInfo( const char *what, lua_Debug *ar )
+            {
+                return lua_getinfo( state, what, ar );
             }
 
         private:
