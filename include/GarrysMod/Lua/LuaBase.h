@@ -11,22 +11,39 @@
 
 struct lua_State;
 
-extern "C"
-{
-    void lua_getfenv( lua_State *L, int idx );
-    int lua_setfenv( lua_State *L, int idx );
-    const char *lua_pushvfstring( lua_State *L, const char *fmt, va_list argp );
-    int lua_error( lua_State *L );
-    int luaL_typerror( lua_State *L, int narg, const char *tname );
-    const void *lua_topointer( lua_State *L, int idx );
-    int luaL_callmeta( lua_State *L, int idx, const char *e );
-}
-
 namespace GarrysMod
 {
     namespace Lua
     {
+        extern "C"
+        {
+            void lua_getfenv( lua_State *L, int idx );
+            int lua_setfenv( lua_State *L, int idx );
+            const char *lua_pushvfstring( lua_State *L, const char *fmt, va_list argp );
+            int lua_error( lua_State *L );
+            int luaL_typerror( lua_State *L, int narg, const char *tname );
+            const void *lua_topointer( lua_State *L, int idx );
+            int luaL_callmeta( lua_State *L, int idx, const char *e );
+        }
+
         typedef int ( *CFunc )( lua_State* L );
+
+        // For use with ILuaBase::PushSpecial
+        enum
+        {
+            SPECIAL_GLOB,       // Global table
+            SPECIAL_ENV,        // Environment table
+            SPECIAL_REG,        // Registry table
+        };
+
+        // Use these when calling ILuaBase::GetField or ILuaBase::SetField for example,
+        // instead of pushing the specified table
+        enum
+        {
+            INDEX_GLOBAL = -10002,  // Global table
+            INDEX_ENVIRONMENT,      // Environment table
+            INDEX_REGISTRY,         // Registry table
+        };
 
         //
         // Use this to communicate between C and Lua
@@ -407,25 +424,14 @@ namespace GarrysMod
                 return luaL_callmeta( state, iStackPos, e );
             }
 
+            // Produces the pseudo-index of an upvalue at iPos
+            static inline int GetUpvalueIndex( int iPos )
+            {
+                return static_cast<int>( INDEX_GLOBAL ) - iPos;
+            }
+
         private:
             lua_State *state;
-        };
-
-        // For use with ILuaBase::PushSpecial
-        enum
-        {
-            SPECIAL_GLOB,       // Global table
-            SPECIAL_ENV,        // Environment table
-            SPECIAL_REG,        // Registry table
-        };
-
-        // Use these when calling ILuaBase::GetField or ILuaBase::SetField for example,
-        // instead of pushing the specified table
-        enum
-        {
-            INDEX_GLOBAL = -10002,  // Global table
-            INDEX_ENVIRONMENT,      // Environment table
-            INDEX_REGISTRY,         // Registry table
         };
     }
 }
