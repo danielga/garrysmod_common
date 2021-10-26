@@ -1,29 +1,13 @@
-newoption({
-	trigger = "workspace",
-	description = "Sets the path for the workspace directory",
-	value = "path for workspace directory"
-})
-
-newoption({
-	trigger = "macosx_sdkroot",
-	description = "Sets the path for the MacOSX SDK directory (the SDKROOT environment variable is a better alternative when running make)",
-	value = "path for MacOSX SDK directory"
-})
-
-newoption({
-	trigger = "sourcesdk",
-	description = "Sets the path to the SourceSDK directory (deprecated)",
-	value = "path to SourceSDK directory (deprecated)"
-})
-
 _GARRYSMOD_COMMON_DIRECTORY = path.getabsolute("..")
 
+include("options.lua")
+include("actions.lua")
+include("pkg_config.lua")
 include("../lua_shared")
 include("../detouring")
 include("../scanning")
 include("../helpers")
 include("../helpers_extended")
-include("pkg_config.lua")
 
 local function GetSourceSDKPath()
 	-- All of these are deprecated, sourcesdk-minimal is provided as a git submodule
@@ -81,7 +65,6 @@ function CreateWorkspace(config)
 		inlining("Auto")
 		rtti("On")
 		vectorextensions("SSE2")
-		pic("On")
 		targetdir("%{wks.location}/%{cfg.architecture}/%{cfg.buildcfg}")
 		debugdir("%{wks.location}/%{cfg.architecture}/%{cfg.buildcfg}")
 		objdir("!%{wks.location}/%{cfg.architecture}/%{cfg.buildcfg}/intermediate/%{prj.name}")
@@ -142,6 +125,7 @@ function CreateWorkspace(config)
 		filter("system:linux")
 			cdialect("GNU11")
 			cppdialect("GNU++17")
+			pic("On")
 			staticruntime("On")
 			defaultplatform("x86")
 			linkoptions("-Wl,--no-undefined")
@@ -149,6 +133,7 @@ function CreateWorkspace(config)
 		filter("system:macosx")
 			cdialect("GNU11")
 			cppdialect("GNU++17")
+			pic("On")
 			staticruntime("Off")
 			defaultplatform("x86_64")
 			buildoptions({"-mmacosx-version-min=10.7", "-stdlib=libc++"})
@@ -160,22 +145,11 @@ function CreateWorkspace(config)
 				linkoptions("-isysroot " .. macosx_sdkroot)
 			end
 
-		filter("files:**.cpp or **.cxx or **.cc")
+		filter("language:C++")
 			strictaliasing("Level3")
 
 		filter({})
 end
-
-newoption({
-	trigger = "source",
-	description = "Sets the path to the source directory",
-	value = "path to source directory"
-})
-
-newoption({
-	trigger = "autoinstall",
-	description = "Automatically installs the module to GarrysMod/garrysmod/bin (works as a flag and a receiver for a path)"
-})
 
 local function GetSteamLibraryDirectories()
 	local dir
@@ -309,7 +283,17 @@ function CreateProject(config)
 
 	local name = (is_server and "gmsv_" or "gmcl_") .. (config.name or _workspace.name)
 
-	if abi_compatible and os.istarget("windows") and _ACTION ~= "vs2015" and _ACTION ~= "vs2017" and _ACTION ~= "vs2019" then
+	local windows_actions = {
+		vs2015 = true,
+		vs2017 = true,
+		vs2019 = true,
+		install = true,
+		clean = true,
+		lint = true,
+		format = true,
+		["export-compile-commands"] = true
+	}
+	if abi_compatible and os.istarget("windows") and not windows_actions[_ACTION] then
 		error("The only supported compilation platforms for this project (" .. name .. ") on Windows are Visual Studio 2015, 2017 and 2019.")
 	end
 
