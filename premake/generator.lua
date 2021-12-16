@@ -152,7 +152,7 @@ function CreateWorkspace(config)
 			staticruntime("Off")
 			defaultplatform("x86_64")
 			buildoptions({"-mmacosx-version-min=10.7", "-stdlib=libc++"})
-			linkoptions({"-mmacosx-version-min=10.7", "-stdlib=libc++", "-Wl,--no-undefined"})
+			linkoptions({"-mmacosx-version-min=10.7", "-stdlib=libc++"})
 
 			local macosx_sdkroot = _OPTIONS["macosx_sdkroot"]
 			if macosx_sdkroot ~= nil then
