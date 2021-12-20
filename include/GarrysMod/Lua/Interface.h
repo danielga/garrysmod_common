@@ -79,16 +79,27 @@ struct lua_State
         #define LUA_FUNCTION_STATIC_DECLARE( FUNC ) \
             static int FUNC( lua_State *L )
 
-        #define LUA_FUNCTION_IMPLEMENT( FUNC ) \
+        #define LUA_FUNCTION_IMPLEMENT( FUNC )                                                  \
+            [[deprecated("Use LUA_FUNCTION_STATIC_MEMBER instead of LUA_FUNCTION_IMPLEMENT.")]] \
             static int FUNC##__Imp( GarrysMod::Lua::ILuaBase* LUA )
 
-        #define LUA_FUNCTION_WRAP( FUNC )                   \
-            LUA_FUNCTION_STATIC_DECLARE( FUNC )             \
-            {                                               \
-                GarrysMod::Lua::ILuaBase* LUA = L->luabase; \
-                LUA->SetState(L);                           \
-                return FUNC##__Imp( LUA );                  \
+        #define LUA_FUNCTION_WRAP( FUNC )                                                   \
+            [[deprecated("Use LUA_FUNCTION_STATIC_MEMBER instead of LUA_FUNCTION_WRAP.")]]  \
+            static int FUNC( lua_State *L )                                                 \
+            {                                                                               \
+                GarrysMod::Lua::ILuaBase* LUA = L->luabase;                                 \
+                LUA->SetState(L);                                                           \
+                return FUNC##__Imp( LUA );                                                  \
             }
+
+        #define LUA_FUNCTION_STATIC_MEMBER( FUNC )                  \
+            static int FUNC( lua_State* L )                         \
+            {                                                       \
+                GarrysMod::Lua::ILuaBase* LUA = L->luabase;         \
+                LUA->SetState(L);                                   \
+                return FUNC##__Imp( LUA );                          \
+            }                                                       \
+            static int FUNC##__Imp( GarrysMod::Lua::ILuaBase* LUA )
     #endif
 #endif
 
