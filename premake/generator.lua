@@ -8,6 +8,7 @@ include("../detouring")
 include("../scanning")
 include("../helpers")
 include("../helpers_extended")
+include("../goomod")
 
 local function GetSourceSDKPath()
 	-- All of these are deprecated, sourcesdk-minimal is provided as a git submodule
