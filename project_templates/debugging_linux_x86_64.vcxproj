@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="ReleaseWithSymbols|x86">
+      <Configuration>ReleaseWithSymbols</Configuration>
+      <Platform>x86</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x86">
+      <Configuration>Release</Configuration>
+      <Platform>x86</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="ReleaseWithSymbols|x64">
+      <Configuration>ReleaseWithSymbols</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{657338e1-4a28-4dde-877c-69c9e7bc79a2}</ProjectGuid>
+    <Keyword>Linux</Keyword>
+    <MinimumVisualStudioVersion>15.0</MinimumVisualStudioVersion>
+    <ApplicationType>Linux</ApplicationType>
+    <ApplicationTypeRevision>1.0</ApplicationTypeRevision>
+    <TargetLinuxPlatform>Generic</TargetLinuxPlatform>
+    <LinuxProjectType>{FC1A4D80-50E9-41DA-9192-61C0DBAA00D2}</LinuxProjectType>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)/Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Configuration">
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <ConfigurationType>Makefile</ConfigurationType>
+    <RemoteRootDir>~/projects</RemoteRootDir>
+    <RemoteProjectDir>$(RemoteRootDir)/$(ProjectName)</RemoteProjectDir>
+    <OutDir>$(ProjectDir)$(Platform)/$(Configuration)/</OutDir>
+    <IntDir>$(ProjectDir)$(Platform)/$(Configuration)/intermediate/</IntDir>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)/Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="Shared" />
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseWithSymbols|x86'">
+    <PremakeConfig>releasewithsymbols_x86</PremakeConfig>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
+    <PremakeConfig>release_x86</PremakeConfig>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseWithSymbols|x64'">
+    <PremakeConfig>releasewithsymbols_x86_64</PremakeConfig>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <PremakeConfig>release_x86_64</PremakeConfig>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Platform)'=='x86'">
+    <Architecture>x86</Architecture>
+    <BuildOutputFileName>$(ProjectName).dll</BuildOutputFileName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Platform)'=='x64'">
+    <Architecture>x86_64</Architecture>
+    <BuildOutputFileName>$(ProjectName)64.dll</BuildOutputFileName>
+  </PropertyGroup>
+  <ItemGroup>
+    <FilesToCopy Include="../../../source/**/*;../../../license.txt;../../../premake5.lua;../../../readme.md" />
+  </ItemGroup>
+  <PropertyGroup>
+    <RemoteCompileToolExeSuffix>-9</RemoteCompileToolExeSuffix>
+    <RemoteSRCDSDir>~/garrysmod/server_beta</RemoteSRCDSDir>
+    <ReadOnlyProject>true</ReadOnlyProject>
+    <AdditionalSourcesToCopyMapping>@(FilesToCopy->'%(FullPath):=$(RemoteProjectDir)/%(Identity)'->Replace('$(RemoteProjectDir)/../../../','$(RemoteProjectDir)/')->Replace('$(RemoteProjectDir)/..\..\..\','$(RemoteProjectDir)/')->Replace('\','/'))</AdditionalSourcesToCopyMapping>
+    <MakeCommand>make CC=gcc$(RemoteCompileToolExeSuffix) CXX=g++$(RemoteCompileToolExeSuffix) AR=gcc-ar$(RemoteCompileToolExeSuffix) NM=gcc-nm$(RemoteCompileToolExeSuffix) RANLIB=gcc-ranlib$(RemoteCompileToolExeSuffix) config=$(PremakeConfig) verbose=true</MakeCommand>
+    <RemoteGeneratedProjectDir>$(RemoteProjectDir)/projects/linux/gmake</RemoteGeneratedProjectDir>
+    <RemoteCCompileToolExe>gcc$(RemoteCompileToolExeSuffix)</RemoteCCompileToolExe>
+    <RemoteCppCompileToolExe>g++$(RemoteCompileToolExeSuffix)</RemoteCppCompileToolExe>
+    <RemoteBuildCommandLine>pushd projects/linux/gmake
+$(MakeCommand)
+popd</RemoteBuildCommandLine>
+    <RemoteCleanCommandLine>if [ -d projects/linux/gmake ]; then
+    pushd projects/linux/gmake
+    $(MakeCommand) clean
+    popd
+fi</RemoteCleanCommandLine>
+    <RemoteReBuildCommandLine>pushd projects/linux/gmake
+$(MakeCommand) clean
+$(MakeCommand)
+popd</RemoteReBuildCommandLine>
+    <RemoteDeployDir>$(RemoteSRCDSDir)/garrysmod/lua/bin</RemoteDeployDir>
+    <RemoteBuildOutputs>$(RemoteGeneratedProjectDir)/$(Architecture)/$(Configuration)/$(BuildOutputFileName)</RemoteBuildOutputs>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <CLanguageStandard>gnu11</CLanguageStandard>
+      <CppLanguageStandard>gnu++17</CppLanguageStandard>
+    </ClCompile>
+    <RemotePreBuildEvent>
+      <Command>if [ ! -f bootstrap.sh ]; then
+    wget -q -O "bootstrap.sh" "https://raw.githubusercontent.com/danielga/garrysmod_common/master/build/bootstrap.sh";
+    chmod +x "bootstrap.sh";
+fi
+if [ ! -f premake5 ]; then
+    wget -q -O "premake-5.0.0-beta1-linux.tar.gz" "https://github.com/danielga/garrysmod_common/releases/download/premake-build%2F5.0.0-beta1/premake-5.0.0-beta1-linux.tar.gz";
+    tar -xf "premake-5.0.0-beta1-linux.tar.gz";
+    rm -f "premake-5.0.0-beta1-linux.tar.gz";
+fi
+./bootstrap.sh
+./premake5 gmake --gmcommon="./garrysmod_common"</Command>
+    </RemotePreBuildEvent>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)/Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+</Project>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseWithSymbols|x86' Or '$(Configuration)|$(Platform)'=='Release|x86'">
+    <DebuggerFlavor>LinuxDebugger</DebuggerFlavor>
+    <RemoteDebuggerCommand>$(RemoteSRCDSDir)/bin/linux32/srcds</RemoteDebuggerCommand>
+    <RemoteDebuggerCommandArguments>-console -game garrysmod -ip localhost -port 27015 +gamemode sandbox +map gm_construct +maxplayers 2</RemoteDebuggerCommandArguments>
+    <RemoteDebuggerWorkingDirectory>$(RemoteSRCDSDir)</RemoteDebuggerWorkingDirectory>
+    <AdditionalDebuggerCommands>set environment LD_LIBRARY_PATH = ".:bin/linux32:$LD_LIBRARY_PATH"</AdditionalDebuggerCommands>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseWithSymbols|x64' Or '$(Configuration)|$(Platform)'=='Release|x64'">
+    <DebuggerFlavor>LinuxDebugger</DebuggerFlavor>
+    <RemoteDebuggerCommand>$(RemoteSRCDSDir)/bin/linux64/srcds</RemoteDebuggerCommand>
+    <RemoteDebuggerCommandArguments>-console -game garrysmod -ip localhost -port 27015 +gamemode sandbox +map gm_construct +maxplayers 2</RemoteDebuggerCommandArguments>
+    <RemoteDebuggerWorkingDirectory>$(RemoteSRCDSDir)</RemoteDebuggerWorkingDirectory>
+    <AdditionalDebuggerCommands>set environment LD_LIBRARY_PATH = ".:bin/linux64:$LD_LIBRARY_PATH"</AdditionalDebuggerCommands>
+  </PropertyGroup>
+</Project>
