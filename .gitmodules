@@ -7,3 +7,6 @@
 [submodule "sourcesdk-minimal"]
 	path = sourcesdk-minimal
 	url = https://github.com/danielga/sourcesdk-minimal.git
+[submodule "premake/premake-export-compile-commands"]
+	path = premake/premake-export-compile-commands
+url=https://github.com/danielga/premake-export-compile-commands.git
