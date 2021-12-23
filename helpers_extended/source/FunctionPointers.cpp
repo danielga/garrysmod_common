@@ -233,7 +233,7 @@ namespace FunctionPointers
 		if( func_pointer == nullptr )
 		{
 			SourceSDK::FactoryLoader engine_loader( "engine" );
-			func_pointer = ResolveSymbols<Steam3Server_t>(
+			func_pointer = ResolveSymbol<Steam3Server_t>(
 				engine_loader, Symbols::Steam3Server
 			);
 		}
