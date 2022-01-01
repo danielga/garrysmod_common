@@ -6,7 +6,7 @@ There are 2 pairs of files:
 - `debugging_linux.vcxproj` and `debugging_linux.vcxproj.user` for the main branch
 - `debugging_linux_x86_64.vcxproj` and `debugging_linux_x86_64.vcxproj.user` for the x86-64 branch
 
-One of these pairs (depending on the target branch of your module) should be copied to the directory with the premake5 generated project files for Visual Studio and manually added to your solution.
+One of these pairs (depending on the target branch of your module) should be copied to the directory with the premake5 generated project files for Visual Studio, both files renamed to `gmsv_[MODULE_NAME]_linux` (leaving their extensions intact) and manually added to your solution.
 
 ## Customisation
 

@@ -288,6 +288,7 @@ function CreateProject(config)
 		vs2015 = true,
 		vs2017 = true,
 		vs2019 = true,
+		vs2022 = true,
 		install = true,
 		clean = true,
 		lint = true,
@@ -295,7 +296,7 @@ function CreateProject(config)
 		["export-compile-commands"] = true
 	}
 	if abi_compatible and os.istarget("windows") and not windows_actions[_ACTION] then
-		error("The only supported compilation platforms for this project (" .. name .. ") on Windows are Visual Studio 2015, 2017 and 2019.")
+		error("The only supported compilation platforms for this project (" .. name .. ") on Windows are Visual Studio 2015, 2017, 2019 and 2022.")
 	end
 
 	if not startproject_defined then
