@@ -23,5 +23,6 @@ extern const std::vector<Symbol> net_sockets;
 extern const Symbol GMOD_GetNetSocket;
 extern const std::vector<Symbol> GModDataPack_AddOrUpdateFile;
 extern const Symbol Steam3Server;
+extern const std::vector<Symbol> GlobalVars;
 
 }

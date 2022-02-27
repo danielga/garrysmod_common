@@ -8,6 +8,7 @@ class CSteamGameServerAPIContext;
 class ICvar;
 class IServerGameDLL;
 class INetworkStringTableContainer;
+class CGlobalVars;
 
 namespace InterfacePointers
 {
@@ -20,6 +21,7 @@ namespace Client
 
 IFileSystem *FileSystem( );
 INetworkStringTableContainer *NetworkStringTableContainer( );
+CGlobalVars *GlobalVars( );
 
 }
 
@@ -28,6 +30,7 @@ namespace Server
 
 IFileSystem *FileSystem( );
 INetworkStringTableContainer *NetworkStringTableContainer( );
+CGlobalVars *GlobalVars( );
 
 }
 
@@ -92,6 +95,21 @@ inline INetworkStringTableContainer *NetworkStringTableContainerServer( )
 inline INetworkStringTableContainer *NetworkStringTableContainerClient( )
 {
 	return Internal::Client::NetworkStringTableContainer( );
+}
+
+inline CGlobalVars *GlobalVars( )
+{
+
+#if IS_SERVERSIDE
+
+	return Internal::Server::GlobalVars( );
+
+#else
+
+	return Internal::Client::GlobalVars( );
+
+#endif
+
 }
 
 }

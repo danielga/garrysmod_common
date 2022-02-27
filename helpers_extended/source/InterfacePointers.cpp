@@ -6,6 +6,16 @@
 
 #include <scanning/symbolfinder.hpp>
 
+class IPlayerInfo;
+class edict_t;
+
+class IPlayerInfoManager
+{
+public:
+	virtual IPlayerInfo *GetPlayerInfo( edict_t *pEdict ) = 0;
+	virtual CGlobalVars *GetGlobalVars( ) = 0;
+};
+
 namespace InterfacePointers
 {
 	static SymbolFinder symbol_finder;
@@ -17,6 +27,7 @@ namespace InterfacePointers
 	static const char servergamedll_name[] = "ServerGameDLL009";
 	static const char networkstringtableserver_name[] = "VEngineServerStringTable001";
 	static const char networkstringtableclient_name[] = "VEngineClientStringTable001";
+	static const char playerinfomanager_name[] = "PlayerInfoManager002";
 
 	template<class T>
 	static inline T *ResolveSymbol(
@@ -96,6 +107,22 @@ namespace InterfacePointers
 
 				return iface_pointer;
 			}
+
+			CGlobalVars *GlobalVars( )
+			{
+				static CGlobalVars *iface_pointer = nullptr;
+				if( iface_pointer == nullptr )
+				{
+					SourceSDK::FactoryLoader client_loader( "client" );
+					auto pointer = ResolveSymbols<CGlobalVars *>(
+						client_loader, Symbols::GlobalVars
+					);
+					if( pointer != nullptr )
+						iface_pointer = *pointer;
+				}
+
+				return iface_pointer;
+			}
 		}
 
 		namespace Server
@@ -145,6 +172,22 @@ namespace InterfacePointers
 					iface_pointer = engine_loader.GetInterface<INetworkStringTableContainer>(
 						networkstringtableserver_name
 					);
+				}
+
+				return iface_pointer;
+			}
+
+			CGlobalVars *GlobalVars( )
+			{
+				static CGlobalVars *iface_pointer = nullptr;
+				if( iface_pointer == nullptr )
+				{
+					SourceSDK::FactoryLoader server_loader( "server" );
+					auto player_info_manager = server_loader.GetInterface<IPlayerInfoManager>(
+						playerinfomanager_name
+					);
+					if( player_info_manager != nullptr )
+						iface_pointer = player_info_manager->GetGlobalVars( );
 				}
 
 				return iface_pointer;
