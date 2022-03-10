@@ -102,7 +102,7 @@ jobs:
   displayName: macOS
   pool:
     name: Azure Pipelines
-    vmImage: macOS-10.15
+    vmImage: macOS-11
   timeoutInMinutes: 10
   variables:
     BOOTSTRAP_URL: https://raw.githubusercontent.com/danielga/garrysmod_common/master/build/bootstrap.sh
@@ -123,7 +123,7 @@ jobs:
   - bash: 'curl -s -L "$BOOTSTRAP_URL" | bash'
     displayName: Bootstrap
   - bash: |
-      sudo xcode-select -s "/Applications/Xcode_11.4.1.app/Contents/Developer"
+      sudo xcode-select -s "/Applications/Xcode_11.7.app/Contents/Developer"
       $BUILD_SCRIPT
     displayName: Build
   - task: CopyFiles@2
