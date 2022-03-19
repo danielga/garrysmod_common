@@ -1,5 +1,5 @@
 variables:
-  MODULE_NAME: module name here
+  MODULE_NAME: {MODULE NAME HERE}
   DEPENDENCIES: $(System.DefaultWorkingDirectory)/dependencies
   GARRYSMOD_COMMON: $(System.DefaultWorkingDirectory)/dependencies/garrysmod_common
   GARRYSMOD_COMMON_BRANCH: master
@@ -159,7 +159,7 @@ jobs:
   - task: GitHubRelease@1
     displayName: 'Publish GitHub release $(build.sourceBranchName)'
     inputs:
-      gitHubConnection: 'name of your github connection here'
+      gitHubConnection: '{NAME OF YOUR GITHUB SERVICE CONNECTION HERE, NEEDS TO BE GIVEN ACCESS IN YOUR AZURE DASHBOARD}'
       releaseNotesSource: inline
       assets: '$(System.ArtifactsDirectory)/**'
       addChangeLog: false

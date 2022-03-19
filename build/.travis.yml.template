@@ -4,7 +4,7 @@ git:
   depth: 1
 env:
   global:
-    - MODULE_NAME="module name here"
+    - MODULE_NAME="{MODULE NAME HERE}"
       REPOSITORY_DIR="$TRAVIS_BUILD_DIR"
       DEPENDENCIES="$TRAVIS_BUILD_DIR/dependencies"
       GARRYSMOD_COMMON="$TRAVIS_BUILD_DIR/dependencies/garrysmod_common"
@@ -33,7 +33,7 @@ matrix:
       env:
         - PREMAKE5="$TRAVIS_BUILD_DIR/dependencies/linux/premake-core/premake5"
           PROJECT_OS=linux
-          PREMAKE5_URL="https://github.com/premake/premake-core/releases/download/v5.0.0-alpha15/premake-5.0.0-alpha15-linux.tar.gz"
+          PREMAKE5_URL="https://github.com/danielga/garrysmod_common/releases/download/premake-build%2F5.0.0-beta1/premake-5.0.0-beta1-linux.tar.gz"
       before_install:
         - export CC=gcc-9
           export CXX=g++-9
@@ -45,7 +45,7 @@ matrix:
       env:
         - PREMAKE5="$TRAVIS_BUILD_DIR/dependencies/macosx/premake-core/premake5"
           PROJECT_OS=macosx
-          PREMAKE5_URL="https://github.com/premake/premake-core/releases/download/v5.0.0-alpha15/premake-5.0.0-alpha15-macosx.tar.gz"
+          PREMAKE5_URL="https://github.com/danielga/garrysmod_common/releases/download/premake-build%2F5.0.0-beta1/premake-5.0.0-beta1-macosx.tar.gz"
           MACOSX_SDK_URL="https://github.com/phracker/MacOSX-SDKs/releases/download/10.15/MacOSX10.7.sdk.tar.xz"
           MACOSX_SDK_DIRECTORY="$TRAVIS_BUILD_DIR/dependencies/macosx/MacOSX10.7.sdk"
           SDKROOT="$TRAVIS_BUILD_DIR/dependencies/macosx/MacOSX10.7.sdk"
@@ -65,4 +65,4 @@ deploy:
   on:
     tags: true
   api_key:
-    secure: encrypted api key for travis-ci here (https://docs.travis-ci.com/user/encryption-keys)
+    secure: {ENCRYPTED API KEY FOR TRAVIS-CI HERE https://docs.travis-ci.com/user/encryption-keys}

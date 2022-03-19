@@ -1,15 +1,15 @@
 version: '{build}'
 skip_non_tags: true
-image: Visual Studio 2019
+image: Visual Studio 2022
 clone_depth: 1
 environment:
-  MODULE_NAME: module name here
+  MODULE_NAME: {MODULE NAME HERE}
   REPOSITORY_DIR: $(APPVEYOR_BUILD_FOLDER)
   DEPENDENCIES: $(APPVEYOR_BUILD_FOLDER)/dependencies
   GARRYSMOD_COMMON: $(APPVEYOR_BUILD_FOLDER)/dependencies/garrysmod_common
   GARRYSMOD_COMMON_REPOSITORY: https://github.com/danielga/garrysmod_common.git
   GARRYSMOD_COMMON_BRANCH: master
-  PREMAKE5_URL: https://github.com/premake/premake-core/releases/download/v5.0.0-alpha15/premake-5.0.0-alpha15-windows.zip
+  PREMAKE5_URL: https://github.com/danielga/garrysmod_common/releases/download/premake-build%2F5.0.0-beta1/premake-5.0.0-beta1-windows.zip
   PREMAKE5: $(APPVEYOR_BUILD_FOLDER)/dependencies/windows/premake-core/premake5.exe
   BUILD_SCRIPT: $(APPVEYOR_BUILD_FOLDER)/dependencies/garrysmod_common/build/build.ps1
   BOOTSTRAP_URL: https://raw.githubusercontent.com/danielga/garrysmod_common/master/build/bootstrap.ps1
@@ -19,7 +19,7 @@ environment:
   TARGET_ARCHITECTURE: x86
   TARGET_ARCHITECTURE_64: x86_64
   PROJECT_GENERATOR_VERSION: 2
-  COMPILER_PLATFORM: vs2019
+  COMPILER_PLATFORM: vs2022
 install:
 - ps: 'Invoke-Expression ((New-Object System.Net.WebClient).DownloadString("$env:BOOTSTRAP_URL"))'
 cache:
@@ -40,6 +40,6 @@ deploy:
 - provider: GitHub
   tag: $(APPVEYOR_REPO_TAG_NAME)
   auth_token:
-    secure: encrypted api key for appveyor here (https://ci.appveyor.com/tools/encrypt)
+    secure: {ENCRYPTED API KEY FOR APPVEYOR HERE https://ci.appveyor.com/tools/encrypt}
   artifact: gmsv_$(MODULE_NAME)_$(TARGET_OS).dll,gmcl_$(MODULE_NAME)_$(TARGET_OS).dll,gmsv_$(MODULE_NAME)_$(TARGET_OS_64).dll,gmcl_$(MODULE_NAME)_$(TARGET_OS_64).dll
   force_update: true
