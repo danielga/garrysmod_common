@@ -146,7 +146,7 @@ function CreateWorkspace(config)
 				linkoptions("-isysroot " .. macosx_sdkroot)
 			end
 
-		filter("language:C++")
+		filter({"language:C++", "system:windows or linux"})
 			strictaliasing("Level3")
 
 		filter({})
