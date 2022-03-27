@@ -407,6 +407,8 @@ namespace Symbols
 
 #endif
 
+	};
+
 #endif
 
 }
