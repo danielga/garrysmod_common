@@ -29,9 +29,30 @@ namespace GarrysMod
 				ref = lua->ReferenceCreate( );
 			}
 
+			AutoReference( const AutoReference & ) = delete;
+
+			AutoReference( AutoReference &&rhs ) noexcept
+			{
+				lua = rhs.lua;
+				ref = rhs.ref;
+				rhs.lua = nullptr;
+				rhs.ref = -2;
+			}
+
 			~AutoReference( )
 			{
 				Free( );
+			}
+
+			AutoReference &operator=( const AutoReference & ) = delete;
+
+			AutoReference &operator=( AutoReference &&rhs ) noexcept
+			{
+				lua = rhs.lua;
+				ref = rhs.ref;
+				rhs.lua = nullptr;
+				rhs.ref = -2;
+				return *this;
 			}
 
 			bool IsValid( ) const
@@ -86,7 +107,7 @@ namespace GarrysMod
 				return true;
 			}
 
-			bool Push( )
+			bool Push( ) const
 			{
 				if( !IsValid( ) )
 					return false;
