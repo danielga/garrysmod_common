@@ -31,6 +31,7 @@ class GModDataPack;
 struct netsocket_t;
 class LuaFile;
 class CSteam3Server;
+struct lua_State;
 
 namespace FunctionPointers
 {
@@ -67,5 +68,8 @@ GModDataPack_AddOrUpdateFile_t GModDataPack_AddOrUpdateFile( );
 
 typedef CSteam3Server *( *Steam3Server_t )( );
 Steam3Server_t Steam3Server( );
+
+typedef int ( *AdvancedLuaErrorReporter_t )( lua_State *L );
+AdvancedLuaErrorReporter_t AdvancedLuaErrorReporter( );
 
 }

@@ -240,4 +240,18 @@ namespace FunctionPointers
 
 		return func_pointer;
 	}
+
+	AdvancedLuaErrorReporter_t AdvancedLuaErrorReporter( )
+	{
+		static AdvancedLuaErrorReporter_t func_pointer = nullptr;
+		if( func_pointer == nullptr )
+		{
+			SourceSDK::FactoryLoader lua_shared_loader( "lua_shared" );
+			func_pointer = ResolveSymbols<AdvancedLuaErrorReporter_t>(
+				lua_shared_loader, Symbols::AdvancedLuaErrorReporter
+			);
+		}
+
+		return func_pointer;
+	}
 }

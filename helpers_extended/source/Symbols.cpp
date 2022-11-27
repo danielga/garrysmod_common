@@ -75,6 +75,8 @@ namespace Symbols
 		Symbol::FromSignature( "\x2A\x2A\x2A\x2A\x41\x8B\xD4\x48\x8D\x4C\x24\x2A\xE8\x2A\x2A\x2A\x2A\x41\x8B\xD4\x48" )
 	};
 
+	const std::vector<Symbol> AdvancedLuaErrorReporter = { Symbol::FromName( "?AdvancedLuaErrorReporter@@YAHPEAUlua_State@@@Z" ) };
+
 #elif defined ARCHITECTURE_X86
 
 	const std::vector<Symbol> CBasePlayer_HandleClientLuaError = {
@@ -154,6 +156,11 @@ namespace Symbols
 
 	const std::vector<Symbol> GlobalVars = {
 		Symbol::FromSignature( "\x2A\x2A\x2A\x2A\x8D\x45\x2A\x6A\x01\x50\xE8\x2A\x2A\x2A\x2A\x8D\x45" )
+	};
+
+	const std::vector<Symbol> AdvancedLuaErrorReporter = {
+		Symbol::FromName( "?AdvancedLuaErrorReporter@@YAHPAUlua_State@@@Z" ),
+		Symbol::FromSignature( "\x55\x8B\xEC\x8B\x0D\x2A\x2A\x2A\x2A\x83\xEC\x4C" )
 	};
 
 #endif
@@ -327,6 +334,18 @@ namespace Symbols
 
 	};
 
+	const std::vector<Symbol> AdvancedLuaErrorReporter = {
+
+#if defined ARCHITECTURE_X86
+
+		Symbol::FromSignature( "\x55\x89\xE5\x57\x56\x53\x83\xEC\x7C\x8B\x15\x2A\x2A\x2A\x2A\x8B\x7D\x2A" ),
+
+#endif
+
+		Symbol::FromName( "_Z24AdvancedLuaErrorReporterP9lua_State" )
+
+	};
+
 #elif defined SYSTEM_MACOSX
 
 	const std::vector<Symbol> CBasePlayer_HandleClientLuaError = {
@@ -408,6 +427,8 @@ namespace Symbols
 #endif
 
 	};
+
+	const std::vector<Symbol> AdvancedLuaErrorReporter = { Symbol::FromName( "_Z24AdvancedLuaErrorReporterP9lua_State" ) };
 
 #endif
 
