@@ -5,7 +5,7 @@ function IncludeHelpersExtended()
 
 	local _project = project()
 
-	sysincludedirs(current_dir .. "/include")
+	externalincludedirs(current_dir .. "/include")
 	-- GCC requires manual ordering of links, where libraries on the left depend on libraries on the right
 	-- Since helpers_extended depends on helpers and scanning, the latter must appear after
 	links({"helpers_extended", "helpers", "scanning"})

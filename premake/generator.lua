@@ -337,7 +337,7 @@ function CreateProject(config)
 			"GMOD_ALLOW_LIGHTUSERDATA",
 			"GMOD_MODULE_NAME=\"" .. _workspace.name .. "\""
 		})
-		sysincludedirs(_GARRYSMOD_COMMON_DIRECTORY .. "/include")
+		externalincludedirs(_GARRYSMOD_COMMON_DIRECTORY .. "/include")
 		includedirs(_project.directory)
 
 		if not manual_files then

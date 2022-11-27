@@ -5,7 +5,7 @@ function IncludeHelpers()
 
 	local _project = project()
 
-	sysincludedirs(current_dir .. "/include")
+	externalincludedirs(current_dir .. "/include")
 	links("helpers")
 
 	if refcount == 1 then
