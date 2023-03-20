@@ -104,20 +104,35 @@ namespace FunctionPointers
 		return func_pointer;
 	}
 
-	CBaseClientState_ConnectionStart_t CBaseClientState_ConnectionStart( )
+	CBaseClientState_ConnectionStart_t CBaseClientState_ConnectionStart()
 	{
 		static CBaseClientState_ConnectionStart_t func_pointer = nullptr;
-		if( func_pointer == nullptr )
+		if (func_pointer == nullptr)
 		{
-			SourceSDK::FactoryLoader engine_loader( "engine" );
+			SourceSDK::FactoryLoader engine_loader("engine");
 			// we use a starting point for sigscan because, on Linux, CBaseClient::ConnectionStart
 			// and CBaseClientState::ConnectionStart have the same signature
 			// this code expects CBaseClient::ConnectionStart to appear before
 			// CBaseClientState::ConnectionStart
 			func_pointer = ResolveSymbols<CBaseClientState_ConnectionStart_t>(
 				engine_loader, Symbols::CBaseClientState_ConnectionStart,
-				reinterpret_cast<const uint8_t *>( CBaseClient_ConnectionStart( ) ) + 16
-			);
+				reinterpret_cast<const uint8_t*>(CBaseClient_ConnectionStart()) + 16
+				);
+		}
+
+		return func_pointer;
+	}
+
+	CLC_CmdKeyValues_Constructor_t CLC_CmdKeyValues_Constructor()
+	{
+		static CLC_CmdKeyValues_Constructor_t func_pointer = nullptr;
+		if (func_pointer == nullptr)
+		{
+			SourceSDK::FactoryLoader engine_loader("engine");
+			func_pointer = ResolveSymbols<CLC_CmdKeyValues_Constructor_t>(
+				engine_loader, Symbols::CLC_CmdKeyValues_Constructor,
+				reinterpret_cast<const uint8_t*>(CBaseClient_ConnectionStart()) + 16
+				);
 		}
 
 		return func_pointer;
