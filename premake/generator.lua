@@ -1,5 +1,6 @@
 _GARRYSMOD_COMMON_DIRECTORY = path.getabsolute("..")
 
+include("version_checking.lua")
 include("options.lua")
 include("actions.lua")
 include("pkg_config.lua")

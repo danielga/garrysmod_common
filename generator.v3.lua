@@ -3,7 +3,7 @@
 
 assert(_ACTION ~= nil, "no action (vs20**, gmake or xcode for example) provided!")
 
-include("premake/version.lua")
+include("premake/generator_version.lua")
 
 local default_project_generator_version = 3
 
