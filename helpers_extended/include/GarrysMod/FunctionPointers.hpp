@@ -48,11 +48,11 @@ CNetChan_ProcessMessages_t CNetChan_ProcessMessages( );
 typedef void ( GMCOMMON_CALLING_CONVENTION *CBaseClient_ConnectionStart_t )( CBaseClient *client, INetChannel *netchan );
 CBaseClient_ConnectionStart_t CBaseClient_ConnectionStart( );
 
-typedef void (GMCOMMON_CALLING_CONVENTION* CBaseClientState_ConnectionStart_t)(CBaseClientState* clientstate, INetChannel* netchan);
-CBaseClientState_ConnectionStart_t CBaseClientState_ConnectionStart();
+typedef void ( GMCOMMON_CALLING_CONVENTION *CBaseClientState_ConnectionStart_t )( CBaseClientState *clientstate, INetChannel *netchan );
+CBaseClientState_ConnectionStart_t CBaseClientState_ConnectionStart( );
 
-typedef void (GMCOMMON_CALLING_CONVENTION* CLC_CmdKeyValues_Constructor_t)(CBaseClientState* clientstate, INetChannel* netchan);
-CLC_CmdKeyValues_Constructor_t CLC_CmdKeyValues_Constructor();
+typedef void ( GMCOMMON_CALLING_CONVENTION *CLC_CmdKeyValues_Constructor_t )( CBaseClientState *clientstate, INetChannel *netchan );
+CLC_CmdKeyValues_Constructor_t CLC_CmdKeyValues_Constructor( );
 
 typedef void ( GMCOMMON_CALLING_CONVENTION *CBaseServer_RecalculateTags_t )( CBaseServer *server );
 CBaseServer_RecalculateTags_t CBaseServer_RecalculateTags( );
