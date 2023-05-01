@@ -6,6 +6,7 @@ variables:
   GARRYSMOD_COMMON_REPOSITORY: https://github.com/danielga/garrysmod_common.git
   PROJECT_GENERATOR_VERSION: 2
   REPOSITORY_DIR: $(System.DefaultWorkingDirectory)
+  DISABLE_X86_64_BUILD: false
 trigger:
   batch: true
   branches:
@@ -24,15 +25,15 @@ jobs:
   displayName: Windows
   pool:
     name: Azure Pipelines
-    vmImage: windows-2019
+    vmImage: windows-2022
   timeoutInMinutes: 10
   variables:
     BOOTSTRAP_URL: https://raw.githubusercontent.com/danielga/garrysmod_common/master/build/bootstrap.ps1
     BUILD_SCRIPT: $(System.DefaultWorkingDirectory)/dependencies/garrysmod_common/build/build.ps1
-    COMPILER_PLATFORM: vs2019
+    COMPILER_PLATFORM: vs2022
     PROJECT_OS: windows
     PREMAKE5: $(System.DefaultWorkingDirectory)/dependencies/windows/premake-core/premake5.exe
-    PREMAKE5_URL: https://github.com/danielga/garrysmod_common/releases/download/premake-build%2F5.0.0-beta1/premake-5.0.0-beta1-windows.zip
+    PREMAKE5_URL: https://github.com/danielga/garrysmod_common/releases/download/premake-build%2F5.0.0-beta2/premake-5.0.0-beta2-windows.zip
   steps:
   - checkout: self
     clean: true
@@ -45,7 +46,7 @@ jobs:
   - task: CopyFiles@2
     displayName: 'Copy files to $(Build.ArtifactStagingDirectory)'
     inputs:
-      SourceFolder: '$(System.DefaultWorkingDirectory)/projects/windows/vs2019'
+      SourceFolder: '$(System.DefaultWorkingDirectory)/projects/windows/vs2022'
       Contents: '*/Release/*.dll'
       TargetFolder: '$(Build.ArtifactStagingDirectory)'
       CleanTargetFolder: true
@@ -59,7 +60,7 @@ jobs:
   displayName: Linux
   pool:
     name: Azure Pipelines
-    vmImage: ubuntu-latest
+    vmImage: ubuntu-22.04
   container:
     image: registry.gitlab.steamos.cloud/steamrt/scout/sdk:latest
     options: -v /home
@@ -70,7 +71,7 @@ jobs:
     COMPILER_PLATFORM: gmake
     PREMAKE5: $(System.DefaultWorkingDirectory)/dependencies/linux/premake-core/premake5
     PROJECT_OS: linux
-    PREMAKE5_URL: https://github.com/danielga/garrysmod_common/releases/download/premake-build%2F5.0.0-beta1/premake-5.0.0-beta1-linux.tar.gz
+    PREMAKE5_URL: https://github.com/danielga/garrysmod_common/releases/download/premake-build%2F5.0.0-beta2/premake-5.0.0-beta2-linux.tar.gz
     CC: gcc-9
     CXX: g++-9
     AR: gcc-ar-9
@@ -110,8 +111,8 @@ jobs:
     COMPILER_PLATFORM: gmake
     PREMAKE5: $(System.DefaultWorkingDirectory)/dependencies/macosx/premake-core/premake5
     PROJECT_OS: macosx
-    PREMAKE5_URL: https://github.com/danielga/garrysmod_common/releases/download/premake-build%2F5.0.0-beta1/premake-5.0.0-beta1-macosx.tar.gz
-    MACOSX_SDK_URL: https://github.com/phracker/MacOSX-SDKs/releases/download/10.15/MacOSX10.7.sdk.tar.xz
+    PREMAKE5_URL: https://github.com/danielga/garrysmod_common/releases/download/premake-build%2F5.0.0-beta2/premake-5.0.0-beta2-macosx.tar.gz
+    MACOSX_SDK_URL: https://github.com/phracker/MacOSX-SDKs/releases/download/11.3/MacOSX10.7.sdk.tar.xz
     MACOSX_SDK_DIRECTORY: $(System.DefaultWorkingDirectory)/dependencies/macosx/MacOSX10.7.sdk
     SDKROOT: $(System.DefaultWorkingDirectory)/dependencies/macosx/MacOSX10.7.sdk
     AR: ar
@@ -143,7 +144,7 @@ jobs:
   displayName: Publish to GitHub Releases
   pool:
     name: Azure Pipelines
-    vmImage: ubuntu-latest
+    vmImage: ubuntu-22.04
   timeoutInMinutes: 5
   dependsOn:
     - windows
