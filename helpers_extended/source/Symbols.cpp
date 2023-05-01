@@ -35,6 +35,8 @@ namespace Symbols
 		Symbol::FromName( "?ConnectionStart@CBaseClientState@@UEAAXPEAVINetChannel@@@Z" )
 	};
 
+	const std::vector<Symbol> CLC_CmdKeyValues_Constructor = { };
+
 	const std::vector<Symbol> CBaseServer_RecalculateTags = {
 		Symbol::FromName( "?RecalculateTags@CBaseServer@@QEAAXXZ" )
 	};
@@ -239,6 +241,17 @@ namespace Symbols
 
 	};
 
+	const std::vector<Symbol> CLC_CmdKeyValues_Constructor = {
+		Symbol::FromName( "_ZN16CLC_CmdKeyValuesC1EP9KeyValues" ),
+
+#if defined ARCHITECTURE_X86
+
+		Symbol::FromSignature( "\x55\x89\xE5\x8B\x45\x08\x8B\x55\x0C\xC6\x40\x04\x01" )
+
+#endif
+
+	};
+
 	const std::vector<Symbol> CBaseServer_RecalculateTags = {
 		Symbol::FromName( "_ZN11CBaseServer15RecalculateTagsEv" ),
 
@@ -381,6 +394,10 @@ namespace Symbols
 
 	const std::vector<Symbol> CBaseClientState_ConnectionStart = {
 		Symbol::FromName( "_ZN16CBaseClientState15ConnectionStartEP11INetChannel" )
+	};
+
+	const std::vector<Symbol> CLC_CmdKeyValues_Constructor = {
+		Symbol::FromName( "_ZN16CLC_CmdKeyValuesC1EP9KeyValues" )
 	};
 
 	const std::vector<Symbol> CBaseServer_RecalculateTags = {
