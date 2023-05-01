@@ -37,6 +37,10 @@ namespace Symbols
 
 	const std::vector<Symbol> CLC_CmdKeyValues_Constructor = { };
 
+	const std::vector<Symbol> SVC_CreateStringTable_Constructor = { };
+
+	const std::vector<Symbol> SVC_CmdKeyValues_Constructor = { };
+
 	const std::vector<Symbol> CBaseServer_RecalculateTags = {
 		Symbol::FromName( "?RecalculateTags@CBaseServer@@QEAAXXZ" )
 	};
@@ -114,7 +118,15 @@ namespace Symbols
 	};
 
 	const std::vector<Symbol> CLC_CmdKeyValues_Constructor = {
-		Symbol::FromSignature( "\x55\x8b\xec\x8b\x2A\x2A\x89\x2A\x2A\x8b\xc1\xc6\x2A\x2A\x2A\xc7\x41\x08\x2A\x2A\x2A\x2A\xc7\x01\x2A\x2A\x2A\x2A\x5d\xc2\x04\x00" )
+		Symbol::FromSignature( "\x55\x8B\xEC\x8B\x45\x2A\x89\x41\x2A\x8B\xC1\xC6\x41\x2A\x01\xC7\x41\x2A\x00\x00\x00\x00\xC7\x01\x2A\x2A\x2A\x2A\x5D\xC2\x04\x00" )
+	};
+
+	const std::vector<Symbol> SVC_CreateStringTable_Constructor = {
+		Symbol::FromSignature( "\x56\x8B\xF1\x8D\x4E\x2A\xC6\x46\x2A\x01" )
+	};
+
+	const std::vector<Symbol> SVC_CmdKeyValues_Constructor = {
+		Symbol::FromSignature( "\x55\x8B\xEC\x8B\x45\x2A\x89\x41\x2A\x8B\xC1\xC6\x41\x2A\x01\xC7\x41\x2A\x00\x00\x00\x00\xC7\x01\x2A\x2A\x2A\x2A\x5D\xC2\x04\x00" )
 	};
 
 	const std::vector<Symbol> CBaseServer_RecalculateTags = {
@@ -246,7 +258,29 @@ namespace Symbols
 
 #if defined ARCHITECTURE_X86
 
-		Symbol::FromSignature( "\x55\x89\xE5\x8B\x45\x08\x8B\x55\x0C\xC6\x40\x04\x01" )
+		Symbol::FromSignature( "\x55\x89\xE5\x8B\x45\x2A\x8B\x55\x2A\xC6\x40\x2A\x01\xC7\x40\x2A\x00\x00\x00\x00\x89\x50\x2A\xC7\x00\x2A\x2A\x2A\x2A\x5D\xC3" )
+
+#endif
+
+	};
+
+	const std::vector<Symbol> SVC_CreateStringTable_Constructor = {
+		Symbol::FromName( "_ZN21SVC_CreateStringTableC1Ev" ),
+
+#if defined ARCHITECTURE_X86
+
+		Symbol::FromSignature( "\x55\x89\xE5\x53\x83\xEC\x14\x8B\x5D\x2A\x8D\x43\x2A\xC6\x43\x2A\x01" )
+
+#endif
+
+	};
+
+	const std::vector<Symbol> SVC_CmdKeyValues_Constructor = {
+		Symbol::FromName( "_ZN16SVC_CmdKeyValuesC1EP9KeyValues" ),
+
+#if defined ARCHITECTURE_X86
+
+		Symbol::FromSignature( "\x55\x89\xE5\x8B\x45\x2A\x8B\x55\x2A\xC6\x40\x2A\x01\xC7\x40\x2A\x00\x00\x00\x00\x89\x50\x2A\xC7\x00\x2A\x2A\x2A\x2A\x5D\xC3" )
 
 #endif
 
@@ -398,6 +432,14 @@ namespace Symbols
 
 	const std::vector<Symbol> CLC_CmdKeyValues_Constructor = {
 		Symbol::FromName( "_ZN16CLC_CmdKeyValuesC1EP9KeyValues" )
+	};
+
+	const std::vector<Symbol> SVC_CreateStringTable_Constructor = {
+		Symbol::FromName( "_ZN21SVC_CreateStringTableC1Ev" )
+	};
+
+	const std::vector<Symbol> SVC_CmdKeyValues_Constructor = {
+		Symbol::FromName( "_ZN16SVC_CmdKeyValuesC1EP9KeyValues" )
 	};
 
 	const std::vector<Symbol> CBaseServer_RecalculateTags = {
