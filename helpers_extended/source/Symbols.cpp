@@ -35,6 +35,8 @@ namespace Symbols
 		Symbol::FromName( "?ConnectionStart@CBaseClientState@@UEAAXPEAVINetChannel@@@Z" )
 	};
 
+	const std::vector<Symbol> CLC_CmdKeyValues_Constructor = { };
+
 	const std::vector<Symbol> CBaseServer_RecalculateTags = {
 		Symbol::FromName( "?RecalculateTags@CBaseServer@@QEAAXXZ" )
 	};
@@ -103,12 +105,16 @@ namespace Symbols
 
 	const std::vector<Symbol> CBaseClient_ConnectionStart = {
 		Symbol::FromName( "?ConnectionStart@CBaseClient@@UAEXPAVINetChannel@@@Z" ),
-		Symbol::FromSignature( "\x55\x8B\xEC\x51\x53\x56\x57\x8B\xD9\x6A" )
+		Symbol::FromSignature( "\x55\x8B\xEC\x53\x56\x57\x6A\x1C\x8B\xF1\x2A\x2A\x2A\x2A\x2A\x8B\xD0\x83\xC4\x04\x85\xD2\x2A\x2A\xC7" )
 	};
 
 	const std::vector<Symbol> CBaseClientState_ConnectionStart = {
 		Symbol::FromName( "?ConnectionStart@CBaseClientState@@UAEXPAVINetChannel@@@Z" ),
-		Symbol::FromSignature( "\x55\x8B\xEC\x83\xEC\x08\x53\x56\x57\x6A" )
+		Symbol::FromSignature( "\x55\x8B\xEC\x53\x56\x57\x6A\x1C\x8B\xF9\x2A\x2A\x2A\x2A\x2A\x8B\xC8\x83\xC4\x04\x85\xC9\x2A\x2A\xC7\x41\x08\x00" )
+	};
+
+	const std::vector<Symbol> CLC_CmdKeyValues_Constructor = {
+		Symbol::FromSignature( "\x55\x8b\xec\x8b\x2A\x2A\x89\x2A\x2A\x8b\xc1\xc6\x2A\x2A\x2A\xc7\x41\x08\x2A\x2A\x2A\x2A\xc7\x01\x2A\x2A\x2A\x2A\x5d\xc2\x04\x00" )
 	};
 
 	const std::vector<Symbol> CBaseServer_RecalculateTags = {
@@ -230,6 +236,17 @@ namespace Symbols
 #if defined ARCHITECTURE_X86
 
 		Symbol::FromSignature( "\x55\x89\xE5\x57\x56\x53\x83\xEC\x1C\x8B" )
+
+#endif
+
+	};
+
+	const std::vector<Symbol> CLC_CmdKeyValues_Constructor = {
+		Symbol::FromName( "_ZN16CLC_CmdKeyValuesC1EP9KeyValues" ),
+
+#if defined ARCHITECTURE_X86
+
+		Symbol::FromSignature( "\x55\x89\xE5\x8B\x45\x08\x8B\x55\x0C\xC6\x40\x04\x01" )
 
 #endif
 
@@ -377,6 +394,10 @@ namespace Symbols
 
 	const std::vector<Symbol> CBaseClientState_ConnectionStart = {
 		Symbol::FromName( "_ZN16CBaseClientState15ConnectionStartEP11INetChannel" )
+	};
+
+	const std::vector<Symbol> CLC_CmdKeyValues_Constructor = {
+		Symbol::FromName( "_ZN16CLC_CmdKeyValuesC1EP9KeyValues" )
 	};
 
 	const std::vector<Symbol> CBaseServer_RecalculateTags = {

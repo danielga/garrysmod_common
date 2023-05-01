@@ -123,6 +123,21 @@ namespace FunctionPointers
 		return func_pointer;
 	}
 
+	CLC_CmdKeyValues_Constructor_t CLC_CmdKeyValues_Constructor( )
+	{
+		static CLC_CmdKeyValues_Constructor_t func_pointer = nullptr;
+		if( func_pointer == nullptr )
+		{
+			SourceSDK::FactoryLoader engine_loader( "engine" );
+			func_pointer = ResolveSymbols<CLC_CmdKeyValues_Constructor_t>(
+				engine_loader, Symbols::CLC_CmdKeyValues_Constructor,
+				reinterpret_cast<const uint8_t *>( CBaseClient_ConnectionStart( ) ) + 16
+			);
+		}
+
+		return func_pointer;
+	}
+
 	CBaseServer_RecalculateTags_t CBaseServer_RecalculateTags( )
 	{
 		static CBaseServer_RecalculateTags_t func_pointer = nullptr;
