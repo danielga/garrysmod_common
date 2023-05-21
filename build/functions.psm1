@@ -2,7 +2,7 @@
 Set-StrictMode -Version Latest
 
 Write-Host "Installing and importing VSSetup module..."
-Install-Module VSSetup -Scope CurrentUser -Force -ErrorAction Stop
+Install-Module VSSetup -Scope CurrentUser -ErrorAction Stop
 Import-Module VSSetup -ErrorAction Stop
 
 function ValidateVariableOrSetDefault([string]$Name, $Default = $null) {
