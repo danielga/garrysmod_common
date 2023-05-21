@@ -52,17 +52,16 @@ jobs:
       CleanTargetFolder: true
       flattenFolders: true
       preserveTimestamp: true
-  - task: PublishBuildArtifacts@1
-    displayName: 'Publish build artifacts'
-    inputs:
-      ArtifactName: windows
+  - publish: '$(Build.ArtifactStagingDirectory)'
+    displayName: 'Publish Windows binaries'
+    artifact: windows
 - job: linux
   displayName: Linux
   pool:
     name: Azure Pipelines
     vmImage: ubuntu-22.04
   container:
-    image: registry.gitlab.steamos.cloud/steamrt/scout/sdk:latest
+    image: danielga/steamrt-scout:latest
     options: -v /home
   timeoutInMinutes: 10
   variables:
@@ -95,10 +94,9 @@ jobs:
       CleanTargetFolder: true
       flattenFolders: true
       preserveTimestamp: true
-  - task: PublishBuildArtifacts@1
-    displayName: 'Publish build artifacts'
-    inputs:
-      ArtifactName: linux
+  - publish: '$(Build.ArtifactStagingDirectory)'
+    displayName: 'Publish Linux binaries'
+    artifact: linux
 - job: macosx
   displayName: macOS
   pool:
@@ -136,10 +134,9 @@ jobs:
       CleanTargetFolder: true
       flattenFolders: true
       preserveTimestamp: true
-  - task: PublishBuildArtifacts@1
-    displayName: 'Publish build artifacts'
-    inputs:
-      ArtifactName: macosx
+  - publish: '$(Build.ArtifactStagingDirectory)'
+    displayName: 'Publish macOS binaries'
+    artifact: macosx
 - job: publish
   displayName: Publish to GitHub Releases
   pool:
@@ -152,15 +149,12 @@ jobs:
     - macosx
   condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
   steps:
-  - task: DownloadBuildArtifacts@0
-    displayName: 'Download build artifacts'
-    inputs:
-      downloadType: specific
-      parallelizationLimit: 12
+  - download: current
+    patterns: '**/*.dll'
   - task: GitHubRelease@1
     displayName: 'Publish GitHub release $(build.sourceBranchName)'
     inputs:
       gitHubConnection: '{NAME OF YOUR GITHUB SERVICE CONNECTION HERE, NEEDS TO BE GIVEN ACCESS IN YOUR AZURE DASHBOARD}'
       releaseNotesSource: inline
-      assets: '$(System.ArtifactsDirectory)/**'
+      assets: '$(Pipeline.Workspace)/**/*.dll'
       addChangeLog: false
