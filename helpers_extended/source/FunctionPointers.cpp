@@ -302,4 +302,18 @@ namespace FunctionPointers
 
 		return func_pointer;
 	}
+
+	NET_ProcessSocket_t NET_ProcessSocket( )
+	{
+		static NET_ProcessSocket_t func_pointer = nullptr;
+		if( func_pointer == nullptr )
+		{
+			SourceSDK::FactoryLoader lua_shared_loader( "engine" );
+			func_pointer = ResolveSymbols<NET_ProcessSocket_t>(
+				lua_shared_loader, Symbols::NET_ProcessSocket
+			);
+		}
+
+		return func_pointer;
+	}
 }

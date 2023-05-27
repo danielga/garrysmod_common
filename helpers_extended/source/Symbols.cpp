@@ -83,6 +83,8 @@ namespace Symbols
 
 	const std::vector<Symbol> AdvancedLuaErrorReporter = { Symbol::FromName( "?AdvancedLuaErrorReporter@@YAHPEAUlua_State@@@Z" ) };
 
+	const std::vector<Symbol> NET_ProcessSocket;
+
 #elif defined ARCHITECTURE_X86
 
 	const std::vector<Symbol> CBasePlayer_HandleClientLuaError = {
@@ -180,6 +182,8 @@ namespace Symbols
 		Symbol::FromName( "?AdvancedLuaErrorReporter@@YAHPAUlua_State@@@Z" ),
 		Symbol::FromSignature( "\x55\x8B\xEC\x8B\x0D\x2A\x2A\x2A\x2A\x83\xEC\x4C" )
 	};
+
+	const std::vector<Symbol> NET_ProcessSocket = { Symbol::FromSignature( "\x55\x8B\xEC\x83\xEC\x08\x8B\x0D\x2A\x2A\x2A\x2A\x8B\x81" ) };
 
 #endif
 
@@ -397,6 +401,8 @@ namespace Symbols
 
 	};
 
+	const std::vector<Symbol> NET_ProcessSocket = { Symbol::FromName( "_Z17NET_ProcessSocketiP28IConnectionlessPacketHandler" ) };
+
 #elif defined SYSTEM_MACOSX
 
 	const std::vector<Symbol> CBasePlayer_HandleClientLuaError = {
@@ -492,6 +498,8 @@ namespace Symbols
 	};
 
 	const std::vector<Symbol> AdvancedLuaErrorReporter = { Symbol::FromName( "_Z24AdvancedLuaErrorReporterP9lua_State" ) };
+
+	const std::vector<Symbol> NET_ProcessSocket = { Symbol::FromName( "_Z17NET_ProcessSocketiP28IConnectionlessPacketHandler" ) };
 
 #endif
 

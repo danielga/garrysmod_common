@@ -32,6 +32,7 @@ struct netsocket_t;
 class LuaFile;
 class CSteam3Server;
 struct lua_State;
+class IConnectionlessPacketHandler;
 
 namespace FunctionPointers
 {
@@ -80,5 +81,8 @@ Steam3Server_t Steam3Server( );
 
 typedef int ( *AdvancedLuaErrorReporter_t )( lua_State *L );
 AdvancedLuaErrorReporter_t AdvancedLuaErrorReporter( );
+
+typedef void ( *NET_ProcessSocket_t )( int sock, IConnectionlessPacketHandler *handler );
+NET_ProcessSocket_t NET_ProcessSocket( );
 
 }
