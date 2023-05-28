@@ -180,7 +180,7 @@ namespace Symbols
 
 	const std::vector<Symbol> AdvancedLuaErrorReporter = {
 		Symbol::FromName( "?AdvancedLuaErrorReporter@@YAHPAUlua_State@@@Z" ),
-		Symbol::FromSignature( "\x55\x8B\xEC\x8B\x0D\x2A\x2A\x2A\x2A\x83\xEC\x4C" )
+		Symbol::FromSignature( "\x55\x8B\xEC\x83\xEC\x5C" )
 	};
 
 	const std::vector<Symbol> NET_ProcessSocket = { Symbol::FromSignature( "\x55\x8B\xEC\x83\xEC\x08\x8B\x0D\x2A\x2A\x2A\x2A\x8B\x81" ) };
