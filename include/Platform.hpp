@@ -1,38 +1,38 @@
 /*************************************************************************
-* Platform macros
-* A C++ header that defines macros depending on the compilation
-* environment and targets.
-*------------------------------------------------------------------------
-* Copyright (c) 2017-2020, Daniel Almeida
-* All rights reserved.
-*
-* Redistribution and use in source and binary forms, with or without
-* modification, are permitted provided that the following conditions
-* are met:
-*
-* 1. Redistributions of source code must retain the above copyright
-* notice, this list of conditions and the following disclaimer.
-*
-* 2. Redistributions in binary form must reproduce the above copyright
-* notice, this list of conditions and the following disclaimer in the
-* documentation and/or other materials provided with the distribution.
-*
-* 3. Neither the name of the copyright holder nor the names of its
-* contributors may be used to endorse or promote products derived from
-* this software without specific prior written permission.
-*
-* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-* "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-* LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-* A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-* HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-* SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-* LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-* DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-* THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-* (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-* OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*************************************************************************/
+ * Platform macros
+ * A C++ header that defines macros depending on the compilation
+ * environment and targets.
+ *------------------------------------------------------------------------
+ * Copyright (c) 2017-2020, Daniel Almeida
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright
+ * notice, this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright
+ * notice, this list of conditions and the following disclaimer in the
+ * documentation and/or other materials provided with the distribution.
+ *
+ * 3. Neither the name of the copyright holder nor the names of its
+ * contributors may be used to endorse or promote products derived from
+ * this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *************************************************************************/
 
 #pragma once
 
@@ -68,19 +68,17 @@
 
 #ifdef COMPILER_VC
 
-#define DEPRECATED \
-	__declspec( deprecated( "deprecated, avoid using this" ) )
+#define DEPRECATED __declspec(deprecated("deprecated, avoid using this"))
 
-#define DEPRECATED_WITH_SUBSTITUTE( substitute ) \
-	__declspec( deprecated( "deprecated, use " #substitute " instead" ) )
+#define DEPRECATED_WITH_SUBSTITUTE(substitute)                                 \
+  __declspec(deprecated("deprecated, use " #substitute " instead"))
 
 #else
 
-#define DEPRECATED \
-	__attribute__( ( deprecated( "avoid using this" ) ) )
+#define DEPRECATED __attribute__((deprecated("avoid using this")))
 
-#define DEPRECATED_WITH_SUBSTITUTE( substitute ) \
-	__attribute__( ( deprecated( "use " #substitute " instead" ) ) )
+#define DEPRECATED_WITH_SUBSTITUTE(substitute)                                 \
+  __attribute__((deprecated("use " #substitute " instead")))
 
 #endif
 
@@ -133,15 +131,18 @@
 
 #endif
 
-#if defined _M_IX86 || defined ___i386__ || defined __i386 || defined __X86__ || defined _X86_ || defined __I86__
+#if defined _M_IX86 || defined ___i386__ || defined __i386 ||                  \
+    defined __X86__ || defined _X86_ || defined __I86__
 
 #define ARCHITECTURE_X86 1
-#define ARCHITECTURE_X86_OLD 1 // Should disappear when the x86-64 Garry's Mod branch is merged
+#define ARCHITECTURE_X86_OLD                                                   \
+  1 // Should disappear when the x86-64 Garry's Mod branch is merged
 
 #define ARCHITECTURE_IS_X86 1
 #define ARCHITECTURE_IS_X86_64 0
 
-#elif defined _M_X64 || defined __amd64__ || defined __amd64 || defined __x86_64__ || defined __x86_64
+#elif defined _M_X64 || defined __amd64__ || defined __amd64 ||                \
+    defined __x86_64__ || defined __x86_64
 
 #define ARCHITECTURE_X86_64 1
 
