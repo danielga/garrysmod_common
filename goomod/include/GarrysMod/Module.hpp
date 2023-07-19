@@ -5,16 +5,24 @@
 namespace GarrysMod {
 template <typename ModuleClass> class Module : public ModuleHelper {
 public:
-  static inline ModuleFactory CreateModuleFactory() noexcept {
-    return [] { return std::make_shared<ModuleClass>(); };
+  static inline ModuleFactory CreateModuleFactory(const std::string& module_name) noexcept {
+    return [=] { return std::make_shared<ModuleClass>(module_name); };
   }
+  
+#ifdef GMOD_MODULE_NAME
+  static inline ModuleFactory CreateModuleFactory() noexcept {
+    return CreateModuleFactory(GMOD_MODULE_NAME);
+  }
+#endif
 
 protected:
   typedef int (ModuleClass::*MemberFunctionType)(Lua::ILuaBase *LUA);
   typedef std::function<int(ModuleClass *, Lua::ILuaBase *)>
       MemberFunctionalType;
 
-  bool EnableThink(Lua::ILuaBase *LUA) {
+  inline Module(const std::string& module_name) : ModuleHelper(module_name) {}
+
+  inline bool EnableThink(Lua::ILuaBase *LUA) {
     const int lua_ref =
         CreateFunctionLuaReference(LUA, &Module::Think, m_member_functions);
     return ModuleHelper::EnableThink(

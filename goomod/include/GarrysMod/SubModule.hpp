@@ -5,7 +5,7 @@
 namespace GarrysMod {
 template <typename SubModuleClass> class SubModule : public ModuleBase {
 public:
-  static inline ModuleFactory CreateSubModuleFactory() {
+  static inline SubModuleFactory CreateSubModuleFactory() {
     return [] { return std::make_shared<SubModuleClass>(); };
   }
 

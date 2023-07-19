@@ -32,8 +32,13 @@ int ModuleHelper::Deinitialize(Lua::ILuaBase *LUA) {
   return 0;
 }
 
-void ModuleHelper::AddSubModuleFactory(
-    std::function<std::shared_ptr<ModuleBase>()> &&factory) {
+const std::string& ModuleHelper::ModuleName() const {
+    return m_module_name;
+}
+
+ModuleHelper::ModuleHelper(const std::string& module_name) : m_module_name(module_name) {}
+
+void ModuleHelper::AddSubModuleFactory(SubModuleFactory&& factory) {
   m_submodule_factories.emplace_back(std::move(factory));
 }
 
@@ -71,7 +76,7 @@ bool ModuleHelper::EnableThink(Lua::ILuaBase *LUA,
   }
 
   LUA->PushString("Think");
-  LUA->PushString("module." GMOD_MODULE_NAME ".Think");
+  LUA->PushFormattedString("module.%s.Think", ModuleName().c_str());
   PushMemberFunction(LUA, wrapper, function_reference);
 
   // NOLINTNEXTLINE(cppcoreguidelines-avoid-magic-numbers,readability-magic-numbers)
@@ -118,7 +123,7 @@ bool ModuleHelper::DisableThink(Lua::ILuaBase *LUA) const {
   }
 
   LUA->PushString("Think");
-  LUA->PushString("module." GMOD_MODULE_NAME ".Think");
+  LUA->PushFormattedString("module.%s.Think", ModuleName().c_str());
 
   if (LUA->PCall(2, 0, -4) != 0) {
     dynamic_cast<Lua::ILuaInterface *>(LUA)->ErrorNoHalt("\n%s\n\n",

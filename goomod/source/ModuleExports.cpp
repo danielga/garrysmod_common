@@ -1,20 +1,21 @@
 #include "GarrysMod/Lua/Interface.h"
 #include "GarrysMod/Lua/LuaInterface.h"
-#include "GarrysMod/ModuleBase.hpp"
+#include "GarrysMod/ModuleHelper.hpp"
 
 #include "lua.hpp"
 
 namespace GarrysMod {
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
-static std::shared_ptr<ModuleBase> s_module_singleton;
+static std::shared_ptr<ModuleHelper> s_module_singleton;
 
 static int Cleanup(Lua::ILuaBase *LUA,
                    const bool error_on_invalid_module = false) {
+  const auto module_singleton = s_module_singleton;
+
   auto *lua_interface = dynamic_cast<Lua::ILuaInterface *>(LUA);
-  if (!s_module_singleton) {
+  if (!module_singleton) {
     if (error_on_invalid_module) {
-      lua_interface->ErrorNoHalt("[%s] module isn't instantiated\n",
-                                 GMOD_MODULE_NAME);
+      lua_interface->ErrorNoHalt("[unknown] module isn't instantiated\n");
     }
 
     return 0;
@@ -22,10 +23,10 @@ static int Cleanup(Lua::ILuaBase *LUA,
 
   int result = 0;
   try {
-    result = s_module_singleton->Deinitialize(LUA);
+    result = module_singleton->Deinitialize(LUA);
   } catch (const std::exception &e) {
     lua_interface->ErrorNoHalt("[%s] deinitialization failure: %s\n",
-                               GMOD_MODULE_NAME, e.what());
+                               module_singleton->ModuleName().c_str(), e.what());
   }
 
   s_module_singleton.reset();

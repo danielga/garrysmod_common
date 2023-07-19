@@ -148,7 +148,5 @@ private:
   friend class ModuleHelper;
 };
 
-typedef std::function<std::shared_ptr<ModuleBase>()> ModuleFactory;
-
-extern const ModuleFactory ModuleFactorySingleton;
+typedef std::function<std::shared_ptr<ModuleBase>()> SubModuleFactory;
 } // namespace GarrysMod
