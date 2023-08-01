@@ -35,11 +35,17 @@ namespace Symbols
 		Symbol::FromName( "?ConnectionStart@CBaseClientState@@UEAAXPEAVINetChannel@@@Z" )
 	};
 
-	const std::vector<Symbol> CLC_CmdKeyValues_Constructor = { };
+	const std::vector<Symbol> CLC_CmdKeyValues_Constructor = {
+		Symbol::FromSignature( "\x48\x8D\x05\xE1\xB0\x1D\x00\xC6\x41\x08\x01\x48\x89\x01\x48\x8B\xC1" )
+	};
 
-	const std::vector<Symbol> SVC_CreateStringTable_Constructor = { };
+	const std::vector<Symbol> SVC_CreateStringTable_Constructor = {
+		Symbol::FromSignature( "\x40\x53\x48\x83\xEC\x20\x48\x8B\xD9\xC6\x41\x08\x01\x33\xC9\x48\x8D\x05\x92\xB1\x1D\x00" )
+	};
 
-	const std::vector<Symbol> SVC_CmdKeyValues_Constructor = { };
+	const std::vector<Symbol> SVC_CmdKeyValues_Constructor = {
+		Symbol::FromSignature( "\x48\x8D\x05\x41\xB1\x1D\x00\xC6\x41\x08\x01\x48\x89\x01\x48\x8B\xC1" )
+	};
 
 	const std::vector<Symbol> CBaseServer_RecalculateTags = {
 		Symbol::FromName( "?RecalculateTags@CBaseServer@@QEAAXXZ" )
