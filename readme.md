@@ -64,6 +64,7 @@ CreateProject({
 Call the following functions as needed. The Source SDK based projects do not need a path to the SDK anymore, as it is provided through this git repository as a submodule.
 
 ```lua
+IncludeHelpersExtended() -- uses this repo path
 IncludeLuaShared() -- uses this repo path
 IncludeDetouring() -- uses this repo detouring submodule
 IncludeScanning() -- uses this repo scanning submodule
