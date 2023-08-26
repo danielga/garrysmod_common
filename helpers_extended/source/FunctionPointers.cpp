@@ -110,10 +110,12 @@ namespace FunctionPointers
 		if( func_pointer == nullptr )
 		{
 			SourceSDK::FactoryLoader engine_loader( "engine" );
+
 			// we use a starting point for sigscan because, on Linux, CBaseClient::ConnectionStart
 			// and CBaseClientState::ConnectionStart have the same signature
 			// this code expects CBaseClient::ConnectionStart to appear before
 			// CBaseClientState::ConnectionStart
+
 			func_pointer = ResolveSymbols<CBaseClientState_ConnectionStart_t>(
 				engine_loader, Symbols::CBaseClientState_ConnectionStart,
 				reinterpret_cast<const uint8_t *>( CBaseClient_ConnectionStart( ) ) + 16
@@ -132,6 +134,19 @@ namespace FunctionPointers
 			func_pointer = ResolveSymbols<CLC_CmdKeyValues_Constructor_t>(
 				engine_loader, Symbols::CLC_CmdKeyValues_Constructor
 			);
+
+			// we use an offset for the function pointer because, on Linux, Base_CmdKeyValues::Base_CmdKeyValues
+			// and CLC_CmdKeyValues::CLC_CmdKeyValues have the same signature
+			// this code adds the necessary offset to locate CLC_CmdKeyValues::CLC_CmdKeyValues
+
+#if defined SYSTEM_LINUX && defined ARCHITECTURE_X86_64
+
+			const uint8_t *tmp_func_pointer = reinterpret_cast<const uint8_t *>( func_pointer ) + 32;
+
+			func_pointer = reinterpret_cast<CLC_CmdKeyValues_Constructor_t>( tmp_func_pointer );
+
+#endif
+
 		}
 
 		return func_pointer;
@@ -143,9 +158,13 @@ namespace FunctionPointers
 		if( func_pointer == nullptr )
 		{
 			SourceSDK::FactoryLoader engine_loader( "engine" );
+
+			// we use a starting point for sigscan because SVC_CmdKeyValues::SVC_CmdKeyValues
+			// appears before SVC_CreateStringTable::SVC_CreateStringTable
+
 			func_pointer = ResolveSymbols<SVC_CreateStringTable_Constructor_t>(
 				engine_loader, Symbols::SVC_CreateStringTable_Constructor,
-				reinterpret_cast<const uint8_t *>( CBaseClientState_ConnectionStart( ) ) + 16
+				reinterpret_cast<const uint8_t *>( SVC_CmdKeyValues_Constructor( ) ) + 16
 			);
 		}
 
@@ -158,10 +177,12 @@ namespace FunctionPointers
 		if( func_pointer == nullptr )
 		{
 			SourceSDK::FactoryLoader engine_loader( "engine" );
+
 			// we use a starting point for sigscan because SVC_CmdKeyValues::SVC_CmdKeyValues
 			// and CLC_CmdKeyValues::CLC_CmdKeyValues have the same signature
 			// this code expects CLC_CmdKeyValues::CLC_CmdKeyValues to appear before
 			// SVC_CmdKeyValues::SVC_CmdKeyValues
+
 			func_pointer = ResolveSymbols<SVC_CmdKeyValues_Constructor_t>(
 				engine_loader, Symbols::SVC_CmdKeyValues_Constructor,
 				reinterpret_cast<const uint8_t *>( CLC_CmdKeyValues_Constructor( ) ) + 16
