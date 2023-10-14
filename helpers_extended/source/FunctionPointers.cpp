@@ -26,9 +26,13 @@ namespace FunctionPointers
 		if( symbol.type == Symbol::Type::None )
 			return nullptr;
 
-		return reinterpret_cast<T>( symbol_finder.Resolve(
+		auto pointer = reinterpret_cast<uint8_t *>( symbol_finder.Resolve(
 			loader.GetModule( ), symbol.name.c_str( ), symbol.length, starting_point
 		) );
+		if( pointer != nullptr )
+			pointer += symbol.offset;
+
+		return reinterpret_cast<T>( pointer );
 	}
 
 	template<class T>
