@@ -404,6 +404,72 @@ function CreateProject(config)
 				postbuildcommands({"{COPY} \"%{cfg.buildtarget.abspath}\" \"" .. binDir .. "\""})
 		end
 
+		local debug_path = _OPTIONS["debug-path"]
+		if debug_path ~= nil then
+			local client_args = {"-steam", "-game", "garrysmod"}
+			local server_args = {
+				"-console",
+				"-game", "garrysmod",
+				"-ip", "localhost",
+				"-port", "27015",
+				"+gamemode", "sandbox",
+				"+map", "gm_construct",
+				"+maxplayers", "16"
+			}
+			local args = is_server and server_args or client_args
+
+			if PROJECT_GENERATOR_VERSION < 3 then
+				filter({"system:windows", "platforms:x86"})
+					debugcommand(path.join(debug_path, is_server and "srcds.exe" or "hl2.exe"))
+					debugdir(debug_path)
+					debugargs(args)
+
+				filter({"system:linux", "platforms:x86"})
+					debugcommand(path.join(debug_path, is_server and "srcds_linux" or "hl2_linux"))
+					debugdir(debug_path)
+					debugargs(args)
+					debugenvs({"LD_LIBRARY_PATH=\".:bin:garrysmod/bin:$LD_LIBRARY_PATH\""})
+
+				if not is_server then
+					filter({"system:macosx", "platforms:x86"})
+						debugcommand(path.join(debug_path, "hl2_osx"))
+						debugdir(debug_path)
+						debugargs(args)
+				end
+			else
+				filter({"system:windows", "platforms:x86"})
+					debugcommand(path.join(debug_path, is_server and "srcds.exe" or "bin/gmod.exe"))
+					debugdir(debug_path)
+					debugargs(args)
+
+				filter({"system:windows", "platforms:x86_64"})
+					debugcommand(path.join(debug_path, is_server and "srcds_win64.exe" or "bin/win64/gmod.exe"))
+					debugdir(debug_path)
+					debugargs(args)
+
+				if is_server then
+					filter({"system:linux", "platforms:x86"})
+						debugcommand(path.join(debug_path, "bin/linux32/srcds"))
+						debugdir(debug_path)
+						debugargs(args)
+						debugenvs({"LD_LIBRARY_PATH=\".:bin/linux32:$LD_LIBRARY_PATH\""})
+				end
+
+				filter({"system:linux", "platforms:x86_64"})
+					debugcommand(path.join(debug_path, is_server and "bin/linux64/srcds" or "bin/linux64/gmod"))
+					debugdir(debug_path)
+					debugargs(args)
+					debugenvs({"LD_LIBRARY_PATH=\".:bin/linux64:$LD_LIBRARY_PATH\""})
+
+				if not is_server then
+					filter({"system:macosx", "platforms:x86_64"})
+						debugcommand(path.join(debug_path, "GarrysMod_Signed.app/Contents/MacOS/gmod"))
+						debugdir(debug_path)
+						debugargs(args)
+				end
+			end
+		end
+
 		IncludeHelpers()
 
 		filter({})
