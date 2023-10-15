@@ -29,5 +29,6 @@ extern const Symbol Steam3Server;
 extern const std::vector<Symbol> GlobalVars;
 extern const std::vector<Symbol> AdvancedLuaErrorReporter;
 extern const std::vector<Symbol> NET_ProcessSocket;
+extern const std::vector<Symbol> NET_CreateNetChannel;
 
 }

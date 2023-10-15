@@ -91,6 +91,10 @@ namespace Symbols
 
 	const std::vector<Symbol> NET_ProcessSocket;
 
+	const std::vector<Symbol> NET_CreateNetChannel = {
+		Symbol::FromSignature( "\x48\x89\x6C\x24\x2A\x48\x89\x7C\x24\x2A\x41\x54\x41\x56\x41\x57\x48\x83\xEC\x30\x80\x7C\x24\x2A\x00" )
+	};
+
 #elif defined ARCHITECTURE_X86
 
 	const std::vector<Symbol> CBasePlayer_HandleClientLuaError = {
@@ -190,6 +194,10 @@ namespace Symbols
 	};
 
 	const std::vector<Symbol> NET_ProcessSocket = { Symbol::FromSignature( "\x55\x8B\xEC\x83\xEC\x08\x8B\x0D\x2A\x2A\x2A\x2A\x8B\x81" ) };
+
+	const std::vector<Symbol> NET_CreateNetChannel = {
+		Symbol::FromSignature( "\x55\x8B\xEC\x80\x7D\x2A\x00\x53\x8B\x5D" )
+	};
 
 #endif
 
@@ -421,6 +429,25 @@ namespace Symbols
 
 	const std::vector<Symbol> NET_ProcessSocket = { Symbol::FromName( "_Z17NET_ProcessSocketiP28IConnectionlessPacketHandler" ) };
 
+	const std::vector<Symbol> NET_CreateNetChannel = {
+		Symbol::FromName( "_Z20NET_CreateNetChanneliP8netadr_sPKcP18INetChannelHandlerbi" ),
+
+#if defined ARCHITECTURE_X86_OLD
+
+		Symbol::FromSignature( "\x55\x89\xE5\x57\x56\x53\x83\xEC\x3C\xC7\x45\x2A\x00\x00\x00\x00\x80\x7D\x2A\x01" )
+
+#elif defined ARCHITECTURE_X86
+
+		Symbol::FromSignature( "\x55\x89\xE5\x57\x56\x53\x83\xEC\x2C\x80\x7D\x2A\x01" )
+
+#elif defined ARCHITECTURE_X86_64
+
+		Symbol::FromSignature( "\x55\x48\x89\xE5\x41\x57\x45\x89\xCF\x41\x56\x49\x89\xCE" )
+
+#endif
+
+	};
+
 #elif defined SYSTEM_MACOSX
 
 	const std::vector<Symbol> CBasePlayer_HandleClientLuaError = {
@@ -518,6 +545,8 @@ namespace Symbols
 	const std::vector<Symbol> AdvancedLuaErrorReporter = { Symbol::FromName( "_Z24AdvancedLuaErrorReporterP9lua_State" ) };
 
 	const std::vector<Symbol> NET_ProcessSocket = { Symbol::FromName( "_Z17NET_ProcessSocketiP28IConnectionlessPacketHandler" ) };
+
+	const std::vector<Symbol> NET_CreateNetChannel;
 
 #endif
 

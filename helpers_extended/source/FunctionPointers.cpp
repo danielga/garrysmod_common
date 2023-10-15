@@ -320,4 +320,18 @@ namespace FunctionPointers
 
 		return func_pointer;
 	}
+
+	NET_CreateNetChannel_t NET_CreateNetChannel( )
+	{
+		static NET_CreateNetChannel_t func_pointer = nullptr;
+		if( func_pointer == nullptr )
+		{
+			SourceSDK::FactoryLoader lua_shared_loader( "engine" );
+			func_pointer = ResolveSymbols<NET_CreateNetChannel_t>(
+				lua_shared_loader, Symbols::NET_CreateNetChannel
+			);
+		}
+
+		return func_pointer;
+	}
 }
