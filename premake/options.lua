@@ -68,7 +68,13 @@ newoption({
 })
 
 newoption({
-	trigger = "debug-path",
-	description = "Root path to the game client or server to debug with",
+	trigger = "client-debug-path",
+	description = "Root path to the game client to debug with",
+	value = "/home/you/garrysmod"
+})
+
+newoption({
+	trigger = "server-debug-path",
+	description = "Root path to the game server to debug with",
 	value = "/home/you/garrysmod"
 })
