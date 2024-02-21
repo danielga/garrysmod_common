@@ -16,6 +16,7 @@ typedef C_BaseEntity BaseEntity;
 #endif
 
 class IPhysicsObject;
+class VMatrix;
 
 namespace GarrysMod
 {
@@ -47,8 +48,8 @@ namespace GarrysMod
 			virtual const char *GetMemberStr( const char *name, const char *s = "" ) = 0;
 			virtual void *GetMemberUserData( const char *name, void *u = 0 ) = 0;
 			virtual void *GetMemberUserData( float name, void *u = 0 ) = 0;
-			virtual ILuaObject *GetMember( const char *name ) = 0;
-			virtual ILuaObject *GetMember( ILuaObject *key ) = 0;
+			virtual ILuaObject *GetMember( const char *name, ILuaObject *obj ) = 0;
+			virtual ILuaObject *GetMember( ILuaObject *key, ILuaObject *obj ) = 0;
 
 			virtual void SetMetaTable( ILuaObject *obj ) = 0;
 			virtual void SetUserData( void *obj ) = 0;
@@ -62,7 +63,7 @@ namespace GarrysMod
 			virtual bool isFunction( ) = 0;
 			virtual bool isUserData( ) = 0;
 
-			virtual ILuaObject *GetMember( float fKey ) = 0;
+			virtual ILuaObject *GetMember( float fKey, ILuaObject* obj ) = 0;
 
 			virtual void *Remove_Me_1( const char *name, void * = 0 ) = 0;
 
@@ -110,6 +111,7 @@ namespace GarrysMod
 			virtual unsigned int GetMemberUInt( const char *, unsigned int ) = 0;
 
 			virtual void SetMember( const char *, unsigned long long ) = 0;
+			virtual void SetMember( const char *, int ) = 0;
 			virtual void SetReference( int ) = 0;
 
 			virtual void RemoveMember( const char * ) = 0;
@@ -136,9 +138,15 @@ namespace GarrysMod
 			virtual bool isVector( ) = 0;
 
 			virtual void SetMemberAngle( const char *, QAngle * ) = 0;
+			virtual void SetMemberAngle( const char *, QAngle & ) = 0;
 			virtual QAngle *GetMemberAngle( const char *, QAngle * ) = 0;
 			virtual QAngle *GetAngle( ) = 0;
 			virtual bool isAngle( ) = 0;
+
+			virtual void SetMemberMatrix( const char *, VMatrix const * ) = 0;
+			virtual void SetMemberMatrix( const char *, VMatrix const & ) = 0;
+			virtual void SetMemberMatrix( float, VMatrix const * ) = 0;
+			virtual void SetMemberMatrix( int, VMatrix const * ) = 0;
 
 			virtual void SetMemberPhysObject( const char *, IPhysicsObject * ) = 0;
 		};
