@@ -26,9 +26,13 @@ namespace FunctionPointers
 		if( symbol.type == Symbol::Type::None )
 			return nullptr;
 
-		return reinterpret_cast<T>( symbol_finder.Resolve(
+		auto pointer = reinterpret_cast<uint8_t *>( symbol_finder.Resolve(
 			loader.GetModule( ), symbol.name.c_str( ), symbol.length, starting_point
 		) );
+		if( pointer != nullptr )
+			pointer += symbol.offset;
+
+		return reinterpret_cast<T>( pointer );
 	}
 
 	template<class T>
@@ -332,6 +336,20 @@ namespace FunctionPointers
 			SourceSDK::FactoryLoader lua_shared_loader( "engine" );
 			func_pointer = ResolveSymbols<NET_ProcessSocket_t>(
 				lua_shared_loader, Symbols::NET_ProcessSocket
+			);
+		}
+
+		return func_pointer;
+	}
+
+	NET_CreateNetChannel_t NET_CreateNetChannel( )
+	{
+		static NET_CreateNetChannel_t func_pointer = nullptr;
+		if( func_pointer == nullptr )
+		{
+			SourceSDK::FactoryLoader lua_shared_loader( "engine" );
+			func_pointer = ResolveSymbols<NET_CreateNetChannel_t>(
+				lua_shared_loader, Symbols::NET_CreateNetChannel
 			);
 		}
 

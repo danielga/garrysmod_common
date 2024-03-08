@@ -25,6 +25,7 @@ class CNetChan;
 class bf_read;
 class CBaseClient;
 class INetChannel;
+class INetChannelHandler;
 class CBaseClientState;
 class CBaseServer;
 class GModDataPack;
@@ -33,6 +34,7 @@ class LuaFile;
 class CSteam3Server;
 struct lua_State;
 class IConnectionlessPacketHandler;
+struct ns_address;
 
 namespace FunctionPointers
 {
@@ -84,5 +86,15 @@ AdvancedLuaErrorReporter_t AdvancedLuaErrorReporter( );
 
 typedef void ( *NET_ProcessSocket_t )( int sock, IConnectionlessPacketHandler *handler );
 NET_ProcessSocket_t NET_ProcessSocket( );
+
+typedef INetChannel *( *NET_CreateNetChannel_t )(
+	int socket,
+	const ns_address *adr,
+	const char * name,
+	INetChannelHandler *handler,
+	const unsigned char *pbEncryptionKey,
+	bool bForceNewChannel
+);
+NET_CreateNetChannel_t NET_CreateNetChannel( );
 
 }

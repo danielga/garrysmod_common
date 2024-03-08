@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-PYTHON_VERSION='3.9.16'
+PYTHON_VERSION='3.9.18'
 curl -L "https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tgz" -o python.tgz
 tar -xvf python.tgz
 rm -f python.tgz

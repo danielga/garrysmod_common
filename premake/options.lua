@@ -66,3 +66,15 @@ newoption({
 	description = "Number of parallel jobs to run on the 'lint' command",
 	value = "4"
 })
+
+newoption({
+	trigger = "client-debug-path",
+	description = "Root path to the game client to debug with",
+	value = "/home/you/garrysmod"
+})
+
+newoption({
+	trigger = "server-debug-path",
+	description = "Root path to the game server to debug with",
+	value = "/home/you/garrysmod"
+})
