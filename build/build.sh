@@ -18,14 +18,30 @@ echo "Running premake5..."
 "$PREMAKE5" "$COMPILER_PLATFORM"
 popd
 
+BUILD_32BIT=false
 if [ "$PROJECT_GENERATOR_VERSION" -le "2" ] || [ ! "$(uname -s)" = "Darwin" ]; then
+	BUILD_32BIT=true
+fi
+if [ "${DISABLE_32BIT#false}" = "true" ]; then
+	BUILD_32BIT=false
+fi
+
+BUILD_64BIT=false
+if [ "$PROJECT_GENERATOR_VERSION" -ge "3" ]; then
+	BUILD_64BIT=true
+fi
+if [ "${DISABLE_64BIT#false}" = "true" ]; then
+	BUILD_64BIT=false
+fi
+
+if [ "${BUILD_32BIT}" = "true" ]; then
 	pushd "$REPOSITORY_DIR/projects/$PROJECT_OS/$COMPILER_PLATFORM"
 	echo "Building module with ${JOBS} job(s)..."
 	make -j "$JOBS" config=release_x86
 	popd
 fi
 
-if [ "$PROJECT_GENERATOR_VERSION" -ge "3" ]; then
+if [ "${BUILD_64BIT}" = "true" ]; then
 	pushd "$REPOSITORY_DIR/projects/$PROJECT_OS/$COMPILER_PLATFORM"
 	echo "Building module with ${JOBS} job(s)..."
 	make -j "$JOBS" config=release_x86_64

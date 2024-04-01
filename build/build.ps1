@@ -14,12 +14,14 @@ Write-Output "Running premake5..."
 Invoke-Call { & "$PREMAKE5" "$COMPILER_PLATFORM" } -ErrorAction Stop
 Pop-Location
 
-Push-Location "$REPOSITORY_DIR/projects/$PROJECT_OS/$COMPILER_PLATFORM" -ErrorAction Stop
-Write-Output "Building module..."
-Invoke-Call { & "$MSBuild" "$MODULE_NAME.sln" /p:Configuration=Release /p:Platform=Win32 /m } -ErrorAction Stop
-Pop-Location
+if ($env:DISABLE_32BIT -ne "true") {
+	Push-Location "$REPOSITORY_DIR/projects/$PROJECT_OS/$COMPILER_PLATFORM" -ErrorAction Stop
+	Write-Output "Building module..."
+	Invoke-Call { & "$MSBuild" "$MODULE_NAME.sln" /p:Configuration=Release /p:Platform=Win32 /m } -ErrorAction Stop
+	Pop-Location
+}
 
-if ($PROJECT_GENERATOR_VERSION -ge 3) {
+if ($PROJECT_GENERATOR_VERSION -ge 3 && $env:DISABLE_64BIT -ne "true") {
 	Push-Location "$REPOSITORY_DIR/projects/$PROJECT_OS/$COMPILER_PLATFORM" -ErrorAction Stop
 	Write-Output "Building module..."
 	Invoke-Call { & "$MSBuild" "$MODULE_NAME.sln" /p:Configuration=Release /p:Platform=x64 /m } -ErrorAction Stop
