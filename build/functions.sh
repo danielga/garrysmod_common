@@ -80,3 +80,20 @@ function create_directory_forcefully {
 
 	mkdir -p "$DIRECTORY"
 }
+
+function value_is_truthy {
+	local VALUE="$1"
+	if { [[ "$VALUE" =~ ^[0-9]+$ ]] && [ "$VALUE" -ne 0 ]; } || [[ "$VALUE" =~ ^[tT][rR][uU][eE]$ ]]; then
+		return 0
+	else
+		return 1
+	fi
+}
+
+function value_is_falsy {
+	if value_is_truthy "$1"; then
+		return 1
+	else
+		return 0
+	fi
+}

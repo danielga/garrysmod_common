@@ -37,5 +37,7 @@ case "$(uname -s)" in
 esac
 
 validate_variable_or_set_default "PREMAKE5" "$DEPENDENCIES/$PROJECT_OS/premake-core/premake5"
+validate_variable_or_set_default "DISABLE_32BIT" "0"
+validate_variable_or_set_default "DISABLE_64BIT" "0"
 
 create_directory_forcefully "$DEPENDENCIES"

@@ -130,6 +130,14 @@ function GetMSBuildPath() {
 	return $MSBuild
 }
 
+function ValueIsTruthy($Value) {
+	return $Value -eq $true -or [bool]($Value -as [int])
+}
+
+function ValueIsFalsy($Value) {
+	return -not (ValueIsTruthy $Value)
+}
+
 Set-Variable MSBuild (GetMSBuildPath) -ErrorAction Stop -Confirm:$false
 
 Export-ModuleMember -Function ValidateVariableOrSetDefault, UpdateLocalGitRepository, CreateDirectoryForcefully, Invoke-Call, GetMSBuildPath -Variable MSBuild
