@@ -37,21 +37,25 @@ function update_local_git_repository {
 		echo "Fetching all branches from remote in \"${DIRECTORY}\"..."
 		git fetch --quiet --all --prune
 
-		local CURBRANCH=$(git symbolic-ref --quiet --short HEAD)
-		if [ ! "$BRANCH" = "$CURBRANCH" ]; then
+		local CURBRANCH
+		CURBRANCH=$(git symbolic-ref --quiet --short HEAD)
+		if [ "$BRANCH" != "$CURBRANCH" ]; then
 			echo "Checking out branch \"${BRANCH}\" in \"${DIRECTORY}\"..."
 			git checkout --quiet --force "$BRANCH"
 			local UPDATED=1
 		fi
 
-		local LOCAL=$(git rev-parse @)
-		local REMOTE=$(git rev-parse @{u})
-		local BASE=$(git merge-base @ @{u})
+		local LOCAL
+		LOCAL=$(git rev-parse @)
+		local REMOTE
+		REMOTE=$(git rev-parse @\{u\})
+		local BASE
+		BASE=$(git merge-base @ @\{u\})
 
 		if [ "$LOCAL" = "$BASE" ]; then
 			echo "Branch \"${BRANCH}\" in \"${DIRECTORY}\" needs updating..."
 			local UPDATED=1
-		elif [ ! "$LOCAL" = "$REMOTE" ]; then
+		elif [ "$LOCAL" != "$REMOTE" ]; then
 			echo "Hard resetting branch \"${BRANCH}\" in \"${DIRECTORY}\"..."
 			git reset --quiet --hard "origin/${BRANCH}"
 			git clean --quiet --force -dx
