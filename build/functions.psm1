@@ -140,4 +140,4 @@ function ValueIsFalsy($Value) {
 
 Set-Variable MSBuild (GetMSBuildPath) -ErrorAction Stop -Confirm:$false
 
-Export-ModuleMember -Function ValidateVariableOrSetDefault, UpdateLocalGitRepository, CreateDirectoryForcefully, Invoke-Call, GetMSBuildPath -Variable MSBuild
+Export-ModuleMember -Function ValidateVariableOrSetDefault, UpdateLocalGitRepository, CreateDirectoryForcefully, Invoke-Call, GetMSBuildPath, ValueIsTruthy, ValueIsFalsy -Variable MSBuild
