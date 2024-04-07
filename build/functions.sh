@@ -37,21 +37,25 @@ function update_local_git_repository {
 		echo "Fetching all branches from remote in \"${DIRECTORY}\"..."
 		git fetch --quiet --all --prune
 
-		local CURBRANCH=$(git symbolic-ref --quiet --short HEAD)
-		if [ ! "$BRANCH" = "$CURBRANCH" ]; then
+		local CURBRANCH
+		CURBRANCH=$(git symbolic-ref --quiet --short HEAD)
+		if [ "$BRANCH" != "$CURBRANCH" ]; then
 			echo "Checking out branch \"${BRANCH}\" in \"${DIRECTORY}\"..."
 			git checkout --quiet --force "$BRANCH"
 			local UPDATED=1
 		fi
 
-		local LOCAL=$(git rev-parse @)
-		local REMOTE=$(git rev-parse @{u})
-		local BASE=$(git merge-base @ @{u})
+		local LOCAL
+		LOCAL=$(git rev-parse @)
+		local REMOTE
+		REMOTE=$(git rev-parse @\{u\})
+		local BASE
+		BASE=$(git merge-base @ @\{u\})
 
 		if [ "$LOCAL" = "$BASE" ]; then
 			echo "Branch \"${BRANCH}\" in \"${DIRECTORY}\" needs updating..."
 			local UPDATED=1
-		elif [ ! "$LOCAL" = "$REMOTE" ]; then
+		elif [ "$LOCAL" != "$REMOTE" ]; then
 			echo "Hard resetting branch \"${BRANCH}\" in \"${DIRECTORY}\"..."
 			git reset --quiet --hard "origin/${BRANCH}"
 			git clean --quiet --force -dx
@@ -79,4 +83,21 @@ function create_directory_forcefully {
 	fi
 
 	mkdir -p "$DIRECTORY"
+}
+
+function value_is_truthy {
+	local VALUE="$1"
+	if { [[ "$VALUE" =~ ^[0-9]+$ ]] && [ "$VALUE" -ne 0 ]; } || [[ "$VALUE" =~ ^[tT][rR][uU][eE]$ ]]; then
+		return 0
+	else
+		return 1
+	fi
+}
+
+function value_is_falsy {
+	if value_is_truthy "$1"; then
+		return 1
+	else
+		return 0
+	fi
 }

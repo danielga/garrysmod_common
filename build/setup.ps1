@@ -14,5 +14,7 @@ ValidateVariableOrSetDefault "PREMAKE5_URL" -Default "https://github.com/premake
 ValidateVariableOrSetDefault "PREMAKE5" -Default "$DEPENDENCIES/windows/premake-core/premake5.exe"
 ValidateVariableOrSetDefault "PROJECT_OS" -Default "windows"
 ValidateVariableOrSetDefault "PROJECT_GENERATOR_VERSION" -Default "1"
+ValidateVariableOrSetDefault "DISABLE_32BIT" -Default "0"
+ValidateVariableOrSetDefault "DISABLE_64BIT" -Default "0"
 
 CreateDirectoryForcefully $DEPENDENCIES

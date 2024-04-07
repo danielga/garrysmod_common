@@ -18,12 +18,10 @@ validate_variable_or_set_default "PROJECT_GENERATOR_VERSION" "1"
 
 case "$(uname -s)" in
     Linux*)
-        TARGET="linux"
         validate_variable_or_set_default "PREMAKE5_URL" "https://github.com/premake/premake-core/releases/download/v5.0.0-alpha15/premake-5.0.0-alpha15-linux.tar.gz"
         validate_variable_or_set_default "PROJECT_OS" "linux"
         ;;
     Darwin*)
-        TARGET="osx"
         validate_variable_or_set_default "PREMAKE5_URL" "https://github.com/premake/premake-core/releases/download/v5.0.0-alpha15/premake-5.0.0-alpha15-macosx.tar.gz"
         validate_variable_or_set_default "PROJECT_OS" "macosx"
         validate_variable_or_set_default "MACOSX_SDK_URL" "https://github.com/phracker/MacOSX-SDKs/releases/download/10.15/MacOSX10.7.sdk.tar.xz"
@@ -37,5 +35,7 @@ case "$(uname -s)" in
 esac
 
 validate_variable_or_set_default "PREMAKE5" "$DEPENDENCIES/$PROJECT_OS/premake-core/premake5"
+validate_variable_or_set_default "DISABLE_32BIT" "0"
+validate_variable_or_set_default "DISABLE_64BIT" "0"
 
 create_directory_forcefully "$DEPENDENCIES"
