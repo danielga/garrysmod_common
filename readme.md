@@ -86,6 +86,11 @@ You can also request the project to auto-install the compiled files to a directo
 
 Using specific MacOSX SDKs is also supported, by using either the premake config `--macosx_sdkroot` or the preferred `SDKROOT` environment variable when calling `make`.
 
+To create a build with the ability to compile binaries in the x86-64, you need to change the project version in your premake5.lua file to "3".
+```lua
+PROJECT_GENERATOR_VERSION = 3
+```
+
 ## Relevant URLs
 
 <https://github.com/ValveSoftware/source-sdk-2013>  
