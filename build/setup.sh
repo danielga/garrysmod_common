@@ -14,17 +14,17 @@ validate_variable_or_set_default "GARRYSMOD_COMMON_REPOSITORY" "https://github.c
 validate_variable_or_set_default "GARRYSMOD_COMMON_BRANCH" "master"
 validate_variable_or_set_default "GARRYSMOD_COMMON" "$DEPENDENCIES/garrysmod_common"
 validate_variable_or_set_default "COMPILER_PLATFORM" "gmake"
-validate_variable_or_set_default "PROJECT_GENERATOR_VERSION" "1"
+validate_variable_or_set_default "PROJECT_GENERATOR_VERSION" "2"
 
 case "$(uname -s)" in
     Linux*)
-        validate_variable_or_set_default "PREMAKE5_URL" "https://github.com/premake/premake-core/releases/download/v5.0.0-alpha15/premake-5.0.0-alpha15-linux.tar.gz"
+        validate_variable_or_set_default "PREMAKE5_URL" "https://github.com/danielga/garrysmod_common/releases/download/premake-build%2F5.0.0-beta2/premake-5.0.0-beta2-linux.tar.gz"
         validate_variable_or_set_default "PROJECT_OS" "linux"
         ;;
     Darwin*)
-        validate_variable_or_set_default "PREMAKE5_URL" "https://github.com/premake/premake-core/releases/download/v5.0.0-alpha15/premake-5.0.0-alpha15-macosx.tar.gz"
+        validate_variable_or_set_default "PREMAKE5_URL" "https://github.com/danielga/garrysmod_common/releases/download/premake-build%2F5.0.0-beta2/premake-5.0.0-beta2-macosx.tar.gz"
         validate_variable_or_set_default "PROJECT_OS" "macosx"
-        validate_variable_or_set_default "MACOSX_SDK_URL" "https://github.com/phracker/MacOSX-SDKs/releases/download/10.15/MacOSX10.7.sdk.tar.xz"
+        validate_variable_or_set_default "MACOSX_SDK_URL" "https://github.com/phracker/MacOSX-SDKs/releases/download/11.3/MacOSX10.7.sdk.tar.xz"
         validate_variable_or_set_default "MACOSX_SDK_DIRECTORY" "$DEPENDENCIES/$PROJECT_OS/MacOSX10.7.sdk"
         validate_variable_or_set_default "SDKROOT" "$MACOSX_SDK_DIRECTORY"
         ;;
