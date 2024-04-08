@@ -1,4 +1,4 @@
-# garrysmod\_common
+# garrysmod_common
 
 A repository of common bits for compilation projects based on Garry's Mod.
 
@@ -10,14 +10,14 @@ There's common code for premake on the `premake` directory for faster developmen
 
 As a rule of thumb, avoid diverging too much from these rules:
 
-* On Windows, compile with **Visual Studio 2015**, **Visual Studio 2017** or **Visual Studio 2019**.
-* On Linux, use **GCC** (the more up to date, the better, tested up to **GCC 9**, older versions like **GCC 4** and **GCC 5** might throw C++ compilation errors).
-* On macOS, any **Xcode (using the GCC compiler)** version *MIGHT* work.
+- On Windows, compile with **Visual Studio 2015**, **Visual Studio 2017** or **Visual Studio 2019**.
+- On Linux, use **GCC** (the more up to date, the better, tested up to **GCC 9**, older versions like **GCC 4** and **GCC 5** might throw C++ compilation errors).
+- On macOS, any **Xcode (using the GCC compiler)** version _MIGHT_ work.
 
 Do not use internal classes/structures (like the `GameDepot::System` class or the `IGamemodeSystem::Information` structure) unless **(these rules are in addition to the previous ones)**:
 
-* On Windows and Linux, compile in **release** mode.
-* On macOS, use the **Mac OSX 10.7 SDK**, in **release** mode.
+- On Windows and Linux, compile in **release** mode.
+- On macOS, use the **Mac OSX 10.7 SDK**, in **release** mode.
 
 These restrictions are not random; they exist because of ABI compatibility reasons.
 
@@ -37,7 +37,7 @@ newoption({
 })
 
 local gmcommon = assert(_OPTIONS.gmcommon or os.getenv("GARRYSMOD_COMMON"),
-	"you didn't provide a path to your garrysmod_common (https://github.com/danielga/garrysmod_common) directory")
+    "you didn't provide a path to your garrysmod_common (https://github.com/danielga/garrysmod_common) directory")
 include(gmcommon)
 ```
 
@@ -81,10 +81,24 @@ IncludeSteamAPI()
 
 You can also request the project to auto-install the compiled files to a directory selected by you or automatically found on your system. Use one of the following:
 
-* Append the `--autoinstall` flag to your command to either use the `GARRYSMOD_LUA_BIN` environment var, automatic path finder or the `DEFAULT_GARRYSMOD_LUA_BIN_DIRECTORY` config (which you have to define yourself in `config.lua`).
-* Append the `--autoinstall=path` config to your command to use the path you want.
+- Append the `--autoinstall` flag to your command to either use the `GARRYSMOD_LUA_BIN` environment var, automatic path finder or the `DEFAULT_GARRYSMOD_LUA_BIN_DIRECTORY` config (which you have to define yourself in `config.lua`).
+- Append the `--autoinstall=path` config to your command to use the path you want.
 
 Using specific MacOSX SDKs is also supported, by using either the premake config `--macosx_sdkroot` or the preferred `SDKROOT` environment variable when calling `make`.
+
+To generate projects with the ability to compile x86-64 binaries, you need to change the project generator version:
+
+- Either in your `premake5.lua` config, before including `garrysmod_common`:
+
+  ```lua
+  PROJECT_GENERATOR_VERSION = 3
+  ```
+
+- Or in your environment variables, for example:
+
+  ```bash
+  PROJECT_GENERATOR_VERSION=3 premake5 gmake
+  ```
 
 ## Relevant URLs
 
