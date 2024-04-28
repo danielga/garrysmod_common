@@ -105,12 +105,17 @@ namespace GarrysMod
 		public:
 			inline ILuaGameCallback *GetLuaGameCallback( ) const
 			{
-				return gamecallback;
+				return m_pGameCallback;
 			}
 
 			inline void SetLuaGameCallback( ILuaGameCallback *callback )
 			{
-				gamecallback = callback;
+				m_pGameCallback = callback;
+			}
+
+			inline ILuaObject *GetStringPool( ) const
+			{
+				return m_pStringPool;
 			}
 
 		private:
@@ -119,8 +124,8 @@ namespace GarrysMod
 
 			// These members represent nothing in particular
 			// They've been selected to fill the required space between the vtable and the callback object
-			uint64_t _1; // 8 bytes
-			size_t _2[43]; // 43 * sizeof(size_t) = 172 (x86) or 344 (x86-64) bytes
+			char _1[2]; // 2 bytes
+			size_t _2[7]; // 7 * sizeof(size_t) = 28 (x86) or 56 (x86-64) bytes
 
 #ifdef __APPLE__
 
@@ -131,7 +136,14 @@ namespace GarrysMod
 			// x86: offset of 188 bytes
 			// x86-64: offset of 368 bytes
 			// macOS adds an offset of 4 bytes (total 192) on x86 and 8 bytes (total 376) on x86-64
-			ILuaGameCallback *gamecallback;
+			ILuaObject* m_pProtectedFunctionReturns[4];
+			ILuaObject* m_pTempObjects[32];
+			unsigned char m_iRealm; // CLIENT = 0, SERVER = 1, MENU = 2
+			ILuaGameCallback* m_pGameCallback;
+			char m_sPathID[32]; // lsv, lsc or LuaMenu
+			int m_iCurrentTempObject;
+			ILuaObject* m_pGlobal;
+			ILuaObject* m_pStringPool;
 		};
 	}
 }
