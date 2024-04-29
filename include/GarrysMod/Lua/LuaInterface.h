@@ -122,10 +122,15 @@ namespace GarrysMod
 			// vtable: 1 * sizeof(void **) = 4 (x86) or 8 (x86-64) bytes
 			// luabase: 1 * sizeof(LuaBase *) = 4 (x86) or 8 (x86-64) bytes
 
-			// These members represent nothing in particular
-			// They've been selected to fill the required space between the vtable and the callback object
-			char _1[2]; // 2 bytes
-			size_t _2[7]; // 7 * sizeof(size_t) = 28 (x86) or 56 (x86-64) bytes
+			// The purpose of these members are unknown.
+			int _1; // Always 1?
+			void* _2;
+			int _3;
+			int _4;
+			int _5;
+			void* _6;
+			void* _7;
+			char _8[3];
 
 #ifdef __APPLE__
 
@@ -133,9 +138,6 @@ namespace GarrysMod
 
 #endif
 
-			// x86: offset of 188 bytes
-			// x86-64: offset of 368 bytes
-			// macOS adds an offset of 4 bytes (total 192) on x86 and 8 bytes (total 376) on x86-64
 			ILuaObject* m_pProtectedFunctionReturns[4];
 			ILuaObject* m_pTempObjects[32];
 			unsigned char m_iRealm; // CLIENT = 0, SERVER = 1, MENU = 2
