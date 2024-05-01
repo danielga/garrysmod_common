@@ -51,7 +51,7 @@ namespace GarrysMod
 			virtual void DestroyObject( ILuaObject *obj ) = 0;
 			virtual ILuaObject *CreateObject( ) = 0;
 			virtual void SetMember( ILuaObject *table, ILuaObject *key, ILuaObject *value ) = 0;
-			virtual void GetNewTable( ) = 0;
+			virtual ILuaObject *GetNewTable( ) = 0;
 			virtual void SetMember( ILuaObject *table, float key ) = 0;
 			virtual void SetMember( ILuaObject *table, float key, ILuaObject *value ) = 0;
 			virtual void SetMember( ILuaObject *table, const char *key ) = 0;
