@@ -159,7 +159,7 @@ namespace GarrysMod
 				return m_pLua;
 			}
 
-			inline void SetLua( ILuaBase *Lua ) const
+			inline void SetLua( ILuaBase *Lua )
 			{
 				m_pLua = Lua;
 			}
@@ -179,6 +179,6 @@ namespace GarrysMod
 			int m_iType;
 			int m_iReference;
 			ILuaBase* m_pLua;
-		}
+		};
 	}
 }
