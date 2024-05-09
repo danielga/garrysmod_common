@@ -132,11 +132,11 @@ namespace GarrysMod
 
 			// The purpose of all members that start with _ are unknown
 			int _1; // Always 1?
-			const char* m_sCurrentPath = NULL;
+			const char* m_sCurrentPath;
 			int _2; // Always 16?
 			int _3; // Always 0?
-			int m_iPushedPaths = 0;
-			const char* m_sLastPath = NULL;
+			int m_iPushedPaths;
+			const char* m_sLastPath;
 			std::list<ILuaThreadedCall*> m_pThreadedCalls;
 
 #ifdef __APPLE__
