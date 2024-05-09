@@ -121,6 +121,7 @@ namespace GarrysMod
 
 			virtual void SetMemberDouble( float, double ) = 0;
 			virtual double GetMemberDouble( const char *, double ) = 0;
+			// NOTE: All members below do NOT exist in ILuaObjects returned from the menusystem!
 
 			virtual BaseEntity *GetMemberEntity( const char *, BaseEntity * ) = 0;
 			virtual void SetMemberEntity( float, BaseEntity * ) = 0;
@@ -149,6 +150,36 @@ namespace GarrysMod
 			virtual void SetMemberMatrix( int, VMatrix const * ) = 0;
 
 			virtual void SetMemberPhysObject( const char *, IPhysicsObject * ) = 0;
+		};
+
+		class CLuaObject : public ILuaObject
+		{
+		public:
+			inline ILuaBase *GetLua( ) const
+			{
+				return m_pLua;
+			}
+
+			inline void SetLua( ILuaBase *Lua )
+			{
+				m_pLua = Lua;
+			}
+
+			inline int GetReference( ) const
+			{
+				return m_iReference;
+			}
+
+			inline int GetInternalType( ) const
+			{
+				return m_iType;
+			}
+
+		private:
+			bool m_bUserData;
+			int m_iType;
+			int m_iReference;
+			ILuaBase* m_pLua;
 		};
 	}
 }
