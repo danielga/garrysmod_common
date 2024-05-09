@@ -121,6 +121,7 @@ namespace GarrysMod
 
 			virtual void SetMemberDouble( float, double ) = 0;
 			virtual double GetMemberDouble( const char *, double ) = 0;
+			// NOTE: All members below do NOT exist in ILuaObjects returned from the menusystem!
 
 			virtual BaseEntity *GetMemberEntity( const char *, BaseEntity * ) = 0;
 			virtual void SetMemberEntity( float, BaseEntity * ) = 0;
