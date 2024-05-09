@@ -25,7 +25,7 @@ namespace GarrysMod
 		class ILuaThreadedCall
 		{
 		public:
-			virtual void Init( ) = 0; //NOTE: Always called on the main thread, so if you need to prepare something there, you can do it in here.
+			virtual void Init( ) = 0; // NOTE: Always called on the main thread, so if you need to prepare something there, you can do it in here.
 			virtual void Run( ILuaBase* ) = 0; // NOTE: After the call was executed, it won't be deleted! So call `delete this;` or reuse it.
 		};
 
