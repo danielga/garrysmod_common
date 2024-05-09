@@ -18,9 +18,15 @@ namespace GarrysMod
 {
 	namespace Lua
 	{
-		class ILuaThreadedCall;
 		class ILuaGameCallback;
 		class ILuaObject;
+
+		class ILuaThreadedCall
+		{
+		public:
+			virtual void Init() = 0; //NOTE: Always called on the main thread, so if you need to prepare something there, you can do it in here.
+			virtual void Run(GarrysMod::Lua::ILuaInterface*) = 0; // NOTE: After the call was executed, it won't be deleted! So call `delete this;` or reuse it.
+		};
 
 		class ILuaInterface : public ILuaBase
 		{
@@ -94,7 +100,7 @@ namespace GarrysMod
 			virtual void PreCreateTable( int arrelems, int nonarrelems ) = 0;
 			virtual void PushPooledString( int index ) = 0;
 			virtual const char *GetPooledString( int index ) = 0;
-			virtual void *AddThreadedCall( ILuaThreadedCall * ) = 0;
+			virtual int AddThreadedCall( ILuaThreadedCall * ) = 0; // NOTE: Returns the amount off queried threaded calls.
 			virtual void AppendStackTrace( char *, unsigned long ) = 0;
 			virtual void *CreateConVar( const char *, const char *, const char *, int ) = 0;
 			virtual void *CreateConCommand( const char *, const char *, int, void ( * )( const CCommand & ), int ( * )( const char *, char ( * )[128] ) ) = 0;
@@ -124,19 +130,18 @@ namespace GarrysMod
 			// vtable: 1 * sizeof(void **) = 4 (x86) or 8 (x86-64) bytes
 			// luabase: 1 * sizeof(LuaBase *) = 4 (x86) or 8 (x86-64) bytes
 
-			// The purpose of these members are unknown.
+			// The purpose of all members that start with _ are unknown
 			int _1; // Always 1?
-			void* _2;
-			int _3;
-			int _4;
-			int _5;
-			void* _6;
-			void* _7;
-			char _8[3];
+			const char* m_sCurrentPath = NULL;
+			int _2; // Always 16?
+			int _3; // Always 0?
+			int m_iPushedPaths = 0;
+			const char* m_sLastPath = NULL;
+			std::list<ILuaThreadedCall*> m_pThreadedCalls;
 
 #ifdef __APPLE__
 
-			size_t _3; // 1 * sizeof(size_t) = 4 (x86) or 8 (x86-64) bytes
+			size_t _4; // 1 * sizeof(size_t) = 4 (x86) or 8 (x86-64) bytes
 
 #endif
 
@@ -148,6 +153,43 @@ namespace GarrysMod
 			int m_iCurrentTempObject;
 			ILuaObject* m_pGlobal;
 			ILuaObject* m_pStringPool;
+			// But wait, there's more. In the next fields the metatables objects are saved, but idk if it just has a field for each metatable or if it uses a map.
+			char _5[40];
+			ILuaObject* m_pWeaponMeta;
+			ILuaObject* m_pVectorMeta;
+			ILuaObject* m_pAngleMeta;
+			ILuaObject* m_pPhysObjMeta;
+			ILuaObject* m_pISaveMeta;
+			ILuaObject* m_pIRestoreMeta;
+			ILuaObject* m_pCTakeDamageInfoMeta;
+			ILuaObject* m_pCEffectDataMeta;
+			ILuaObject* m_pCMoveDataMeta;
+			ILuaObject* m_pCRecipientFilterMeta;
+			ILuaObject* m_pCUserCmd;
+			ILuaObject* _6; // Unknown.
+			ILuaObject* m_pIMaterialMeta;
+			ILuaObject* m_pPanelMeta;
+			ILuaObject* m_pCLuaParticleMeta;
+			char _7[3];
+			ILuaObject* m_pITextureMeta;
+			ILuaObject* m_pBf_readMeta;
+			ILuaObject* m_pConVarMeta;
+			ILuaObject* m_pIMeshMeta;
+			ILuaObject* m_pVMatrixMeta;
+			ILuaObject* m_pCSoundPatchMeta;
+			ILuaObject* m_pPixelvis_handle_tMeta;
+			ILuaObject* m_pDlight_tMeta;
+			ILuaObject* m_pIVideoWriterMeta;
+			ILuaObject* m_pFileMeta;
+			ILuaObject* m_pCLuaLocomotionMeta;
+			ILuaObject* m_pPathFollowerMeta;
+			ILuaObject* m_pCNavAreaMeta;
+			ILuaObject* m_pIGModAudioChannelMeta;
+			ILuaObject* m_pCNavLadderMeta;
+			ILuaObject* m_pCNewParticleEffectMeta;
+			ILuaObject* m_pProjectedTextureMeta;
+			ILuaObject* m_pPhysCollideMeta;
+			ILuaObject* m_pSurfaceInfoMeta;
 		};
 	}
 }
