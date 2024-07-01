@@ -97,4 +97,7 @@ typedef INetChannel *( *NET_CreateNetChannel_t )(
 );
 NET_CreateNetChannel_t NET_CreateNetChannel( );
 
+typedef void ( GMCOMMON_CALLING_CONVENTION *HandleChange_t )( const std::string& path );
+HandleChange_t HandleChange( );
+
 }

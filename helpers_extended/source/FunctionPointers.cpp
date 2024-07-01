@@ -334,4 +334,18 @@ namespace FunctionPointers
 
 		return func_pointer;
 	}
+
+    HandleChange_t HandleChange( )
+	{
+		static HandleChange_t func_pointer = nullptr;
+		if( func_pointer == nullptr )
+		{
+			SourceSDK::FactoryLoader server_loader( "server" );
+			func_pointer = ResolveSymbols<HandleChange_t>(
+				server_loader, Symbols::HandleChange
+			);
+		}
+
+		return func_pointer;
+	}
 }

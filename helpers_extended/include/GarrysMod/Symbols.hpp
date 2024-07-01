@@ -30,5 +30,6 @@ extern const std::vector<Symbol> GlobalVars;
 extern const std::vector<Symbol> AdvancedLuaErrorReporter;
 extern const std::vector<Symbol> NET_ProcessSocket;
 extern const std::vector<Symbol> NET_CreateNetChannel;
+extern const std::vector<Symbol> HandleChange;
 
 }
