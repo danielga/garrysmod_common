@@ -107,6 +107,7 @@ namespace GarrysMod
 			virtual void *CreateConCommand( const char *, const char *, int, void ( * )( const CCommand & ), int ( * )( const char *, char ( * )[128] ) ) = 0;
 			virtual const char* CheckStringOpt( int iStackPos, const char* def ) = 0;
 			virtual double CheckNumberOpt( int iStackPos, double def ) = 0;
+			virtual void RegisterMetaTable( const char* name, ILuaObject* tbl ) = 0;
 		};
 
 		class CLuaInterface : public ILuaInterface
