@@ -7,16 +7,19 @@
 #if defined ARCHITECTURE_X86_64
 
 #define GMCOMMON_CALLING_CONVENTION __fastcall
+#define GMCOMMON_CALLING_CONVENTION_STD __fastcall
 
 #else
 
 #define GMCOMMON_CALLING_CONVENTION __thiscall
+#define GMCOMMON_CALLING_CONVENTION_STD __stdcall
 
 #endif
 
 #else
 
 #define GMCOMMON_CALLING_CONVENTION
+#define GMCOMMON_CALLING_CONVENTION_STD
 
 #endif
 
@@ -96,5 +99,8 @@ typedef INetChannel *( *NET_CreateNetChannel_t )(
 	bool bForceNewChannel
 );
 NET_CreateNetChannel_t NET_CreateNetChannel( );
+
+typedef void ( GMCOMMON_CALLING_CONVENTION_STD *HandleChange_t )( const std::string& path );
+HandleChange_t HandleChange( );
 
 }
