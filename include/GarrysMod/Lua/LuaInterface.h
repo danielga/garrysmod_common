@@ -4,6 +4,7 @@
 
 #include "LuaBase.h"
 #include "SourceCompat.h"
+#include <list>
 
 namespace Bootil
 {
@@ -18,9 +19,15 @@ namespace GarrysMod
 {
 	namespace Lua
 	{
-		class ILuaThreadedCall;
 		class ILuaGameCallback;
 		class ILuaObject;
+
+		class ILuaThreadedCall
+		{
+		public:
+			virtual void Init( ) = 0; // NOTE: Always called on the main thread, so if you need to prepare something there, you can do it in here.
+			virtual void Run( ILuaBase* ) = 0; // NOTE: After the call was executed, it won't be deleted! So call `delete this;` or reuse it.
+		};
 
 		class ILuaInterface : public ILuaBase
 		{
@@ -51,7 +58,7 @@ namespace GarrysMod
 			virtual void DestroyObject( ILuaObject *obj ) = 0;
 			virtual ILuaObject *CreateObject( ) = 0;
 			virtual void SetMember( ILuaObject *table, ILuaObject *key, ILuaObject *value ) = 0;
-			virtual void GetNewTable( ) = 0;
+			virtual ILuaObject *GetNewTable( ) = 0;
 			virtual void SetMember( ILuaObject *table, float key ) = 0;
 			virtual void SetMember( ILuaObject *table, float key, ILuaObject *value ) = 0;
 			virtual void SetMember( ILuaObject *table, const char *key ) = 0;
@@ -94,10 +101,13 @@ namespace GarrysMod
 			virtual void PreCreateTable( int arrelems, int nonarrelems ) = 0;
 			virtual void PushPooledString( int index ) = 0;
 			virtual const char *GetPooledString( int index ) = 0;
-			virtual void *AddThreadedCall( ILuaThreadedCall * ) = 0;
+			virtual int AddThreadedCall( ILuaThreadedCall * ) = 0; // NOTE: Returns the amount off queried threaded calls.
 			virtual void AppendStackTrace( char *, unsigned long ) = 0;
 			virtual void *CreateConVar( const char *, const char *, const char *, int ) = 0;
 			virtual void *CreateConCommand( const char *, const char *, int, void ( * )( const CCommand & ), int ( * )( const char *, char ( * )[128] ) ) = 0;
+			virtual const char* CheckStringOpt( int iStackPos, const char* def ) = 0;
+			virtual double CheckNumberOpt( int iStackPos, double def ) = 0;
+			virtual void RegisterMetaTable( const char* name, ILuaObject* tbl ) = 0;
 		};
 
 		class CLuaInterface : public ILuaInterface
@@ -105,33 +115,83 @@ namespace GarrysMod
 		public:
 			inline ILuaGameCallback *GetLuaGameCallback( ) const
 			{
-				return gamecallback;
+				return m_pGameCallback;
 			}
 
 			inline void SetLuaGameCallback( ILuaGameCallback *callback )
 			{
-				gamecallback = callback;
+				m_pGameCallback = callback;
+			}
+
+			inline ILuaObject *GetStringPool( ) const
+			{
+				return m_pStringPool;
 			}
 
 		private:
 			// vtable: 1 * sizeof(void **) = 4 (x86) or 8 (x86-64) bytes
 			// luabase: 1 * sizeof(LuaBase *) = 4 (x86) or 8 (x86-64) bytes
 
-			// These members represent nothing in particular
-			// They've been selected to fill the required space between the vtable and the callback object
-			uint64_t _1; // 8 bytes
-			size_t _2[43]; // 43 * sizeof(size_t) = 172 (x86) or 344 (x86-64) bytes
+			// The purpose of all members that start with _ are unknown
+			int _1; // Always 1?
+			const char* m_sCurrentPath;
+			int _2; // Always 16?
+			int _3; // Always 0?
+			int m_iPushedPaths;
+			const char* m_sLastPath;
+			std::list<ILuaThreadedCall*> m_pThreadedCalls;
 
 #ifdef __APPLE__
 
-			size_t _3; // 1 * sizeof(size_t) = 4 (x86) or 8 (x86-64) bytes
+			size_t _4; // 1 * sizeof(size_t) = 4 (x86) or 8 (x86-64) bytes
 
 #endif
 
-			// x86: offset of 188 bytes
-			// x86-64: offset of 368 bytes
-			// macOS adds an offset of 4 bytes (total 192) on x86 and 8 bytes (total 376) on x86-64
-			ILuaGameCallback *gamecallback;
+			ILuaObject* m_pProtectedFunctionReturns[4];
+			ILuaObject* m_pTempObjects[32];
+			unsigned char m_iRealm; // CLIENT = 0, SERVER = 1, MENU = 2
+			ILuaGameCallback* m_pGameCallback;
+			char m_sPathID[32]; // lsv, lsc or LuaMenu
+			int m_iCurrentTempObject;
+			ILuaObject* m_pGlobal;
+			ILuaObject* m_pStringPool;
+			// But wait, there's more. In the next fields the metatables objects are saved, but idk if it just has a field for each metatable or if it uses a map.
+			char _5[40];
+			ILuaObject* m_pWeaponMeta;
+			ILuaObject* m_pVectorMeta;
+			ILuaObject* m_pAngleMeta;
+			ILuaObject* m_pPhysObjMeta;
+			ILuaObject* m_pISaveMeta;
+			ILuaObject* m_pIRestoreMeta;
+			ILuaObject* m_pCTakeDamageInfoMeta;
+			ILuaObject* m_pCEffectDataMeta;
+			ILuaObject* m_pCMoveDataMeta;
+			ILuaObject* m_pCRecipientFilterMeta;
+			ILuaObject* m_pCUserCmd;
+			ILuaObject* _6; // Unknown.
+			ILuaObject* m_pIMaterialMeta;
+			ILuaObject* m_pPanelMeta;
+			ILuaObject* m_pCLuaParticleMeta;
+			char _7[3];
+			ILuaObject* m_pITextureMeta;
+			ILuaObject* m_pBf_readMeta;
+			ILuaObject* m_pConVarMeta;
+			ILuaObject* m_pIMeshMeta;
+			ILuaObject* m_pVMatrixMeta;
+			ILuaObject* m_pCSoundPatchMeta;
+			ILuaObject* m_pPixelvis_handle_tMeta;
+			ILuaObject* m_pDlight_tMeta;
+			ILuaObject* m_pIVideoWriterMeta;
+			ILuaObject* m_pFileMeta;
+			ILuaObject* m_pCLuaLocomotionMeta;
+			ILuaObject* m_pPathFollowerMeta;
+			ILuaObject* m_pCNavAreaMeta;
+			ILuaObject* m_pIGModAudioChannelMeta;
+			ILuaObject* m_pCNavLadderMeta;
+			ILuaObject* m_pCNewParticleEffectMeta;
+			ILuaObject* m_pProjectedTextureMeta;
+			ILuaObject* m_pPhysCollideMeta;
+			ILuaObject* m_pSurfaceInfoMeta;
 		};
 	}
 }
