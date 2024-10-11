@@ -2,6 +2,8 @@
 
 #include <Platform.hpp>
 
+#include <string>
+
 #if defined SYSTEM_WINDOWS
 
 #if defined ARCHITECTURE_X86_64
