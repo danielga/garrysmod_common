@@ -118,7 +118,7 @@ extern "C"
 	CreateLoader( int, lua_iscfunction, ( lua_State *a, int b ), ( a, b ) );
 	CreateLoader( int, lua_isuserdata, ( lua_State *a, int b ), ( a, b ) );
 	CreateLoader( int, lua_type, ( lua_State *a, int b ), ( a, b ) );
-	CreateLoader( const char *, lua_typename, ( lua_State *a, int b ), ( a, b ) );
+	CreateLoader( const char *, lua_typename, ( lua_State *a, int b, int c ), ( a, b, c ) );
 	CreateLoader( int, lua_equal, ( lua_State *a, int b, int c ), ( a, b, c ) );
 	CreateLoader( int, lua_rawequal, ( lua_State *a, int b, int c ), ( a, b, c ) );
 	CreateLoader( int, lua_lessthan, ( lua_State *a, int b, int c ), ( a, b, c ) );
