@@ -150,6 +150,7 @@ namespace GarrysMod
 			virtual void SetMemberMatrix( int, VMatrix const * ) = 0;
 
 			virtual void SetMemberPhysObject( const char *, IPhysicsObject * ) = 0;
+			virtual double GetMemberDouble( float, double ) = 0;
 		};
 
 		class CLuaObject : public ILuaObject

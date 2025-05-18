@@ -101,7 +101,7 @@ namespace GarrysMod
 			virtual void PreCreateTable( int arrelems, int nonarrelems ) = 0;
 			virtual void PushPooledString( int index ) = 0;
 			virtual const char *GetPooledString( int index ) = 0;
-			virtual int AddThreadedCall( ILuaThreadedCall * ) = 0; // NOTE: Returns the amount off queried threaded calls.
+			virtual int AddThreadedCall( ILuaThreadedCall * ) = 0; // NOTE: Returns the number of queried threaded calls.
 			virtual void AppendStackTrace( char *, unsigned long ) = 0;
 			virtual void *CreateConVar( const char *, const char *, const char *, int ) = 0;
 			virtual void *CreateConCommand( const char *, const char *, int, void ( * )( const CCommand & ), int ( * )( const char *, char ( * )[128] ) ) = 0;
