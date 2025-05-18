@@ -105,8 +105,8 @@ namespace GarrysMod
 			virtual const char *GetPooledString( int index ) = 0;
 			virtual int AddThreadedCall( ILuaThreadedCall* call ) = 0; // NOTE: Returns the number of queried threaded calls.
 			virtual void AppendStackTrace( char *, unsigned long ) = 0;
-			virtual void *CreateConVar( const char* name, const char* defaultValue, const char* helpString, int flags ) = 0;
-			virtual void *CreateConCommand( const char* name, const char* helpString, int flags, void ( * )( const CCommand & ) callback, int ( * )( const char *, char ( * )[128] ) completionFunc ) = 0;
+			virtual ConVar *CreateConVar( const char* name, const char* defaultValue, const char* helpString, int flags ) = 0;
+			virtual ConCommand *CreateConCommand( const char* name, const char* helpString, int flags, void ( * )( const CCommand & ) callback, int ( * )( const char *, char ( * )[128] ) completionFunc ) = 0;
 			virtual const char* CheckStringOpt( int iStackPos, const char* def ) = 0;
 			virtual double CheckNumberOpt( int iStackPos, double def ) = 0;
 			virtual void RegisterMetaTable( const char* name, ILuaObject* tbl ) = 0;
