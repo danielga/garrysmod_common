@@ -91,8 +91,10 @@ namespace GarrysMod
 			virtual bool RunStringEx( const char *filename, const char *path, const char *stringToRun, bool run, bool printErrors, bool dontPushErrors, bool noReturns ) = 0;
 			virtual size_t GetDataString( int index, const char **str ) = 0;
 			virtual void ErrorFromLua( const char *fmt, ... ) = 0;
+			// Returns "<nowhere>" if nothign was found.
 			virtual const char *GetCurrentLocation( ) = 0;
 			virtual void MsgColour( const Color &col, const char *fmt, ... ) = 0;
+			// outStr is set to "!UNKNOWN" if it couldn't be found.
 			virtual void GetCurrentFile( std::string &outStr ) = 0;
 			virtual void CompileString( Bootil::Buffer &dumper, const std::string &stringToCompile ) = 0;
 			virtual bool CallFunctionProtected( int, int, bool ) = 0;
@@ -101,10 +103,10 @@ namespace GarrysMod
 			virtual void PreCreateTable( int arrelems, int nonarrelems ) = 0;
 			virtual void PushPooledString( int index ) = 0;
 			virtual const char *GetPooledString( int index ) = 0;
-			virtual int AddThreadedCall( ILuaThreadedCall * ) = 0; // NOTE: Returns the number of queried threaded calls.
+			virtual int AddThreadedCall( ILuaThreadedCall* call ) = 0; // NOTE: Returns the number of queried threaded calls.
 			virtual void AppendStackTrace( char *, unsigned long ) = 0;
-			virtual void *CreateConVar( const char *, const char *, const char *, int ) = 0;
-			virtual void *CreateConCommand( const char *, const char *, int, void ( * )( const CCommand & ), int ( * )( const char *, char ( * )[128] ) ) = 0;
+			virtual void *CreateConVar( const char* name, const char* defaultValue, const char* helpString, int flags ) = 0;
+			virtual void *CreateConCommand( const char* name, const char* helpString, int flags, void ( * )( const CCommand & ) callback, int ( * )( const char *, char ( * )[128] ) completionFunc ) = 0;
 			virtual const char* CheckStringOpt( int iStackPos, const char* def ) = 0;
 			virtual double CheckNumberOpt( int iStackPos, double def ) = 0;
 			virtual void RegisterMetaTable( const char* name, ILuaObject* tbl ) = 0;
