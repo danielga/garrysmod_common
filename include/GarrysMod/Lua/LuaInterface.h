@@ -91,7 +91,7 @@ namespace GarrysMod
 			virtual bool RunStringEx( const char *filename, const char *path, const char *stringToRun, bool run, bool printErrors, bool dontPushErrors, bool noReturns ) = 0;
 			virtual size_t GetDataString( int index, const char **str ) = 0;
 			virtual void ErrorFromLua( const char *fmt, ... ) = 0;
-			// Returns "<nowhere>" if nothign was found.
+			// Returns "<nowhere>" if nothing was found.
 			virtual const char *GetCurrentLocation( ) = 0;
 			virtual void MsgColour( const Color &col, const char *fmt, ... ) = 0;
 			// outStr is set to "!UNKNOWN" if it couldn't be found.
