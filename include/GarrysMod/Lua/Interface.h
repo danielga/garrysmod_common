@@ -3,10 +3,10 @@
 
 #ifdef GMOD_USE_ILUAINTERFACE
 #include "LuaInterface.h"
-#define GMOD_LUACLASS GarrysMod::Lua::ILuaInterface*
+typedef GarrysMod::Lua::ILuaInterface* GMOD_LUACLASS;
 #else
 #include "LuaBase.h"
-#define GMOD_LUACLASS GarrysMod::Lua::ILuaBase*
+typedef GarrysMod::Lua::ILuaBase* GMOD_LUACLASS;
 #endif
 
 struct lua_State

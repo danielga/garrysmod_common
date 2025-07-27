@@ -166,7 +166,7 @@ namespace Symbols
 
 	const std::vector<Symbol> GModDataPack_SendFileToClient = {
 		Symbol::FromName( "?SendFileToClient@GModDataPack@@QAEXHH@Z" ),
-		Symbol::FromSignature( "\x55\x8B\xEC\x83\xEC*\x53\x8B\x5D\x0C\x56\x8B\xF1\x89\x75\xF8" )
+		Symbol::FromSignature( "\x55\x8B\xEC\x83\xEC\x2A\x53\x8B\x5D\x0C\x56\x8B\xF1\x89\x75\xF8" )
 	};
 
 	const std::vector<Symbol> CNetChan_IsValidFileForTransfer = {
