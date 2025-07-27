@@ -1,5 +1,5 @@
-#ifndef GMOD_POOLEDSTRINGS_H
-#define GMOD_POOLEDSTRINGS_H
+#pragma once
+
 static const char *g_PooledStrings[] = {
 	"AcceptInput",
 	"AdjustMouseSensitivity",
@@ -316,7 +316,6 @@ static const char *g_PooledStrings[] = {
 	"Entity"
 };
 
-// Definitions
 enum g_PooledStringsEnum {
 	LUA_POOLEDSTRING_AcceptInput = 0,
 	LUA_POOLEDSTRING_AdjustMouseSensitivity,
@@ -632,4 +631,3 @@ enum g_PooledStringsEnum {
 	LUA_POOLEDSTRING_String,
 	LUA_POOLEDSTRING_Entity,
 };
-#endif

@@ -3,10 +3,18 @@
 
 #ifdef GMOD_USE_ILUAINTERFACE
 #include "LuaInterface.h"
-typedef GarrysMod::Lua::ILuaInterface* GMOD_LUACLASS;
+
+namespace GarrysMod::Lua
+{
+    typedef ILuaInterface ILua;
+}
 #else
 #include "LuaBase.h"
-typedef GarrysMod::Lua::ILuaBase* GMOD_LUACLASS;
+
+namespace GarrysMod::Lua
+{
+    typedef ILuaBase ILua;
+}
 #endif
 
 struct lua_State
@@ -23,7 +31,7 @@ struct lua_State
     #error Unsupported platform
 #endif
 
-    GMOD_LUACLASS luabase;
+    GarrysMod::Lua::ILua *luabase;
 };
 
 #ifndef GMOD
@@ -44,40 +52,40 @@ struct lua_State
         #define LUA_FUNCTION_STATIC( name ) static LUA_FUNCTION( name )
     #else
         #define GMOD_MODULE_OPEN()                                  \
-            int gmod13_open__Imp( GMOD_LUACLASS LUA );  \
+            int gmod13_open__Imp( GarrysMod::Lua::ILua *LUA );  \
             GMOD_DLL_EXPORT int gmod13_open( lua_State* L )         \
             {                                                       \
                 return gmod13_open__Imp( L->luabase );              \
             }                                                       \
-            int gmod13_open__Imp( [[maybe_unused]] GMOD_LUACLASS LUA )
+            int gmod13_open__Imp( [[maybe_unused]] GarrysMod::Lua::ILua *LUA )
 
         #define GMOD_MODULE_CLOSE()                                 \
-            int gmod13_close__Imp( GMOD_LUACLASS LUA ); \
+            int gmod13_close__Imp( GarrysMod::Lua::ILua *LUA ); \
             GMOD_DLL_EXPORT int gmod13_close( lua_State* L )        \
             {                                                       \
                 return gmod13_close__Imp( L->luabase );             \
             }                                                       \
-            int gmod13_close__Imp( [[maybe_unused]] GMOD_LUACLASS LUA )
+            int gmod13_close__Imp( [[maybe_unused]] GarrysMod::Lua::ILua *LUA )
 
         #define LUA_FUNCTION( FUNC )                            \
-            int FUNC##__Imp( GMOD_LUACLASS LUA );   \
+            int FUNC##__Imp( GarrysMod::Lua::ILua *LUA );   \
             int FUNC( lua_State* L )                            \
             {                                                   \
-                GMOD_LUACLASS LUA = L->luabase;     \
+                GarrysMod::Lua::ILua *LUA = L->luabase;     \
                 LUA->SetState(L);                               \
                 return FUNC##__Imp( LUA );                      \
             }                                                   \
-            int FUNC##__Imp( [[maybe_unused]] GMOD_LUACLASS LUA )
+            int FUNC##__Imp( [[maybe_unused]] GarrysMod::Lua::ILua *LUA )
 
         #define LUA_FUNCTION_STATIC( FUNC )                             \
-            static int FUNC##__Imp( GMOD_LUACLASS LUA );    \
+            static int FUNC##__Imp( GarrysMod::Lua::ILua *LUA );    \
             static int FUNC( lua_State* L )                             \
             {                                                           \
-                GMOD_LUACLASS LUA = L->luabase;             \
+                GarrysMod::Lua::ILua *LUA = L->luabase;             \
                 LUA->SetState(L);                                       \
                 return FUNC##__Imp( LUA );                              \
             }                                                           \
-            static int FUNC##__Imp( [[maybe_unused]] GMOD_LUACLASS LUA )
+            static int FUNC##__Imp( [[maybe_unused]] GarrysMod::Lua::ILua *LUA )
 
         #define LUA_FUNCTION_DECLARE( FUNC ) \
             int FUNC( lua_State *L )
@@ -87,13 +95,13 @@ struct lua_State
 
         #define LUA_FUNCTION_IMPLEMENT( FUNC )                                                  \
             [[deprecated("Use LUA_FUNCTION_STATIC_MEMBER instead of LUA_FUNCTION_IMPLEMENT.")]] \
-            static int FUNC##__Imp( [[maybe_unused]] GMOD_LUACLASS LUA )
+            static int FUNC##__Imp( [[maybe_unused]] GarrysMod::Lua::ILua *LUA )
 
         #define LUA_FUNCTION_WRAP( FUNC )                                                   \
             [[deprecated("Use LUA_FUNCTION_STATIC_MEMBER instead of LUA_FUNCTION_WRAP.")]]  \
             static int FUNC( lua_State *L )                                                 \
             {                                                                               \
-                GMOD_LUACLASS LUA = L->luabase;                                 \
+                GarrysMod::Lua::ILua *LUA = L->luabase;                                 \
                 LUA->SetState(L);                                                           \
                 return FUNC##__Imp( LUA );                                                  \
             }
@@ -101,11 +109,11 @@ struct lua_State
         #define LUA_FUNCTION_STATIC_MEMBER( FUNC )                  \
             static int FUNC( lua_State* L )                         \
             {                                                       \
-                GMOD_LUACLASS LUA = L->luabase;         \
+                GarrysMod::Lua::ILua *LUA = L->luabase;         \
                 LUA->SetState(L);                                   \
                 return FUNC##__Imp( LUA );                          \
             }                                                       \
-            static int FUNC##__Imp( GMOD_LUACLASS LUA )
+            static int FUNC##__Imp( GarrysMod::Lua::ILua *LUA )
     #endif
 #endif
 

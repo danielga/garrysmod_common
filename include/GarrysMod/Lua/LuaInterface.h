@@ -14,6 +14,8 @@ namespace Bootil
 struct lua_Debug;
 class CCommand;
 class Color;
+class ConVar;
+class ConCommand;
 
 namespace GarrysMod
 {
@@ -106,7 +108,7 @@ namespace GarrysMod
 			virtual int AddThreadedCall( ILuaThreadedCall *call ) = 0; // NOTE: Returns the number of queried threaded calls.
 			virtual void AppendStackTrace( char *, unsigned int ) = 0;
 			virtual ConVar *CreateConVar( const char *name, const char *defaultValue, const char *helpString, int flags ) = 0;
-			virtual ConCommand *CreateConCommand( const char *name, const char *helpString, int flags, void ( * )( const CCommand & ) callback, int ( * )( const char *, char ( * )[128] ) completionFunc ) = 0;
+			virtual ConCommand *CreateConCommand( const char *name, const char *helpString, int flags, void ( *callback )( const CCommand & ), int ( *completionFunc )( const char *, char ( * )[128] ) ) = 0;
 			virtual const char *CheckStringOpt( int iStackPos, const char *def ) = 0;
 			virtual double CheckNumberOpt( int iStackPos, double def ) = 0;
 			virtual int RegisterMetaTable( const char *name, ILuaObject *tbl ) = 0;
