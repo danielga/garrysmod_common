@@ -14,6 +14,8 @@ namespace Bootil
 struct lua_Debug;
 class CCommand;
 class Color;
+class ConVar;
+class ConCommand;
 
 namespace GarrysMod
 {
@@ -83,7 +85,7 @@ namespace GarrysMod
 			virtual void PopPath( ) = 0;
 			virtual const char *GetPath( ) = 0;
 			virtual int GetColor( int index ) = 0;
-			virtual void PushColor( Color color ) = 0;
+			virtual void *PushColor( Color color ) = 0; // ToDo: This seems to return something, but it hasn't been figured out what yet.
 			virtual int GetStack( int level, lua_Debug *dbg ) = 0;
 			virtual int GetInfo( const char *what, lua_Debug *dbg ) = 0;
 			virtual const char *GetLocal( lua_Debug *dbg, int n ) = 0;
@@ -91,23 +93,25 @@ namespace GarrysMod
 			virtual bool RunStringEx( const char *filename, const char *path, const char *stringToRun, bool run, bool printErrors, bool dontPushErrors, bool noReturns ) = 0;
 			virtual size_t GetDataString( int index, const char **str ) = 0;
 			virtual void ErrorFromLua( const char *fmt, ... ) = 0;
+			// Returns "<nowhere>" if nothing was found.
 			virtual const char *GetCurrentLocation( ) = 0;
 			virtual void MsgColour( const Color &col, const char *fmt, ... ) = 0;
+			// outStr is set to "!UNKNOWN" if it couldn't be found.
 			virtual void GetCurrentFile( std::string &outStr ) = 0;
-			virtual void CompileString( Bootil::Buffer &dumper, const std::string &stringToCompile ) = 0;
+			virtual bool CompileString( Bootil::Buffer &dumper, const std::string &stringToCompile ) = 0;
 			virtual bool CallFunctionProtected( int, int, bool ) = 0;
 			virtual void Require( const char *name ) = 0;
 			virtual const char *GetActualTypeName( int type ) = 0;
 			virtual void PreCreateTable( int arrelems, int nonarrelems ) = 0;
 			virtual void PushPooledString( int index ) = 0;
 			virtual const char *GetPooledString( int index ) = 0;
-			virtual int AddThreadedCall( ILuaThreadedCall * ) = 0; // NOTE: Returns the amount off queried threaded calls.
-			virtual void AppendStackTrace( char *, unsigned long ) = 0;
-			virtual void *CreateConVar( const char *, const char *, const char *, int ) = 0;
-			virtual void *CreateConCommand( const char *, const char *, int, void ( * )( const CCommand & ), int ( * )( const char *, char ( * )[128] ) ) = 0;
-			virtual const char* CheckStringOpt( int iStackPos, const char* def ) = 0;
+			virtual int AddThreadedCall( ILuaThreadedCall *call ) = 0; // NOTE: Returns the number of queried threaded calls.
+			virtual void AppendStackTrace( char *, unsigned int ) = 0;
+			virtual ConVar *CreateConVar( const char *name, const char *defaultValue, const char *helpString, int flags ) = 0;
+			virtual ConCommand *CreateConCommand( const char *name, const char *helpString, int flags, void ( *callback )( const CCommand & ), int ( *completionFunc )( const char *, char ( * )[128] ) ) = 0;
+			virtual const char *CheckStringOpt( int iStackPos, const char *def ) = 0;
 			virtual double CheckNumberOpt( int iStackPos, double def ) = 0;
-			virtual void RegisterMetaTable( const char* name, ILuaObject* tbl ) = 0;
+			virtual int RegisterMetaTable( const char *name, ILuaObject *tbl ) = 0;
 		};
 
 		class CLuaInterface : public ILuaInterface
@@ -134,11 +138,11 @@ namespace GarrysMod
 
 			// The purpose of all members that start with _ are unknown
 			int _1; // Always 1?
-			const char* m_sCurrentPath;
+			const char *m_sCurrentPath;
 			int _2; // Always 16?
 			int _3; // Always 0?
 			int m_iPushedPaths;
-			const char* m_sLastPath;
+			const char *m_sLastPath;
 			std::list<ILuaThreadedCall*> m_pThreadedCalls;
 
 #ifdef __APPLE__
@@ -147,51 +151,17 @@ namespace GarrysMod
 
 #endif
 
-			ILuaObject* m_pProtectedFunctionReturns[4];
-			ILuaObject* m_pTempObjects[32];
+			ILuaObject *m_pProtectedFunctionReturns[4];
+			ILuaObject *m_pTempObjects[32];
 			unsigned char m_iRealm; // CLIENT = 0, SERVER = 1, MENU = 2
-			ILuaGameCallback* m_pGameCallback;
+			ILuaGameCallback *m_pGameCallback;
 			char m_sPathID[32]; // lsv, lsc or LuaMenu
 			int m_iCurrentTempObject;
-			ILuaObject* m_pGlobal;
-			ILuaObject* m_pStringPool;
-			// But wait, there's more. In the next fields the metatables objects are saved, but idk if it just has a field for each metatable or if it uses a map.
-			char _5[40];
-			ILuaObject* m_pWeaponMeta;
-			ILuaObject* m_pVectorMeta;
-			ILuaObject* m_pAngleMeta;
-			ILuaObject* m_pPhysObjMeta;
-			ILuaObject* m_pISaveMeta;
-			ILuaObject* m_pIRestoreMeta;
-			ILuaObject* m_pCTakeDamageInfoMeta;
-			ILuaObject* m_pCEffectDataMeta;
-			ILuaObject* m_pCMoveDataMeta;
-			ILuaObject* m_pCRecipientFilterMeta;
-			ILuaObject* m_pCUserCmd;
-			ILuaObject* _6; // Unknown.
-			ILuaObject* m_pIMaterialMeta;
-			ILuaObject* m_pPanelMeta;
-			ILuaObject* m_pCLuaParticleMeta;
-			char _7[3];
-			ILuaObject* m_pITextureMeta;
-			ILuaObject* m_pBf_readMeta;
-			ILuaObject* m_pConVarMeta;
-			ILuaObject* m_pIMeshMeta;
-			ILuaObject* m_pVMatrixMeta;
-			ILuaObject* m_pCSoundPatchMeta;
-			ILuaObject* m_pPixelvis_handle_tMeta;
-			ILuaObject* m_pDlight_tMeta;
-			ILuaObject* m_pIVideoWriterMeta;
-			ILuaObject* m_pFileMeta;
-			ILuaObject* m_pCLuaLocomotionMeta;
-			ILuaObject* m_pPathFollowerMeta;
-			ILuaObject* m_pCNavAreaMeta;
-			ILuaObject* m_pIGModAudioChannelMeta;
-			ILuaObject* m_pCNavLadderMeta;
-			ILuaObject* m_pCNewParticleEffectMeta;
-			ILuaObject* m_pProjectedTextureMeta;
-			ILuaObject* m_pPhysCollideMeta;
-			ILuaObject* m_pSurfaceInfoMeta;
+			ILuaObject *m_pGlobal;
+			ILuaObject *m_pStringPool;
+			unsigned char m_iMetaTableIDCounter;
+			// Their index is based off their type. means m_MetaTables[Type::Entity] returns the Entity metatable though they can be NULL as its only filled by CreateMetaTableType.
+			GarrysMod::Lua::ILuaObject *m_pMetaTables[255];
 		};
 	}
 }

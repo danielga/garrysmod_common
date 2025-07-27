@@ -4,6 +4,7 @@
 
 class ConVar;
 class CCommand;
+class ConCommand;
 
 namespace GarrysMod
 {
@@ -14,11 +15,12 @@ namespace GarrysMod
 		public:
 			virtual ~ILuaConVars( ) = 0;
 			virtual void Init( ) = 0;
-			virtual ConVar *CreateConVar( const char *, const char *, const char *, int ) = 0;
-			virtual ConCommand *CreateConCommand( const char *, const char *, int, void ( * )( const CCommand & ), int ( * )( const char *, char ( * )[128] ) ) = 0;
+			virtual ConVar *CreateConVar( const char *name, const char *defaultValue, const char *helpString, int flags ) = 0;
+			virtual ConCommand *CreateConCommand( const char *name, const char *helpString, int flags, void ( *callback )( const CCommand & ), int ( *completionFunc )( const char *, char ( * )[128] ) ) = 0;
 			virtual void DestroyManaged( ) = 0;
-			virtual void Cache( const char *, const char * ) = 0;
+			virtual void Cache( const char *key, const char *value ) = 0;
 			virtual void ClearCache( ) = 0;
+			virtual void SaveManaged( ) = 0;
 		};
 	}
 }
