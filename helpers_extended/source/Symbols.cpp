@@ -125,12 +125,12 @@ namespace Symbols
 
 	const std::vector<Symbol> CBaseClient_ConnectionStart = {
 		Symbol::FromName( "?ConnectionStart@CBaseClient@@UAEXPAVINetChannel@@@Z" ),
-		Symbol::FromSignature( "\x55\x8B\xEC\x53\x56\x57\x6A\x1C\x8B\xF1\x2A\x2A\x2A\x2A\x2A\x8B\xD0\x83\xC4\x04\x85\xD2\x2A\x2A\xC7" )
+		Symbol::FromSignature( "\x55\x8B\xEC\x2A\x53\x56\x57\x8B\xD9\x6A\x1C\x89\x5D\xFC\x2A\x2A\x2A\x2A\x2A\x8B\xD0\x83\xC4\x04\x85\xD2\x2A\x2A\xC7" )
 	};
 
 	const std::vector<Symbol> CBaseClientState_ConnectionStart = {
 		Symbol::FromName( "?ConnectionStart@CBaseClientState@@UAEXPAVINetChannel@@@Z" ),
-		Symbol::FromSignature( "\x55\x8B\xEC\x53\x56\x57\x6A\x1C\x8B\xF9\x2A\x2A\x2A\x2A\x2A\x8B\xC8\x83\xC4\x04\x85\xC9\x2A\x2A\xC7\x41\x08\x00" )
+		Symbol::FromSignature( "\x55\x8B\xEC\x2A\x53\x56\x57\x6A\x1C\x8B\xF9\x2A\x2A\x2A\x2A\x2A\x8B\xC8\x83\xC4\x04\x85\xC9\x2A\x2A\xC7\x41\x08\x00" )
 	};
 
 	const std::vector<Symbol> CLC_CmdKeyValues_Constructor = {
@@ -147,7 +147,7 @@ namespace Symbols
 
 	const std::vector<Symbol> CBaseServer_RecalculateTags = {
 		Symbol::FromName( "?RecalculateTags@CBaseServer@@QAEXXZ" ),
-		Symbol::FromSignature( "\x55\x8B\xEC\x83\xEC\x78\x56\x57" )
+		Symbol::FromSignature( "\x55\x8B\xEC\x83\xEC\x18\x8B\x0D" )
 	};
 
 #ifdef _MSC_VER
