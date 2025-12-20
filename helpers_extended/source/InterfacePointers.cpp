@@ -70,6 +70,35 @@ namespace InterfacePointers
 		return iface_pointer;
 	}
 
+	template<class T>
+	static inline T *ResolveSymbolNoDereference(
+		SourceSDK::FactoryLoader &loader, const Symbol &symbol
+	)
+	{
+		if( symbol.type == Symbol::Type::None )
+			return nullptr;
+
+		return reinterpret_cast<T *>( symbol_finder.Resolve(
+			loader.GetModule( ), symbol.name.c_str( ), symbol.length
+		) );
+	}
+
+	template<class T>
+	static inline T *ResolveSymbolsNoDereference(
+		SourceSDK::FactoryLoader &loader, const std::vector<Symbol> &symbols
+	)
+	{
+		T *iface_pointer = nullptr;
+		for( const auto &symbol : symbols )
+		{
+			iface_pointer = ResolveSymbolNoDereference<T>( loader, symbol );
+			if( iface_pointer != nullptr )
+				break;
+		}
+
+		return iface_pointer;
+	}
+
 	namespace Internal
 	{
 		namespace Client
@@ -249,7 +278,7 @@ namespace InterfacePointers
 		if( iface_pointer == nullptr )
 		{
 			SourceSDK::FactoryLoader engine_loader( "engine" );
-			iface_pointer = ResolveSymbols<IServer>( engine_loader, Symbols::IServer );
+			iface_pointer = ResolveSymbolsNoDereference<IServer>( engine_loader, Symbols::IServer );
 		}
 
 		return iface_pointer;
