@@ -97,6 +97,9 @@ static FunctionType GetSymbol( const char *name )
 
 extern "C"
 {
+#pragma push_macro("lua_typename")
+#undef lua_typename
+
 	CreateLoader( void, lua_getfenv, ( lua_State *a, int b ), ( a, b ) );
 	CreateLoader( int, lua_setfenv, ( lua_State *a, int b ), ( a, b ) );
 	CreateLoader( const char *, lua_pushvfstring, ( lua_State *a, const char *b, va_list c ), ( a, b, c ) );
@@ -219,6 +222,8 @@ extern "C"
 	CreateLoader( void, luaL_addstring, ( luaL_Buffer *a, const char *b ), ( a, b ) );
 	CreateLoader( void, luaL_addvalue, ( luaL_Buffer *a ), ( a ) );
 	CreateLoader( void, luaL_pushresult, ( luaL_Buffer *a ), ( a ) );
+
+#pragma pop_macro("lua_typename")
 
 	const char *lua_pushfstring( lua_State *L, const char *fmt, ... )
 	{
