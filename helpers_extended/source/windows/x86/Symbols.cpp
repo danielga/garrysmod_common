@@ -19,7 +19,7 @@ namespace Symbols
 
 	const std::vector<Symbol> IServer = {
 		Symbol::FromName("?sv@@3VCGameServer@@A"),
-		Symbol::FromSignature("\x2A\x2A\x2A\x2A\xE8\x2A\x2A\x2A\x2A\xD8\x6D\x24\x83\x4D\xEC\x10")
+		Symbol::FromSignature("\x2A\x2A\x2A\x2A\xE8\x2A\x2A\x2A\x2A\x84\xC0\x74\x2A\x83\x3D\x2A\x2A\x2A\x2A\x03")
 	};
 
 	const std::vector<Symbol> CNetChan_ProcessMessages = {
@@ -79,7 +79,7 @@ namespace Symbols
 	};
 
 	const std::vector<Symbol> net_sockets = {
-		Symbol::FromSignature("\x2A\x2A\x2A\x2A\x56\x57\x8B\x7D\x08\x8B\xF7\x03\xF6\x8B\x44\xF3\x0C\x85\xC0\x74\x0A\x57\x50")
+		Symbol::FromSignature("\x2A\x2A\x2A\x2A\xFF\x70\x40\xFF\x70\x30")
 	};
 
 	const Symbol GMOD_GetNetSocket = Symbol::FromName("?GMOD_GetNetSocket@@YAPAUnetsocket_t@@H@Z");
