@@ -11,11 +11,13 @@ group("garrysmod_common")
 			"../include/Platform.hpp",
 			"include/**.h",
 			"include/**.hpp",
-			"source/*.cpp"
+			"source/*.cpp",
+			"source/" .. os.target() .. "/*.cpp",
+			"source/" .. os.target() .. "/%{cfg.architecture}/*.cpp"
 		})
 		vpaths({
 			["Header files/*"] = {"../include/**.hpp", "include/**.h", "include/**.hpp"},
-			["Source files/*"] = "source/*.cpp"
+			["Source files/*"] = "source/**.cpp"
 		})
 
 		filter("system:linux or macosx")
