@@ -131,7 +131,7 @@ function GetMSBuildPath() {
 }
 
 function ValueIsTruthy($Value) {
-	return $Value -eq $true -or [bool]($Value -as [int])
+	return ($Value -eq $true) -or [bool]($Value -as [int])
 }
 
 function ValueIsFalsy($Value) {

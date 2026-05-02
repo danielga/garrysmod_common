@@ -10,7 +10,7 @@ function Use-Object([Object]$InputObject, [scriptblock]$ScriptBlock) {
     try {
         . $ScriptBlock
     } finally {
-        if ($null -ne $InputObject -and $InputObject -is [System.IDisposable]) {
+        if (($null -ne $InputObject) -and ($InputObject -is [System.IDisposable])) {
             $InputObject.Dispose()
         }
     }

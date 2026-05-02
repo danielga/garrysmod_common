@@ -21,7 +21,7 @@ if (ValueIsFalsy $DISABLE_32BIT) {
 	Pop-Location
 }
 
-if (ValueIsFalsy $DISABLE_64BIT -and $PROJECT_GENERATOR_VERSION -ge 3) {
+if ((ValueIsFalsy $DISABLE_64BIT) -and ($PROJECT_GENERATOR_VERSION -ge 3)) {
 	Push-Location "$REPOSITORY_DIR/projects/$PROJECT_OS/$COMPILER_PLATFORM" -ErrorAction Stop
 	Write-Output "Building x86-64 module..."
 	Invoke-Call { & "$MSBuild" "$MODULE_NAME.sln" /p:Configuration=Release /p:Platform=x64 /m } -ErrorAction Stop
