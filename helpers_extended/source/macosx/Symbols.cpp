@@ -74,12 +74,16 @@ namespace Symbols
 
 #if defined ARCHITECTURE_X86
 
-	const Symbol Steam3Server = Symbol::FromName( "_Z12Steam3Serverv" );
+	const std::vector<Symbol> Steam3Server = {
+		Symbol::FromName( "_Z12Steam3Serverv" )
+	};
 
 #elif ARCHITECTURE_X86_64
 
-	const Symbol Steam3Server =
-		Symbol::FromSignature( "\x55\x48\x89\xE5\x48\x8D\x05\x2A\x2A\x2A\x2A\x5D\xC3\x0F\x1F\x00" );
+	const std::vector<Symbol> Steam3Server = {
+		Symbol::FromName( "_Z12Steam3Serverv" ),
+		Symbol::FromSignature( "\x55\x48\x89\xE5\x48\x8D\x05\x2A\x2A\x2A\x2A\x5D\xC3\x0F\x1F\x00" )
+	};
 
 #endif
 
