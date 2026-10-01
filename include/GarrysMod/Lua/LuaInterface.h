@@ -84,8 +84,8 @@ namespace GarrysMod
 			virtual void PushPath( const char *path ) = 0;
 			virtual void PopPath( ) = 0;
 			virtual const char *GetPath( ) = 0;
-			virtual int GetColor( int index ) = 0;
-			virtual void *PushColor( Color color ) = 0; // ToDo: This seems to return something, but it hasn't been figured out what yet.
+			virtual Color GetColor( int index ) = 0;
+			virtual void PushColor( Color color ) = 0;
 			virtual int GetStack( int level, lua_Debug *dbg ) = 0;
 			virtual int GetInfo( const char *what, lua_Debug *dbg ) = 0;
 			virtual const char *GetLocal( lua_Debug *dbg, int n ) = 0;
