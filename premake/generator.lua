@@ -403,7 +403,7 @@ function CreateProject(config)
 			assert(type(binDir) == "string", "The path to garrysmod/lua/bin is not a string!")
 
 			filter({})
-				postbuildcommands({"{COPY} \"%{cfg.buildtarget.abspath}\" \"" .. binDir .. "\""})
+				postbuildcommands({"{COPYFILE} \"%{cfg.buildtarget.abspath}\" \"" .. binDir .. "\""})
 		end
 
 		local server_debug_path = _OPTIONS["server-debug-path"]
