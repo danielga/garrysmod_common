@@ -27,7 +27,7 @@ void *ModuleLoader::LoadModule( const std::string &name )
 
 #if defined ARCHITECTURE_X86_64
 
-		"garrysmod/bin/win64/%s.dll", // GMod main branch 64x has its files here
+		"garrysmod/bin/win64/%s.dll",
 		"bin/win64/%s.dll",
 
 #elif defined ARCHITECTURE_X86
